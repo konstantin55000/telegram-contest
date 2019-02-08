@@ -1,0 +1,94 @@
+#informburo.kz
+~version: "2.0"
+?path_not: .*/tags/.*
+
+  
+
+ 
+ body: //*[has-class("article")]  
+title://h1    
+$dt: /html/head/meta[@property="article:published_time"] 
+  
+
+$sf:$dt/@content 
+published_date: $sf
+@if_not( $sf ) {
+ @remove:  //i[has-class("fa-clock-o")]/..
+$dad:(//div[has-class("date")]/span)[1]
+@datetime(0, "ru-RU","d M yyyy, hh:mm"): $dad
+published_date:$@
+@debug
+}
+
+$aut: //*[has-class("author")]//a/text()
+@if ($aut){
+author: $aut
+}
+ 
+
+ 
+author_url: //*[has-class("author")]//a/@href
+
+
+
+ 
+
+@before_el(./..):   //strong/iframe
+@before_el(./..):   //p/iframe
+#@before_el(./../../..):   //p/span/div/iframe
+$rdf:  //*[has-class("embed-responsive")]
+ 
+@before_el(./..):   //td/iframe
+<div>: //td
+
+@before_el(./..):   //a/iframe
+ 
+
+ $f: (//p[@dir="ltr"])[2]
+ $x:  ($f/a)[3] 
+ $z: $x/@href
+
+@remove: //amp-iframe
+#@remove: //table
+#subtitle: //h3
+
+$sd: //strong[contains(text(),'Читайте Informburo.kz там, где удобно:')]
+@remove: $sd
+$kz: //strong[contains(text(),'Өзіңізге ыңғайлы жерден informburo.kz оқыңыз')]
+@remove: $kz
+#Өзіңізге ыңғайлы жерден informburo.kz оқыңыз:
+@remove://a[contains(@href,'https://www.facebook.com/informburo')]/..
+@remove://a[contains(@href,'https://www.facebook.com/kaz.informburo.kz')]/..
+
+#https://www.facebook.com/kaz.informburo.kz/
+#@remove://a[contains(@href,'https://www.instagram.com/informburo.kz')]  
+#@remove://a[contains(@href,'https://t.me/informburo_kz')]  
+@remove: //div[@class="article-text-corrector"]
+@remove: //div[has-class("article-text-tags")]
+@remove: //div[@class="author"]
+@remove: //div[@class="date"]
+@remove: //div[has-class("schema-meta")]
+@remove: //div[has-class("hidden-xs")]
+@remove: //div[has-class("views")]
+<figcaption> : //div[@class="imgcopy"]
+<figure> : //div[@class="ib_image"]
+$dsrc: //div[@class="article-main-img"] 
+@set_attr(src, @data-src):  //div[@class="article-main-img"]/img
+$to_figure: //div[@class="article-main-img"]
+<figcaption> : $to_figure//p[@data-role="article-img-cred"]
+
+<figure>: $to_figure
+cover
+channel: "@informburo_kz"
+@remove: //hr
+
+@remove: //strong[contains(text(),'Читайте также')]/next-sibling::a
+ @remove: //strong[contains(text(),'Читайте также')]
+ 
+   
+
+ 
+ 
+ 
+ 
+ 
