@@ -1,0 +1,74 @@
+~version: "2.0"
+$exists: //meta[@property="og:type"][@content="article"]
+ 
+?exists: $exists
+$full_post:  //div[has-class("article-content")]
+
+$sdx: //div[has-class("article-header")]//h1
+#$cat:  //p[@class='category']
+#@wrap_inner(<b>): $cat
+#@prepend_to($full_post): $cat
+site_name: 'evernote.com'
+
+title: $sdx
+
+ 
+# @before_el(./..):   //a/img
+ @before_el(./..):   //strong/img
+ @before_el(./..):   //p//img
+
+
+ 
+$top: //div[has-class("featured-image")]/div
+
+cover: $top//img
+$aut: //*[@class="author-date"] 
+@clone: //*[@class="author-date"]
+$dt: $@
+@replace("^.+(•)", ""): $dt 
+@replace("(•).+$", ""): $aut
+author: $aut
+published_date: $dt
+ 
+
+@after_el(./..):   //p//audio
+$a: $@
+
+$b: $a//source/@src
+@set_attr(src, $b): $a
+<iframe>: $a
+
+ 
+body: $full_post
+<div> : //p[descendant::img] 
+
+
+<figcaption>: $z/..
+@combine(<br>): //figure/next-sibling::figcaption
+  
+$fig:  //img[has-class("aligncenter")]
+ 
+ $next: $fig/next-sibling::p/next-sibling::p[@style="text-align: center;"]
+
+ <figcaption> : $next
+ @wrap(<figure>) :$fig
+ $wp: $@
+ @debug
+ @wrap("<figcaption>"):  $next
+ $x:  $wp/next-sibling::p/next-sibling::figcaption
+ $y: //figcaption/prev-sibling::p
+ @remove: //figcaption/prev-sibling::p[not(text())]
+$xy: //figcaption/prev-sibling::figure 
+ $yo: //figure/..
+<div>:   //p[./img]
+@wrap_inner(<x>): //figure/next-sibling::figcaption
+@combine("\n"):   //figure/next-sibling::figcaption[@style="text-align: center;"]
+<figure>: $@
+<figcaption>: //figure//x 
+<div>:   //p[./img]
+
+ 
+ 
+ 
+
+ 
