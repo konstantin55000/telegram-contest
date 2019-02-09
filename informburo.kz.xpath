@@ -1,15 +1,14 @@
-#informburo.kz
 ~version: "2.0"
 ?path_not: .*/tags/.*
 
-  
-
  
- body: //*[has-class("article")]  
+body: //*[has-class("article")]  
 title://h1    
 $dt: /html/head/meta[@property="article:published_time"] 
-  
-
+ 
+ 
+@remove://hr[has-class("empty")]
+#@debug
 $sf:$dt/@content 
 published_date: $sf
 @if_not( $sf ) {
@@ -17,7 +16,7 @@ published_date: $sf
 $dad:(//div[has-class("date")]/span)[1]
 @datetime(0, "ru-RU","d M yyyy, hh:mm"): $dad
 published_date:$@
-@debug
+#@debug
 }
 
 $aut: //*[has-class("author")]//a/text()
@@ -26,16 +25,19 @@ author: $aut
 }
  
 
- 
+$sub: //*[@data-role="article-meta-description"] 
+
 author_url: //*[has-class("author")]//a/@href
 
 
 
+$pos: //p//iframe
+@before_el(./../..):  $pos
  
 
 @before_el(./..):   //strong/iframe
 @before_el(./..):   //p/iframe
-#@before_el(./../../..):   //p/span/div/iframe
+
 $rdf:  //*[has-class("embed-responsive")]
  
 @before_el(./..):   //td/iframe
@@ -49,8 +51,8 @@ $rdf:  //*[has-class("embed-responsive")]
  $z: $x/@href
 
 @remove: //amp-iframe
-#@remove: //table
-#subtitle: //h3
+
+
 
 $sd: //strong[contains(text(),'Читайте Informburo.kz там, где удобно:')]
 @remove: $sd
@@ -80,15 +82,108 @@ $to_figure: //div[@class="article-main-img"]
 <figure>: $to_figure
 cover
 channel: "@informburo_kz"
-@remove: //hr
+#@remove: //hr
 
-@remove: //strong[contains(text(),'Читайте также')]/next-sibling::a
- @remove: //strong[contains(text(),'Читайте также')]
+$rmore: //*[contains(text(),'Читайте также')]
+#<related>: $rmore/next-sibling::a
+
+$tt: $rmore/..
  
+@if( $tt/prev-sibling::hr  ) {
+@if( $tt/next-sibling::hr  ) {
+ @remove: $rmore/next-sibling::*
+@remove: $rmore/prev-sibling::*
+@remove: $rmore/../next-sibling::hr
+@remove: $rmore/../prev-sibling::hr
+@remove: $rmore
+}
+}
+
+@if( $rmore/prev-sibling::hr  ) {
+@if( $rmore/next-sibling::hr  ) {
+ @remove: $rmore/next-sibling::*
+@remove: $rmore/prev-sibling::*
+@remove: $rmore/../next-sibling::hr
+@remove: $rmore/../prev-sibling::hr
+@remove: $rmore
+ }
+}
+
+
+$rmore: //*[contains(text(),'Мақаланың орысша нұсқасын оқи отырыңыз')]
+$tt: $rmore/..
+ 
+@if( $tt/prev-sibling::hr  ) {
+@if( $tt/next-sibling::hr  ) {
+ @remove: $rmore/next-sibling::*
+@remove: $rmore/prev-sibling::*
+@remove: $rmore/../next-sibling::hr
+@remove: $rmore/../prev-sibling::hr
+@remove: $rmore
+}
+}
+$rmore: //*[contains(text(),'Оқи отырыңыз')]
+@if( $rmore/prev-sibling::hr  ) {
+@if( $rmore/next-sibling::hr  ) {
+ @remove: $rmore/next-sibling::*
+@remove: $rmore/prev-sibling::*
+@remove: $rmore/../next-sibling::hr
+@remove: $rmore/../prev-sibling::hr
+@remove: $rmore
+}
+}
+$tt: $rmore/..
+ 
+@if( $tt/prev-sibling::hr  ) {
+@if( $tt/next-sibling::hr  ) {
+ @remove: $rmore/next-sibling::*
+@remove: $rmore/prev-sibling::*
+@remove: $rmore/../next-sibling::hr
+@remove: $rmore/../prev-sibling::hr
+@remove: $rmore
+}
+}
+
+
+
+#
+#kaz author
+$sem: //p[not(@class)]/em
+#@if ($sem){
+#author: $sem
+#}
+
+ 
+#@remove: //strong[contains(text(),'Читайте также')]/prev-sibling::hr
+ #@remove: //strong[contains(text(),'Читайте также')]
+ #
    
+#$read: 
 
+$sdfd: //iframe 
+@debug
+#related block 
  
+ $rmore: //p[contains(text(),'Читайте также')]
+@if( $rmore/prev-sibling::hr  ) {
  
+$dd: $rmore/next-sibling::*/next-sibling::*/next-sibling::*/next-sibling::*
+@remove : $dd
  
- 
+$dd: $rmore/next-sibling::*/next-sibling::*/next-sibling::*
+@remove : $dd
+$dd: $rmore/next-sibling::*/next-sibling::*/next-sibling::*/next-sibling::*
+@remove : $dd
+$dd: $rmore/next-sibling::*/next-sibling::*/next-sibling::*
+$dd: $rmore/next-sibling::*/next-sibling::* 
+@remove : $dd
+
+$dd: $rmore/next-sibling::*
+@remove : $dd
+$dd: $rmore/prev-sibling::*
+@remove : $dd
+
+ @remove: $rmore 
+
+}
  
