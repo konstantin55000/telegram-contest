@@ -16,8 +16,9 @@ title: $sdx
 # @before_el(./..):   //a/img
  @before_el(./..):   //strong/img
  @before_el(./..):   //p//img
-
-
+$xcv: //p[not(*)][not(normalize-space())]
+@debug
+@remove: $xcv
  
 $top: //div[has-class("featured-image")]/div
 
@@ -42,30 +43,32 @@ $b: $a//source/@src
 body: $full_post
 <div> : //p[descendant::img] 
 
-
-<figcaption>: $z/..
-@combine(<br>): //figure/next-sibling::figcaption
   
 $fig:  //img[has-class("aligncenter")]
- 
- $next: $fig/next-sibling::p/next-sibling::p[@style="text-align: center;"]
 
+ $next: $fig/next-sibling::p[@style="text-align: center;"]
+ @debug
  <figcaption> : $next
  @wrap(<figure>) :$fig
  $wp: $@
- @debug
+ 
  @wrap("<figcaption>"):  $next
  $x:  $wp/next-sibling::p/next-sibling::figcaption
  $y: //figcaption/prev-sibling::p
  @remove: //figcaption/prev-sibling::p[not(text())]
-$xy: //figcaption/prev-sibling::figure 
+$xy: //figcaption/prev-sibling::figure
+ 
+
  $yo: //figure/..
 <div>:   //p[./img]
 @wrap_inner(<x>): //figure/next-sibling::figcaption
 @combine("\n"):   //figure/next-sibling::figcaption[@style="text-align: center;"]
 <figure>: $@
-<figcaption>: //figure//x 
-<div>:   //p[./img]
+<figcaption>: //figure//x
+
+ 
+
+ 
 
  
  
