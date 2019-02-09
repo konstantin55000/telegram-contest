@@ -17,7 +17,6 @@ title: $sdx
  @before_el(./..):   //strong/img
  @before_el(./..):   //p//img
 $xcv: //p[not(*)][not(normalize-space())]
-@debug
 @remove: $xcv
  
 $top: //div[has-class("featured-image")]/div
@@ -66,9 +65,27 @@ $xy: //figcaption/prev-sibling::figure
 <figure>: $@
 <figcaption>: //figure//x
 
- 
+ #https://evernote.com/blog/four-ways-virtual-teams-fail
+ #Beat Bühlmann
+ <x>: //figure/next-sibling::p[./span[@style="font-size: .75em; font-style: italic;"]]
+ @wrap_inner(<figcaption>): $@
+ @combine("\n"):   //figure/next-sibling::x
+ $yy: $@
+ @debug
 
+<iframe>: //audio
+<div>: //p[descendant::iframe]
  
+ #to check
+ $btn: //span[contains(@style,"background-color: #4caf50;")]/..
+  @debug
+ $xv: $btn/..
+
+#@remove: $xv/prev-sibling::*[not(text())][not(*)][not(normalize-space())]
+ #@debug
+@remove: $xv/next-sibling::*
+@debug
+ @remove : $btn
 
  
  
