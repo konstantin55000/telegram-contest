@@ -1,12 +1,14 @@
 ~version: "2.0"
-?path_not: .*/tags/.*
+?path_not: .*/novosti.html
 
+body:   //*[has-class("article")]  
  
-body: //*[has-class("article")]  
 title://h1    
 $dt: /html/head/meta[@property="article:published_time"] 
- 
- 
+site_name: "Informburo.kz" 
+$df: //h3[1]
+description: $df
+#@debug
 @remove://hr[has-class("empty")]
 #@debug
 $sf:$dt/@content 
@@ -19,9 +21,9 @@ published_date:$@
 #@debug
 }
 
-$aut: //*[has-class("author")]//a/text()
 @if ($aut){
-author: $aut
+author: concat(//*[has-class("author")]//a[1],",  ",//*[has-class("author")]//a[2])
+
 }
  
 
@@ -29,11 +31,12 @@ $sub: //*[@data-role="article-meta-description"]
 
 author_url: //*[has-class("author")]//a/@href
 
+$im: //img[@src="https://informburo.kz/theme/img/grey.png"]
+@remove: $im
 
-
-$pos: //p//iframe
-@before_el(./../..):  $pos
- 
+#$pos: //p//iframe
+#@before_el(./../..):  $pos
+<div> : //p[descendant::iframe]
 
 @before_el(./..):   //strong/iframe
 @before_el(./..):   //p/iframe
@@ -61,7 +64,8 @@ $kz: //strong[contains(text(),'Өзіңізге ыңғайлы жерден info
 #Өзіңізге ыңғайлы жерден informburo.kz оқыңыз:
 @remove://a[contains(@href,'https://www.facebook.com/informburo')]/..
 @remove://a[contains(@href,'https://www.facebook.com/kaz.informburo.kz')]/..
-
+ 
+@debug
 #https://www.facebook.com/kaz.informburo.kz/
 #@remove://a[contains(@href,'https://www.instagram.com/informburo.kz')]  
 #@remove://a[contains(@href,'https://t.me/informburo_kz')]  
@@ -83,33 +87,34 @@ $to_figure: //div[@class="article-main-img"]
 cover
 channel: "@informburo_kz"
 #@remove: //hr
-
+@remove: //hr[has-class("empty")]
 $rmore: //*[contains(text(),'Читайте также')]
 #<related>: $rmore/next-sibling::a
 
-$tt: $rmore/..
  
+ 
+
 @if( $tt/prev-sibling::hr  ) {
 @if( $tt/next-sibling::hr  ) {
- @remove: $rmore/next-sibling::*
-@remove: $rmore/prev-sibling::*
-@remove: $rmore/../next-sibling::hr
-@remove: $rmore/../prev-sibling::hr
-@remove: $rmore
+ @remove: $tt/prev-sibling::hr 
+@remove: $tt/next-sibling::hr
+@remove:$tt
 }
-}
-
-@if( $rmore/prev-sibling::hr  ) {
-@if( $rmore/next-sibling::hr  ) {
- @remove: $rmore/next-sibling::*
-@remove: $rmore/prev-sibling::*
-@remove: $rmore/../next-sibling::hr
-@remove: $rmore/../prev-sibling::hr
-@remove: $rmore
- }
+@debug
+@if( $tt/next-sibling::*/next-sibling::hr  ) {
+ @remove: $tt/next-sibling::ul/next-sibling::hr 
+ @remove: $tt/next-sibling::ul
+  @remove: $tt/next-sibling::a/next-sibling::hr 
+ @remove: $tt/next-sibling::a
+ @remove:$tt/prev-sibling::hr 
+ @remove: $tt 
 }
 
+}
+ 
+ 
 
+@remove: $lk
 $rmore: //*[contains(text(),'Мақаланың орысша нұсқасын оқи отырыңыз')]
 $tt: $rmore/..
  
@@ -132,17 +137,7 @@ $rmore: //*[contains(text(),'Оқи отырыңыз')]
 @remove: $rmore
 }
 }
-$tt: $rmore/..
  
-@if( $tt/prev-sibling::hr  ) {
-@if( $tt/next-sibling::hr  ) {
- @remove: $rmore/next-sibling::*
-@remove: $rmore/prev-sibling::*
-@remove: $rmore/../next-sibling::hr
-@remove: $rmore/../prev-sibling::hr
-@remove: $rmore
-}
-}
 
 
 
@@ -164,26 +159,32 @@ $sdfd: //iframe
 @debug
 #related block 
  
- $rmore: //p[contains(text(),'Читайте также')]
-@if( $rmore/prev-sibling::hr  ) {
- 
-$dd: $rmore/next-sibling::*/next-sibling::*/next-sibling::*/next-sibling::*
-@remove : $dd
- 
-$dd: $rmore/next-sibling::*/next-sibling::*/next-sibling::*
-@remove : $dd
-$dd: $rmore/next-sibling::*/next-sibling::*/next-sibling::*/next-sibling::*
-@remove : $dd
-$dd: $rmore/next-sibling::*/next-sibling::*/next-sibling::*
-$dd: $rmore/next-sibling::*/next-sibling::* 
-@remove : $dd
 
-$dd: $rmore/next-sibling::*
-@remove : $dd
-$dd: $rmore/prev-sibling::*
-@remove : $dd
+$add: //p//*[contains(text(),'А теперь почитайте')]
 
- @remove: $rmore 
-
-}
+#<h4>: $add
+$par: $add/..
+@debug
+$ul: $add/../next-sibling::ul
+@debug
+ #https://informburo.kz/stati/nuzhna-li-legalizaciya-prostitucii-v-kazahstane.html
+@remove: $ul/next-sibling::hr
+ @remove: $add/../prev-sibling::hr
+ @remove: $add
+@remove: $ul
+@debug
+#<div>: //p[descendant::related]
  
+
+
+?path: .*/restrict.html
+@remove: //hr/next-sibling::p
+@remove: //hr/next-sibling::p
+@remove: //hr/next-sibling::p
+@remove: //hr/next-sibling::p
+@remove: //hr/next-sibling::p
+@remove: //hr/next-sibling::p
+@remove: //hr/next-sibling::p
+@remove: //hr/next-sibling::hr
+@remove: //hr
+
