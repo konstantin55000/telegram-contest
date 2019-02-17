@@ -1,7 +1,7 @@
 ~version: "2.0"
 ?path_not: .*/novosti.html
-
-body:   //*[has-class("article")]  
+$body: //*[has-class("article")]  
+body:   $body
  
 title://h1    
 $dt: /html/head/meta[@property="article:published_time"] 
@@ -13,27 +13,57 @@ description: $df
 #@debug
 $sf:$dt/@content 
 published_date: $sf
+@remove: //script
 @if_not( $sf ) {
+
  @remove:  //i[has-class("fa-clock-o")]/..
 $dad:(//div[has-class("date")]/span)[1]
-@datetime(0, "ru-RU","d M yyyy, hh:mm"): $dad
-published_date:$@
-#@debug
-}
-
-@if ($aut){
-author: concat(//*[has-class("author")]//a[1],",  ",//*[has-class("author")]//a[2])
-
-}
  
+@datetime(0, "ru-RU","d M yyyy, hh:mm"): $dad 
+published_date:$@ 
+@debug
+}
 
+
+<img>: //amp-img
+#<div>: //a[./img]
+@remove: //a[./img[@width="30"]]
+<div>: //p[./img]
+ 
+ $ax: //*[has-class("author")]//a[1]
+ 
+$xcz: concat(//*[has-class("author")]//a[1],",  ",//*[has-class("author")]//a[2], ", ", //*[has-class("author")]//a[3])
+author:$xcz
+@debug
+<div>: //img[contains(@src, 'theme/img/grey.png')]
+ 
+ 
+<iframe>: //amp-iframe
 $sub: //*[@data-role="article-meta-description"] 
 
 author_url: //*[has-class("author")]//a/@href
 
+$op: //*[has-class("opinion-item-title")]
+@if( $op ) {
+ author: $op//h4/text()
+  @debug
+ author_url:$op//a/@href
+ @debug
+ $rel_op: //*[has-class("opinion-item-content")]
+ @remove: $rel_op
+#<related>: $rel_op
+@remove: $op
+}
+
+
 $im: //img[@src="https://informburo.kz/theme/img/grey.png"]
 @remove: $im
 
+ $db: //blockquote[has-class("instagram-media")]
+  @set_attr(src,@data-instgrm-permalink)://blockquote[has-class("instagram-media")]
+  @debug
+ <iframe>: $db
+@debug
 #$pos: //p//iframe
 #@before_el(./../..):  $pos
 <div> : //p[descendant::iframe]
@@ -53,8 +83,7 @@ $rdf:  //*[has-class("embed-responsive")]
  $x:  ($f/a)[3] 
  $z: $x/@href
 
-@remove: //amp-iframe
-
+ 
 
 
 $sd: //strong[contains(text(),'Читайте Informburo.kz там, где удобно:')]
@@ -77,12 +106,13 @@ $kz: //strong[contains(text(),'Өзіңізге ыңғайлы жерден info
 @remove: //div[has-class("hidden-xs")]
 @remove: //div[has-class("views")]
 <figcaption> : //div[@class="imgcopy"]
+<figcaption> : //div[@class="imgalt"]
 <figure> : //div[@class="ib_image"]
 $dsrc: //div[@class="article-main-img"] 
 @set_attr(src, @data-src):  //div[@class="article-main-img"]/img
 $to_figure: //div[@class="article-main-img"]
 <figcaption> : $to_figure//p[@data-role="article-img-cred"]
-
+@remove: //noscript
 <figure>: $to_figure
 cover
 channel: "@informburo_kz"
@@ -174,7 +204,7 @@ $ul: $add/../next-sibling::ul
 @remove: $ul
 @debug
 #<div>: //p[descendant::related]
- 
+<div>: //aside 
 
 
 ?path: .*/restrict.html
@@ -188,14 +218,3 @@ $ul: $add/../next-sibling::ul
 @remove: //hr/next-sibling::hr
 @remove: //hr
 
-#https://informburo.kz/stati/hochu-rabotat-v-santo-kak-tuda-popast-.html
-#https://informburo.kz/syuzhety/vashe-zdorovie.html
-#https://informburo.kz/mneniya/aigerim-tleubaeva/rabotat-ne-po-specialnosti-normalno-zhizn-menyaetsya-bystree-chem-my-uspevaem-poluchit-obrazovanie.html
-
-#https://informburo.kz/mneniya/aigerim-tleubaeva/rabotat-ne-po-specialnosti-normalno-zhizn-menyaetsya-bystree-chem-my-uspevaem-poluchit-obrazovanie.html
-
-#NOSCRIPT
-#https://informburo.kz/stati/stariki-recidivisty-pochemu-yaponskie-pensionery-stremyatsya-za-reshyotku.html
-# https://informburo.kz/stati/hochu-rabotat-v-santo-kak-tuda-popast-.html na pravah
-
-#!!https://informburo.kz/stati/mnogodetnye-semi-vstretilis-s-akimami-v-raznyh-gorodah-kazahstana-chem-im-obeshchali-pomoch.html
