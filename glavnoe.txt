@@ -1,0 +1,117 @@
+#glavnoe
+#pages: https://glavnoe.ua/news/n356984033-morskie-pehotincy-provodjat-prakticheskie-zanjatija-na-bronirovannyh-desantno-shturmovyh-katerah-kentavr
+#dt format check https://glavnoe.ua/news/n356984015-na-hersonschine-blagodarja-sbu-na-tri-goda-posadili-bojca-vsu-(foto)
+#https://glavnoe.ua/news/n356984009-harkovchane-mogut-perekryt-ulicy-iz-za-nevypolnenija-kernesom-dvuh-reshenij-suda
+#liki: https://glavnoe.ua/news/n305285 correcotr osh.
+#supported img in a https://glavnoe.ua/news/n356982768-v-vinnice-otkryli-zavod-solnechnyh-panelej
+#check embed https://glavnoe.ua/news/n356984006-krovavoe-dtp-v-centre-harkova-kak-prokuratura-zagnala-sebja-v-gluhoj-ugol
+#fb https://glavnoe.ua/news/n305304
+
+#https://glavnoe.ua/news/n356982768-v-vinnice-otkryli-zavod-solnechnyh-panelej
+#check https://glavnoe.ua/news/n356982768-v-vinnice-otkryli-zavod-solnechnyh-panelej
+
+#test tjhis
+#https://glavnoe.ua/news/n356982768-v-vinnice-otkryli-zavod-solnechnyh-panelej
+
+~version: "2.0"
+site_name: "Главное™"
+
+$body: //article[has-class("one-article")]
+title: //h1
+?exists: $body
+$dt: $body//div[has-class("newsdate")]
+
+channel: "https://t.me/glavnoeUA"
+ <p>: //a[./img]
+#<div class="newsdate">20 февраля 2019</div>
+#<div class="newstime">07:04</div>
+
+$time: $body//div[has-class("newstime")]
+
+#@datetime(0, "ru-RU","d M yyyy, hh:mm"): $dt 
+@datetime(0, "ru-RU","d M yyyy"): $dt
+$formated: $@
+published_date: $formated
+@remove: $body//img[contains(@src,"informer.yandex.ru")]
+@remove: //img[contains(@src,"logo-large.jpg")]
+
+$an_img: //p/img/ancestor::p
+@after_el(./..):  $an_img
+
+$to_iframe: //*[contains(@data-oembed-url,"//")]
+
+@set_attr(src,$to_iframe/@data-oembed-url): $to_iframe
+
+<iframe>: $to_iframe
+#subtitle: $body//h3
+$last: $body//p[contains(@style,"right")]
+$aut:  //*[has-class("newsauthor")]
+ 
+author: $aut/*/text()
+ 
+author_url: $aut//*/@href
+
+
+ 
+#@before_el(./..):   $an_img
+@after_el(./..):   //p/img
+#<div>: //p[./img]
+
+
+#@wrap(<figure>)://p//img
+#<span>: //a[./img]
+
+ 
+<div>: //p[//iframe]
+@if( $time/text() ) {
+@debug
+$df: $body//div[has-class("newsdate")]/next-sibling::*[has-class("newstime")]
+@combine(" "): $body//div[has-class("newsdate")]/next-sibling::*[has-class("newstime")]
+ @debug
+$xsd:  $@
+ # <fig>: $xsd
+  @debug
+  @datetime(0, "ru-RU","d M yyyy hh:mm"): $xsd
+  $formated: $@
+    @debug
+  published_date!: $formated
+  published_date: $formated
+}
+
+$nt: //*[has-class("newstools")]
+
+@remove: $nt
+$nt: //*[has-class("newscred")]
+@remove: $nt
+$orf: //p[@align="center"][//i]
+@debug
+@remove: $orf
+$orf: //div[@align="center"][//i]
+@remove: $orf
+@remove: //noindex
+
+$links: //*[has-class("seealso_inner")]/a
+ #@B($body): "##"
+
+ @remove: //div[@class="facebook-tools"]
+
+ @if( $links ) {
+   
+
+
+ 
+   #@wrap(<h3>): $@
+   @wrap(<related>):$links 
+   $par: $@
+  
+  
+   @append_to($body): $par
+  
+   
+ }
+
+
+@remove://*[has-class("seealso_inner")]
+ 
+
+body: $body

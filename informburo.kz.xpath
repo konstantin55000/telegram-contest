@@ -1,3 +1,17 @@
+#https://informburo.kz/opros/nuzhno-li-dat-vasiliyu-levitu-prizovye-kak-za-zoloto.html
+#https://informburo.kz/kaz/zholserk-pen-zholaushy-poyyzdarda-anday-yzmetter-krsetlu-tis-.html
+#//div[has-class("text-card)]/p[./em]
+# https://informburo.kz/avtory/na-pravah-reklamy.html
+#https://informburo.kz/cards/chto-takoe-partnyorskiy-material-na-informburokz.html
+#https://informburo.kz/stati/kak-rabotaet-vazhneyshaya-sistema-zhizneobespecheniya-astany.html
+#https://informburo.kz/stati/halyk-bank-podaril-21-invalidnyh-taksi-organizaciyam-po-vsemu-kazahstanu.html
+#PIKIR cover is missing https://informburo.kz/pikir/kainar-oljay/tabyt-breu-tadyr-ekeu.html
+#https://informburo.kz/kaz/nesie-tarihy-nesbesz-aldyrmay-ma.html ? tables
+
+#!https://informburo.kz/stati/konor-makgregor-novyy-brend-ambassador-parimatch.html
+#oprosy should Not be generated
+#@after(<figcaption>, caption, "./@caption"): //figure/img
+#@prepend(@caption): //figcaption
 ~version: "2.0"
 ?path_not: .*/novosti.html
 $body: //*[has-class("article")]  
@@ -205,7 +219,7 @@ $ul: $add/../next-sibling::ul
 @debug
 #<div>: //p[descendant::related]
 <div>: //aside 
-
+for most dynamic pages Site name is missing in preview. http://prntscr.com/mmve3k
 
 ?path: .*/restrict.html
 @remove: //hr/next-sibling::p
@@ -218,3 +232,6 @@ $ul: $add/../next-sibling::ul
 @remove: //hr/next-sibling::hr
 @remove: //hr
 
+#datetime 
+#https://informburo.kz/kaz/post-keestk-elder-zhne-demokratiya-azastan-damuy-shn-ne-zgeru-kerek.html
+#https://informburo.kz/syuzhety/pjatidnevka-v-shkolah.html dynamic page
