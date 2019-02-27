@@ -1,0 +1,45 @@
+
+#Static gallery. should be suported.
+issue src: https://instantview.telegram.org/contest/glavnoe.ua/template18/issue4/
+hm.
+krond https://glavnoe.ua/articles/a12483-revoljucija-gidnosti-vibir-shljahu photo is on cover
+
+subtitle issue: 
+https://glavnoe.ua/news/n356984627-paralimpijskaja-sbornaja-ukrainy-zanjala-1-mesto-na-chempionate-mira-po-zimnim-vidam-sporta
+agiw mesyats has
+krond does not has
+https://glavnoe.ua/news/n309527
+
+#https://glavnoe.ua/galleries/g854 paginator with related
+
+https://glavnoe.ua/news/n356983649-v-harkove-dlja-zhurnalistov-so-vsej-ukrainy-proveli-den-pravovoj-bezopasnosti-(foto)
+#!!https://glavnoe.ua/articles/a11610-bachu_sinku_scho_ti_ne_moskal ? cover
+#charkov
+https://glavnoe.ua/news/n356984334-uchastniki-marsha-zlyh-harkovchan-prodolzhili-akciju-v-metropolitene-(foto-video)
+#https://glavnoe.ua/news/n356983649-v-harkove-dlja-zhurnalistov-so-vsej-ukrainy-proveli-den-pravovoj-bezopasnosti-(foto)
+#glavnoe
+#pages: https://glavnoe.ua/news/n356984033-morskie-pehotincy-provodjat-prakticheskie-zanjatija-na-bronirovannyh-desantno-shturmovyh-katerah-kentavr
+#dt format check https://glavnoe.ua/news/n356984015-na-hersonschine-blagodarja-sbu-na-tri-goda-posadili-bojca-vsu-(foto)
+#https://glavnoe.ua/news/n356984126-prokuratura-nachala-rassledovanie-po-zakupke-korma-dlja-zhivotnyh-harkovskogo-zooparka
+#liki: https://glavnoe.ua/news/n305285 correcotr osh.
+#supported img in a https://glavnoe.ua/news/n356982768-v-vinnice-otkryli-zavod-solnechnyh-panelej
+#check embed https://glavnoe.ua/news/n356984006-krovavoe-dtp-v-centre-harkova-kak-prokuratura-zagnala-sebja-v-gluhoj-ugol
+#https://glavnoe.ua/news/n356984126-prokuratura-nachala-rassledovanie-po-zakupke-korma-dlja-zhivotnyh-harkovskogo-zooparka
+#fb https://glavnoe.ua/news/n305304
+
+ 
+ 
+
+ 
+
+#gals:
+!https://glavnoe.ua/galleries/g796
+2 items; https://glavnoe.ua/galleries/g812
+pager https://glavnoe.ua/galleries/g854/p2
+avtoru foto
+https://glavnoe.ua/galleries/g813
+#824
+#https://glavnoe.ua/galleries/g843 !s
+https://glavnoe.ua/galleries/g848 !!
+https://glavnoe.ua/galleries/g843 
+#

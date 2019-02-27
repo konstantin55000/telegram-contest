@@ -1,31 +1,60 @@
-#glavnoe
-#pages: https://glavnoe.ua/news/n356984033-morskie-pehotincy-provodjat-prakticheskie-zanjatija-na-bronirovannyh-desantno-shturmovyh-katerah-kentavr
-#dt format check https://glavnoe.ua/news/n356984015-na-hersonschine-blagodarja-sbu-na-tri-goda-posadili-bojca-vsu-(foto)
-#https://glavnoe.ua/news/n356984009-harkovchane-mogut-perekryt-ulicy-iz-za-nevypolnenija-kernesom-dvuh-reshenij-suda
-#liki: https://glavnoe.ua/news/n305285 correcotr osh.
-#supported img in a https://glavnoe.ua/news/n356982768-v-vinnice-otkryli-zavod-solnechnyh-panelej
-#check embed https://glavnoe.ua/news/n356984006-krovavoe-dtp-v-centre-harkova-kak-prokuratura-zagnala-sebja-v-gluhoj-ugol
-#fb https://glavnoe.ua/news/n305304
-
-#https://glavnoe.ua/news/n356982768-v-vinnice-otkryli-zavod-solnechnyh-panelej
-#check https://glavnoe.ua/news/n356982768-v-vinnice-otkryli-zavod-solnechnyh-panelej
-
-#test tjhis
-#https://glavnoe.ua/news/n356982768-v-vinnice-otkryli-zavod-solnechnyh-panelej
-
-~version: "2.0"
+ ~version: "2.0"
 site_name: "Главное™"
 
-$body: //article[has-class("one-article")]
+$body: //*[has-class("one-article")]
 title: //h1
+#subtitle://h2[has-class("newsshorttext")]
+@remove: //*[contains(@href,"metrika.yandex.ua")]
+ 
+@if( //*[has-class("onegallery")] ) {
+ @remove: //*[has-class("pager")]
+  <wrp>: //a[img]
+  
+ @map( //wrp[img] ) {   
+  $wrp: $@                
+   @set_attr(src, $wrp/@href): $wrp/img
+ 
+ }
+  $body: //*[has-class("onegallery")]
+  title: $body//h1
+  
+  
+  #https://glavnoe.ua/galleries/g824
+  $aut: //*[has-class("gallerytext")][2]/p 
+   <p>:$aut
+ 
+    
+  $dtt: //*[has-class("gallerytext")][1] 
+  @datetime(0, "ru-RU","d M yyyy"): $dtt
+  $formated: $@
+  published_date: $formated
+  
+  @remove: //*[has-class("gallerytext")][1]
+ $ar: //*[has-class("gallerytext")]/a[contains(text(),"Все фотогалереи")]
+ @remove: $ar/..
+ 
+ $rel: //div[@class="info"]//*[has-class("headed-block")]
+ 
+ <h3>: $rel/div[has-class("gray")][1] 
+ <related>: $rel
+ $relhm: $@
+ @debug
+   @after(<xz>): $body
+   $relx: //xz
+   @debug
+   @append_to($body):  $relhm
+@debug
+$relinner://*[has-class("gallery-seealso")]
+ # @remove: //*[has-class("headed-block")]
+  body!!: $body
+}
 ?exists: $body
 $dt: $body//div[has-class("newsdate")]
-
-channel: "https://t.me/glavnoeUA"
+ $gal: //*[has-class("onegallery")]
  <p>: //a[./img]
 #<div class="newsdate">20 февраля 2019</div>
 #<div class="newstime">07:04</div>
-
+#replace facebook
 $time: $body//div[has-class("newstime")]
 
 #@datetime(0, "ru-RU","d M yyyy, hh:mm"): $dt 
@@ -36,35 +65,29 @@ published_date: $formated
 @remove: //img[contains(@src,"logo-large.jpg")]
 
 $an_img: //p/img/ancestor::p
-@after_el(./..):  $an_img
 
-$to_iframe: //*[contains(@data-oembed-url,"//")]
+<figure>: $an_img
+#@after_el(./..):  $an_img
 
-@set_attr(src,$to_iframe/@data-oembed-url): $to_iframe
-
-<iframe>: $to_iframe
+ 
 #subtitle: $body//h3
 $last: $body//p[contains(@style,"right")]
 $aut:  //*[has-class("newsauthor")]
  
 author: $aut/*/text()
- 
+@wrap(<p>): //blockquote//p 
+#@after(<br>): //blockquote/p
 author_url: $aut//*/@href
-
-
- 
-#@before_el(./..):   $an_img
-@after_el(./..):   //p/img
-#<div>: //p[./img]
-
-
-#@wrap(<figure>)://p//img
-#<span>: //a[./img]
-
- 
+#test
+ $fb_post: $body//div[has-class("fb-post")][@data-href]
+ @debug
+@urlencode: $fb_post/@data-href
+@set_attr(data-src, "https://www.facebook.com/plugins/post.php?href=", @data-href, "&show_text=", @data-show-text, "&width=640"): $fb_post
+@before(<iframe>, src, @data-src, class, "fb-post"): $fb_post
+#@remove
 <div>: //p[//iframe]
 @if( $time/text() ) {
-@debug
+ 
 $df: $body//div[has-class("newsdate")]/next-sibling::*[has-class("newstime")]
 @combine(" "): $body//div[has-class("newsdate")]/next-sibling::*[has-class("newstime")]
  @debug
@@ -77,7 +100,7 @@ $xsd:  $@
   published_date!: $formated
   published_date: $formated
 }
-
+channel: "@glavnoeUA"
 $nt: //*[has-class("newstools")]
 
 @remove: $nt
@@ -92,26 +115,56 @@ $orf: //div[@align="center"][//i]
 
 $links: //*[has-class("seealso_inner")]/a
  #@B($body): "##"
+ 
 
+ 
  @remove: //div[@class="facebook-tools"]
 
  @if( $links ) {
    
-
-
- 
    #@wrap(<h3>): $@
-   @wrap(<related>):$links 
-   $par: $@
-  
-  
-   @append_to($body): $par
-  
+  # @wrap(<related>):$links 
+   @after(<xc>): $body
+   $rel: //xc
+   @debug
+      @append_to($rel): $links
+     @wrap_inner(<related>): //xc
+        #@append_to(//related): "Читайте также:"
+     @append_to($body): //related
+
    
+  
+  
  }
 
 
 @remove://*[has-class("seealso_inner")]
+
+#iframe
+$to_iframe: //*[contains(@data-oembed-url,"facebook")]//a
+ 
+ 
+@set_attr(src, "https://www.facebook.com/plugins/video.php?href=", $to_iframe/@href): $to_iframe
+#NEEDED TO 
+#https://www.facebook.com/plugins/video.php?" + $to_iframe/@href
+<iframe>: $to_iframe
+@debug
+#@remove: $to#
+@debug
+# encode-for-uri()
+#!path_not: .*/map.html
+
+#?path: .*galleries/.*
+  
+body: $body
+
+  
+  
+
  
 
-body: $body
+  
+  
+
+ 
+

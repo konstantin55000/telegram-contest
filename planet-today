@@ -1,0 +1,109 @@
+ 
+checklist#6-3-2-related-articles
+
+It is obligatory to format “Related articles” links using the new <related> tag, provided they are identifiable in the source. 
+Here, related articles are identifiable by class with title.
+Please note, when formating related articles, dont do ГЛАВНОЕ ЗА СУТКИ, this are too dynamic (updated each day).
+Instead do ЧИТАЙТЕ ТАКЖЕ section, this more static links.
+
+checklist#6-3-2-related-articles
+It is obligatory to format “Related articles” links using the new <related> tag, provided they are identifiable in the source. 
+Here, related articles are identifiable by class and relatively static.
+http://prntscr.com/mqpvuu
+Please note, when formating related articles, dont do ГЛАВНОЕ ЗА СУТКИ, those are updated each day.
+Instead do ЧИТАЙТЕ ТАКЖЕ section, this more static links.
+
+
+#cover today
+planet-today
+!nested
+https://planet-today.ru/stati/planeta-zemlya/udivitelnaya-priroda/item/99807-samyj-vysokij-londonskij-glaz
+check li
+https://planet-today.ru/stati/planeta-zemlya/udivitelnaya-priroda/item/99807-samyj-vysokij-londonskij-glaz
+
+nested elem https://planet-today.ru/stati/istorii-uspekha/lichnosti/item/98779-olga-prokhorova-analitik-i-finansist-sekret-uspekha
+
+https://planet-today.ru/stati/istorii-uspekha/lichnosti/item/98779-olga-prokhorova-analitik-i-finansist-sekret-uspekha
+
+https://planet-today.ru/stati/planeta-zemlya/udivitelnaya-priroda/item/99807-samyj-vysokij-londonskij-glaz //ul
+
+//trash here
+https://planet-today.ru/novosti/press-relizy/item/99754-ledman-predstavit-innovatsionnye-sov-displei-na-vystavke-isle-2019-v-guanchzhou
+
+https://planet-today.ru/stati/istorii-uspekha/lichnosti/item/97655-natalya-andreina-luchshij-ekspert-v-oblasti-kouchinga
+
+~version: "2.0"
+site_name: "Planet Today"
+!path_not: .*/planet-today.*
+?exists: //*[has-class("sortsnews")]
+$body: //*[has-class("fullstory")]
+description!: //meta[@property="og:description"]
+
+title: $body//h1
+
+ #When several image resolutions are available, the IV page should use better quality images (within reason). 
+
+<xcf>: //a[has-class("modal")][//img]
+<div>: //strong[img]
+<div>: //p[//img]
+$fig: //xcf[has-class("modal")]
+@set_attr(src, $fig/@href): $fig//img
+<cite>: $fig/next-sibling::span[has-class("img-copy")] 
+$c: $@
+@wrap(<figcaption>): $c
+$xc: $@
+@append_to($fig): $xc
+$info:  //*[has-class("newsinfos")]
+  
+author: $info/a
+#<figure>: $fig
+$z: $fig
+ 
+<figure>: //xcf
+ 
+ #fix figure in figcaption https://planet-today.ru/stati/istorii-uspekha/lichnosti/item/98779-olga-prokhorova-analitik-i-finansist-sekret-uspekha
+ <div> : //figure[@style="text-align: center;"]
+ <div>: //figcaption[figure]
+$dt: //*[has-class("autorshare")]//*[has-class("item-date")]
+#<span>: //figcaption[//img]
+@if( $dt ) {
+ 
+    @datetime(0, "ru-RU","eeee, d M yyyy hh:mm"): $dt
+    $xdt: $@ 
+    published_date: $xdt
+}
+
+#chit takzhe
+$sp:  //span[contains(text(),"Читайте также")]
+ 
+
+
+$wrap: //span[contains(text(),"Читайте также")]/ancestor::div/ancestor::div[@class="seemore"]
+
+@remove: $wrap//a[not(has-class("title"))]
+
+<related>: $wrap
+$related: $@
+@debug
+<h3>: $sp/ancestor::div
+
+@append_to($body): $related
+#@debug
+@remove: //script
+@remove: //noscript
+<z>: //figcaption//img
+ $ul: $body//ul
+ <p>: $ul//li
+ <div>: $ul
+@remove: //*[has-class("_custom")] 
+@remove: //*[has-class("custom")]
+@remove: //*[has-class("autorshare")]
+@remove: //*[has-class("newsinfos")]
+@remove: $body//*[has-class("pluso-only-mobile")]
+@remove: $body//*[has-class("aina2")]
+ 
+
+ 
+cover: //figure[1]
+
+ 
