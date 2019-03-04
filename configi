@@ -1,0 +1,118 @@
+vitaly.megabyte, [03.03.19 12:01]
+[In reply to Kostia Trud]
+name = "mushi"
+    allowed_domains = ["realty.ria.ru"]
+    start_urls = ["http://realty.ria.ru"]
+
+Vsevolod T, [03.03.19 12:01]
+он конфиг походу запрашивает
+https://e.issuu.com/config/" + t.split("/")[1] + ".json
+
+Vsevolod T, [03.03.19 12:01]
+get запросом
+и вот типо пример для первого
+https://e.issuu.com/config/45826621.json
+
+vitaly.megabyte, [03.03.19 12:02]
+allow=("/[\d]*/[\d]*\.html")
+
+Vsevolod T, [03.03.19 12:02]
+"{
+ "autoFlip": false,
+ "bgColor": "#353535",
+ "documentURI": "____________________________________dbda624d2e3f09",
+ "enablePoweredByIssuu": true,
+ "enableSeeMore": false,
+ "enableShare": true,
+ "fullscreenBgColor": null,
+ "fullscreenBgImage": null,
+ "fullscreenBgImageStretch": false,
+ "fullscreenBgImageTile": false,
+ "fullscreenLogo": null,
+ "initialPageNumber": 1,
+ "ownerUsername": "976626",
+ "pageLayout": "doublePage"
+}"
+
+Kostia Trud, [03.03.19 12:02]
+что значит documentURI": "____________________________________dbda624d2e3f09
+
+Vsevolod T, [03.03.19 12:02]
+вообще хз че эт
+
+undrfined, [03.03.19 12:02]
+[In reply to Vsevolod T]
+там я помню когда делал скачивалку была странная ссылка которая просто выводила все пикчи на штмл страницу
+
+undrfined, [03.03.19 12:02]
+но это прикрыли
+
+Kostia Trud, [03.03.19 12:03]
+@tva10  тоесть у тебя с таким конфигом работает я правильно понял?
+что. попробую
+
+undrfined, [03.03.19 12:03]
+[In reply to Kostia Trud]
+github.com/undrfined/ivdiff
+
+Vsevolod T, [03.03.19 12:03]
+не, ниче не работает, я из этого конфига -  iframe не знаю как сделать
+
+Illia Pyshniak, [03.03.19 12:04]
+Если есть выбор между картинками 900*600 и 4000*27000, что оставить?
+
+Kostia Trud, [03.03.19 12:05]
+Спасибо. 
+Илья. админы советую выбрать большую 
+но конечно и 4000*27000,  чтото овер много
+
+Dylen, [03.03.19 12:05]
+[In reply to undrfined]
+Цитата стоящая в стороне от текста,тег aside
+
+vitaly.megabyte, [03.03.19 12:05]
+[In reply to Illia Pyshniak]
+4000*27000? Сдается мне, что такая огромная ебанина просто ансаппортед будет)
+
+undrfined, [03.03.19 12:06]
+[In reply to Dylen]
+да я понял уже, только в ИВ она нихера не в стороне
+
+Illia Pyshniak, [03.03.19 12:06]
+[In reply to vitaly.megabyte]
+Ну, пока что все по 3-4 мб, верхний порог 5
+
+Dylen, [03.03.19 12:06]
+[In reply to undrfined]
+Довольно сильно выделяется мне кажется
+
+undrfined, [03.03.19 12:07]
+[In reply to vitaly.megabyte]
+у меня пикчи 6000х6000 были, пока оставляю как есть
+
+Vsevolod T, [03.03.19 12:07]
+https://api.issuu.com/call/reader/api/dynamic/976626/____________________________________dbda624d2e3f09
+
+{
+ "licenses": {},
+ "adsenseAccount": null,
+ "metadata": {
+  "description": "",
+  "userDisplayName": "mind.kiev.ua",
+  "title": "Роз'яснення секретар ату ет",
+  "contentRating": {
+   "isAdsafe": true,
+   "isSafe": true,
+   "isAvailableOnIos": true,
+   "isExplicit": false,
+   "isReviewed": true
+  },
+  "access": "public",
+  "downloadable": false
+ }
+}
+
+Kostia Trud, [03.03.19 12:07]
+@corbee наверное отправь на контест,
+создай ишью на себя и таким образом спроси у админа.
+Да, єто дороговато может стоять ; но я не знаю как "дешевле"

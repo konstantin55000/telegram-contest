@@ -1,0 +1,133 @@
+import scrapy
+from scrapy.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
+from scrapy import Item, Field
+
+desunote = ["//blockquote[@class=\"imgur-embed-pub\"]", "//embed", "//object", "//canvas", "//table//table", 
+    "//anchor[descendant::blockquote]", "//anchor[descendant::aside]", "//anchor[descendant::iframe]", 
+    "//anchor[descendant::slideshow]", "//anchor[descendant::table]", "//anchor[descendant::related]", 
+    "//anchor[descendant::footer]", "//anchor[descendant::img]", "//blockquote[descendant::blockquote]", 
+    "//blockquote[descendant::aside]", "//blockquote[descendant::iframe]", "//blockquote[descendant::slideshow]", 
+    "//blockquote[descendant::table]", "//blockquote[descendant::related]", "//blockquote[descendant::footer]", 
+    "//blockquote[descendant::img]", "//aside[descendant::blockquote]", "//aside[descendant::aside]", 
+    "//aside[descendant::iframe]", "//aside[descendant::slideshow]", "//aside[descendant::table]", 
+    "//aside[descendant::related]", "//aside[descendant::footer]", "//aside[descendant::img]", 
+    "//footer[descendant::blockquote]", "//footer[descendant::aside]", "//footer[descendant::iframe]", 
+    "//footer[descendant::slideshow]", "//footer[descendant::table]", "//footer[descendant::related]", 
+    "//footer[descendant::footer]", "//footer[descendant::img]", "//strong[descendant::blockquote]", 
+    "//strong[descendant::aside]", "//strong[descendant::iframe]", "//strong[descendant::slideshow]", 
+    "//strong[descendant::table]", "//strong[descendant::related]", "//strong[descendant::footer]", 
+    "//strong[descendant::img]", "//b[descendant::blockquote]", "//b[descendant::aside]", "//b[descendant::iframe]", 
+    "//b[descendant::slideshow]", "//b[descendant::table]", "//b[descendant::related]", "//b[descendant::footer]", 
+    "//b[descendant::img]", "//em[descendant::blockquote]", "//em[descendant::aside]", "//em[descendant::iframe]", 
+    "//em[descendant::slideshow]", "//em[descendant::table]", "//em[descendant::related]", "//em[descendant::footer]", 
+    "//em[descendant::img]", "//i[descendant::blockquote]", "//i[descendant::aside]", "//i[descendant::iframe]", 
+    "//i[descendant::slideshow]", "//i[descendant::table]", "//i[descendant::related]", "//i[descendant::footer]", 
+    "//i[descendant::img]", "//ins[descendant::blockquote]", "//ins[descendant::aside]", "//ins[descendant::iframe]", 
+    "//ins[descendant::slideshow]", "//ins[descendant::table]", "//ins[descendant::related]", 
+    "//ins[descendant::footer]", "//ins[descendant::img]", "//u[descendant::blockquote]", "//u[descendant::aside]", 
+    "//u[descendant::iframe]", "//u[descendant::slideshow]", "//u[descendant::table]", "//u[descendant::related]", 
+    "//u[descendant::footer]", "//u[descendant::img]", "//del[descendant::blockquote]", "//del[descendant::aside]", 
+    "//del[descendant::iframe]", "//del[descendant::slideshow]", "//del[descendant::table]", 
+    "//del[descendant::related]", "//del[descendant::footer]", "//del[descendant::img]", 
+    "//s[descendant::blockquote]", "//s[descendant::aside]", "//s[descendant::iframe]", "//s[descendant::slideshow]", 
+    "//s[descendant::table]", "//s[descendant::related]", "//s[descendant::footer]", "//s[descendant::img]", 
+    "//strike[descendant::blockquote]", "//strike[descendant::aside]", "//strike[descendant::iframe]", 
+    "//strike[descendant::slideshow]", "//strike[descendant::table]", "//strike[descendant::related]", 
+    "//strike[descendant::footer]", "//strike[descendant::img]", "//code[descendant::blockquote]", 
+    "//code[descendant::aside]", "//code[descendant::iframe]", "//code[descendant::slideshow]", 
+    "//code[descendant::table]", "//code[descendant::related]", "//code[descendant::footer]", 
+    "//code[descendant::img]", "//kbd[descendant::blockquote]", "//kbd[descendant::aside]", 
+    "//kbd[descendant::iframe]", "//kbd[descendant::slideshow]", "//kbd[descendant::table]", 
+    "//kbd[descendant::related]", "//kbd[descendant::footer]", "//kbd[descendant::img]", 
+    "//samp[descendant::blockquote]", "//samp[descendant::aside]", "//samp[descendant::iframe]", 
+    "//samp[descendant::slideshow]", "//samp[descendant::table]", "//samp[descendant::related]", 
+    "//samp[descendant::footer]", "//samp[descendant::img]", "//tt[descendant::blockquote]", 
+    "//tt[descendant::aside]", "//tt[descendant::iframe]", "//tt[descendant::slideshow]", "//tt[descendant::table]", 
+    "//tt[descendant::related]", "//tt[descendant::footer]", "//tt[descendant::img]", 
+    "//mark[descendant::blockquote]", "//mark[descendant::aside]", "//mark[descendant::iframe]", 
+    "//mark[descendant::slideshow]", "//mark[descendant::table]", "//mark[descendant::related]", 
+    "//mark[descendant::footer]", "//mark[descendant::img]", "//sup[descendant::blockquote]", 
+    "//sup[descendant::aside]", "//sup[descendant::iframe]", "//sup[descendant::slideshow]", 
+    "//sup[descendant::table]", "//sup[descendant::related]", "//sup[descendant::footer]", "//sup[descendant::img]", 
+    "//pic[descendant::blockquote]", "//pic[descendant::aside]", "//pic[descendant::iframe]", 
+    "//pic[descendant::slideshow]", "//pic[descendant::table]", "//pic[descendant::related]", 
+    "//pic[descendant::footer]", "//pic[descendant::img]", "//sub[descendant::blockquote]", 
+    "//sub[descendant::aside]", "//sub[descendant::iframe]", "//sub[descendant::slideshow]", 
+    "//sub[descendant::table]", "//sub[descendant::related]", "//sub[descendant::footer]", 
+    "//sub[descendant::img]", "//a[descendant::blockquote]", "//a[descendant::aside]", "//a[descendant::iframe]", 
+    "//a[descendant::slideshow]", "//a[descendant::table]", "//a[descendant::related]", "//a[descendant::footer]", 
+    "//reference[descendant::blockquote]", "//reference[descendant::aside]", "//reference[descendant::iframe]", 
+    "//reference[descendant::slideshow]", "//reference[descendant::table]", "//reference[descendant::related]", 
+    "//reference[descendant::footer]", "//reference[descendant::img]", "//h1[descendant::blockquote]", 
+    "//h1[descendant::aside]", "//h1[descendant::iframe]", "//h1[descendant::slideshow]", "//h1[descendant::table]", 
+    "//h1[descendant::related]", "//h1[descendant::footer]", "//h1[descendant::img]", "//h2[descendant::blockquote]", 
+    "//h2[descendant::aside]", "//h2[descendant::iframe]", "//h2[descendant::slideshow]", "//h2[descendant::table]", 
+    "//h2[descendant::related]", "//h2[descendant::footer]", "//h2[descendant::img]", "//h3[descendant::blockquote]", 
+    "//h3[descendant::aside]", "//h3[descendant::iframe]", "//h3[descendant::slideshow]", "//h3[descendant::table]", 
+    "//h3[descendant::related]", "//h3[descendant::footer]", "//h3[descendant::img]", "//h4[descendant::blockquote]", 
+    "//h4[descendant::aside]", "//h4[descendant::iframe]", "//h4[descendant::slideshow]", "//h4[descendant::table]", 
+    "//h4[descendant::related]", "//h4[descendant::footer]", "//h4[descendant::img]", "//h5[descendant::blockquote]", 
+    "//h5[descendant::aside]", "//h5[descendant::iframe]", "//h5[descendant::slideshow]", "//h5[descendant::table]", 
+    "//h5[descendant::related]", "//h5[descendant::footer]", "//h5[descendant::img]", "//h6[descendant::blockquote]", 
+    "//h6[descendant::aside]", "//h6[descendant::iframe]", "//h6[descendant::slideshow]", "//h6[descendant::table]", 
+    "//h6[descendant::related]", "//h6[descendant::footer]", "//h6[descendant::img]", "//p[descendant::blockquote]", 
+    "//p[descendant::aside]", "//p[descendant::slideshow]", "//p[descendant::table]", "//p[descendant::related]", 
+    "//p[descendant::footer]", "//pre[descendant::blockquote]", "//pre[descendant::aside]", 
+    "//pre[descendant::iframe]", "//pre[descendant::slideshow]", "//pre[descendant::table]", 
+    "//pre[descendant::related]", "//pre[descendant::footer]", "//pre[descendant::img]", 
+    "//hr[descendant::blockquote]", "//hr[descendant::aside]", "//hr[descendant::iframe]", 
+    "//hr[descendant::slideshow]", "//hr[descendant::table]", "//hr[descendant::related]", 
+    "//hr[descendant::footer]", "//hr[descendant::img]", "//img[descendant::blockquote]", 
+    "//img[descendant::aside]", "//img[descendant::iframe]", "//img[descendant::slideshow]", 
+    "//img[descendant::table]", "//img[descendant::related]", "//img[descendant::footer]", 
+    "//img[descendant::img]", "//br[descendant::blockquote]", "//br[descendant::aside]", 
+    "//br[descendant::iframe]", "//br[descendant::slideshow]", "//br[descendant::table]", 
+    "//br[descendant::related]", "//br[descendant::footer]", "//br[descendant::img]", 
+    "//div[contains(@id, \"vk_post\")]", "//div[contains(@id, \"vk_poll\")]", 
+    "//blockquote[contains(concat(\" \", normalize-space(@class), \" \"), \" reddit-card \")]", 
+    "//div[contains(concat(\" \", normalize-space(@class), \" \"), \" apester-media \")]", 
+    "//div[contains(concat(\" \", normalize-space(@class), \" \"), \" apester-element \")]",
+    "//div[contains(concat(\" \", normalize-space(@class), \" \"), \" jwplayer \")]",
+    "//div[contains(concat(\" \", normalize-space(@class), \" \"), \" jp-jplayer \")]",
+    "//script[@id=\"infogram\" or contains(@src, \"infogr.am\")]"]
+#desunote.append(["//p[descendant::img]", "//p[descendant::iframe]", "//a[descendant::img]", "//table"])
+#"//span[child::img and text()]", "//span[child::img and child::span/text()]"
+#"//a[@name]"
+
+class CrawlResult(Item):
+    url = Field()
+    tags = Field()
+
+class IvCrawler(CrawlSpider):
+    custom_settings = {
+        #'USER_AGENT': 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1; +http://www.google.com/bot.html) Safari/537.36',
+        #'CONCURRENT_REQUESTS_PER_IP': '1',
+        #'DOWNLOAD_DELAY': '0.5'
+    }
+
+    name = "iv-crawler"
+    allowed_domains = ["site.com"]
+    start_urls = ["http://site.com"]
+
+    rules = [Rule(LinkExtractor(allow=(), allow_domains=allowed_domains, deny=(), 
+    deny_domains=()), callback='parse_item', follow=True)]
+
+    def parse_item(self, response):
+        #xpath_base = ["//div[contains(concat(\" \", normalize-space(@class), \" \"), \" entry \")]",
+        #    "//section[contains(concat(\" \", normalize-space(@class), \" \"), \" entry \")]"]
+        xpath_base = ["//div[contains(concat(\" \", normalize-space(@class), \" \"), \" article \")]"]
+        #xpath_base = ["//span[@itemprop=\"articleBody\"]"]
+        #xpath_base = ["//article"]
+        #results = { "url": response.url, "tags":[] }
+        results = CrawlResult()
+        results["url"] = response.url
+        results["tags"] = []
+
+        for tag in desunote:
+            for xpath in xpath_base:
+                if len(response.xpath(f"{xpath}{tag}")) > 0:
+                    results["tags"].append(tag + " \n \t " + response.selector.xpath(f"{xpath}{tag}").extract()[0])
+        
+        if len(results["tags"]) > 0:
+            yield results

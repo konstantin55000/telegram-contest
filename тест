@@ -1,0 +1,14 @@
+https://t.me/instantview_russian/30347
+
+# в скрипте -  JSON взятый с https://pastebin.com/vXEYXPgb
+@json_to_xml: $body//script
+$json: $@
+
+@html_to_dom: $json//content
+$content: $@
+@debug: $content//*[contains(@data-uri, ".mp3")]
+
+И на выходе:
+
+Debug 1 node:
+  [0]: <img class="wscnph editor-placeholder" src="https://wdl.wallstreetcn.com/2ed0c8c8-fb82-499d-b81c-3fd1de114eae" data-wscntype="audio" data-uri="https://premium.wallstcn.com/1f20560f-b6e6-493d-8f91-b0394d5a293f.mp3" data-title="MSCI将A股纳入因子由5%提至20%" data-text=""/>

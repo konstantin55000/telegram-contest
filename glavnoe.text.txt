@@ -1,8 +1,13 @@
-
+polsatnews.pl
+https://glavnoe.ua/galleries/g843
 #Static gallery. should be suported.
 issue src: https://instantview.telegram.org/contest/glavnoe.ua/template18/issue4/
 hm.
 krond https://glavnoe.ua/articles/a12483-revoljucija-gidnosti-vibir-shljahu photo is on cover
+pagination missing
+https://glavnoe.ua/galleries/g854
+
+andery mesac https://glavnoe.ua/galleries/g854/p2
 
 subtitle issue: 
 https://glavnoe.ua/news/n356984627-paralimpijskaja-sbornaja-ukrainy-zanjala-1-mesto-na-chempionate-mira-po-zimnim-vidam-sporta
@@ -28,8 +33,9 @@ https://glavnoe.ua/news/n356984334-uchastniki-marsha-zlyh-harkovchan-prodolzhili
 #fb https://glavnoe.ua/news/n305304
 
  
+ to slideshow: https://glavnoe.ua/news/n354137-na-harkovschine-diplomaty-izrailja-proveli-vstrechu-s-rukovodstvom-oblasti-(foto)
  
-
+instagram https://glavnoe.ua/news/n356983953-poedinki-na-svetovyh-mechah-priznali-oficialnym-vidom-sporta
  
 
 #gals:

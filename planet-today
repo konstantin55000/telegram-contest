@@ -14,6 +14,11 @@ Please note, when formating related articles, dont do ГЛАВНОЕ ЗА СУТ
 Instead do ЧИТАЙТЕ ТАКЖЕ section, this more static links.
 
 
+https://planet-today.ru/stati/istorii-uspekha/lichnosti/item/98779-olga-prokhorova-analitik-i-finansist-sekret-uspekha
+i takzhe: 
+https://instantview.telegram.org/my/planet-today.ru/?url=https%3A%2F%2Fplanet-today.ru%2Fnovosti%2Farmiya%2Farmii-mira%2Fitem%2F99668-importnye-obraztsy-legkoj-bronetekhniki-predstavlennye-na-vystavke-v-abu-dabi-zadayut-samye-vysokie-standarty
+
+TEST: https://planet-today.ru/novosti/tekhnologii/item/99932-sovety-i-rekomendatsii-po-s-emke-zimnikh-vidov-sporta-ot-ambassadora-canon-rikharda-valkha
 #cover today
 planet-today
 !nested
@@ -36,12 +41,47 @@ https://planet-today.ru/stati/istorii-uspekha/lichnosti/item/97655-natalya-andre
 site_name: "Planet Today"
 !path_not: .*/planet-today.*
 ?exists: //*[has-class("sortsnews")]
-$body: //*[has-class("fullstory")]
-description!: //meta[@property="og:description"]
+$body:  //*[has-class("sortsnews")]
 
-title: $body//h1
+$x: //meta[@property="og:description"]
+ @remove: //*[@class="pos4content"]
+ 
+description!: $x/@content
+title: //h1
+$scr: //*[@data-type="text/javascript"] 
+ @remove: $scr
+ $txt: //*[@id="cloak31249"]
+ #@remove
+ @debug
+ @if( //iframe ) {
+   $body:  //*[has-class("fullstory")]
+ }
+ 
+  #https://planet-today.ru/novosti/armiya/rossijskoe-vooruzhenie/item/99364-snajperskaya-vintovka-sv-98-obzor-oruzhiya-i-mnenie-snajpera fix
+ $toreplace: //figure[@style="text-align: center;"]/next-sibling::figure
+  <figcaption>: $toreplace
+  
+ #@deb ug
+ #@combine(<br>): //figcaption/prev-sibling::figure
+ #@combine(<br>): //figure/next-sibling::figcaption
+ #$to_figure: $@
+ #<figure>: $to_figure
+ @debug
+$fig: //p[img]
+$figc: $fig/next-sibling::p[em] 
+@set_attr(style,""): $figc
+<figcaption>: $figc
+@wrap_inner(<figcaption>): $@
+@debug
+@combine(<br>): $fig/next-sibling::figcaption
+$to_fig: $@
+@debug
+<figure>: $to_fig
+#@wrap_inner(<figure>): $to_fig
 
- #When several image resolutions are available, the IV page should use better quality images (within reason). 
+#<figure>: $fig
+
+
 
 <xcf>: //a[has-class("modal")][//img]
 <div>: //strong[img]
@@ -55,15 +95,19 @@ $xc: $@
 @append_to($fig): $xc
 $info:  //*[has-class("newsinfos")]
   
+
+  
 author: $info/a
+author_url: $info/a/@href
 #<figure>: $fig
 $z: $fig
  
 <figure>: //xcf
+ @remove: //*[has-class("pos4content")]
  
  #fix figure in figcaption https://planet-today.ru/stati/istorii-uspekha/lichnosti/item/98779-olga-prokhorova-analitik-i-finansist-sekret-uspekha
- <div> : //figure[@style="text-align: center;"]
- <div>: //figcaption[figure]
+<div> : //figure[@style="text-align: center;"]/figcaption[figure]
+ #<div>: //figcaption[figure]
 $dt: //*[has-class("autorshare")]//*[has-class("item-date")]
 #<span>: //figcaption[//img]
 @if( $dt ) {
@@ -75,22 +119,19 @@ $dt: //*[has-class("autorshare")]//*[has-class("item-date")]
 
 #chit takzhe
 $sp:  //span[contains(text(),"Читайте также")]
- 
-
-
 $wrap: //span[contains(text(),"Читайте также")]/ancestor::div/ancestor::div[@class="seemore"]
 
 @remove: $wrap//a[not(has-class("title"))]
 
 <related>: $wrap
 $related: $@
-@debug
+ 
 <h3>: $sp/ancestor::div
 
 @append_to($body): $related
 #@debug
-@remove: //script
-@remove: //noscript
+#@remove: //script
+#@remove: //noscript
 <z>: //figcaption//img
  $ul: $body//ul
  <p>: $ul//li
@@ -103,7 +144,13 @@ $related: $@
 @remove: $body//*[has-class("aina2")]
  
 
+$ins: //span[@id="cloak3550"]/next-sibling::ins
+@remove: $ins
  
+
 cover: //figure[1]
+
+body!: $body
+
 
  

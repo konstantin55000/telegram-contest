@@ -1,0 +1,4 @@
+$setsrc: $body//img[@srcset]
+@replace("http.+w, ", ""): $setsrc/@srcset
+@replace("(jpe?g|png|gif).+w", "$1"): $setsrc/@srcset
+@set_attr(src, @srcset): $setsrc

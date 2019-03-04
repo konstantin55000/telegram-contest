@@ -1,16 +1,16 @@
- ~version: "2.0"
+~version: "2.0"
 site_name: "Главное™"
 
 $body: //*[has-class("one-article")]
 title: //h1
 #subtitle://h2[has-class("newsshorttext")]
 @remove: //*[contains(@href,"metrika.yandex.ua")]
- 
+
 @if( //*[has-class("onegallery")] ) {
- @remove: //*[has-class("pager")]
-  <wrp>: //a[img]
+
+  <wag>: //a[img]
   
- @map( //wrp[img] ) {   
+ @map( //wag[img] ) {   
   $wrp: $@                
    @set_attr(src, $wrp/@href): $wrp/img
  
@@ -18,14 +18,37 @@ title: //h1
   $body: //*[has-class("onegallery")]
   title: $body//h1
   
+  $last_pager: (//div[has-class("pager")])[last()]
+  @if ($last_pager) {
   
+ 
+  
+ $tx: $last_pager/a[not(has-class="selected")]
+ @debug
+ @remove: //div[has-class("pager")]
+ $d: (//wag)[last()]
+ 
+ @map( $tx ) {
+  $curr: $@
+  @after(<iframex>): $d
+  $xs: $@
+   @set_attr(src, $curr/@href): $xs
+ }
+ #@inline: //iframex
+<iframe>: //iframex
+@inline: //iframe
+@debug
+ @set_attr(src, $tx/@href): //vstavit
+  }
+ 
   #https://glavnoe.ua/galleries/g824
   $aut: //*[has-class("gallerytext")][2]/p 
    <p>:$aut
  
-    
+    # @remove: //*[has-class("pager")]
   $dtt: //*[has-class("gallerytext")][1] 
-  @datetime(0, "ru-RU","d M yyyy"): $dtt
+  @datetime(0, "ru-UA","d M yyyy hh:mm"): $dtt
+ @debug
   $formated: $@
   published_date: $formated
   
@@ -46,6 +69,7 @@ title: //h1
 @debug
 $relinner://*[has-class("gallery-seealso")]
  # @remove: //*[has-class("headed-block")]
+ #@after(<iframe>):$body
   body!!: $body
 }
 ?exists: $body
@@ -56,9 +80,11 @@ $dt: $body//div[has-class("newsdate")]
 #<div class="newstime">07:04</div>
 #replace facebook
 $time: $body//div[has-class("newstime")]
-
+@after(<br>): //blockquote/p
+@debug
 #@datetime(0, "ru-RU","d M yyyy, hh:mm"): $dt 
-@datetime(0, "ru-RU","d M yyyy"): $dt
+@datetime(0, "ru-UA","d M yyyy"): $dt
+@debug
 $formated: $@
 published_date: $formated
 @remove: $body//img[contains(@src,"informer.yandex.ru")]
@@ -86,20 +112,20 @@ author_url: $aut//*/@href
 @before(<iframe>, src, @data-src, class, "fb-post"): $fb_post
 #@remove
 <div>: //p[//iframe]
-@if( $time/text() ) {
+ @if( $time/text() ) {
  
-$df: $body//div[has-class("newsdate")]/next-sibling::*[has-class("newstime")]
-@combine(" "): $body//div[has-class("newsdate")]/next-sibling::*[has-class("newstime")]
+
+ @combine(" "): $body//div[has-class("newsdate")]/next-sibling::*[has-class("newstime")] 
+ $date_field:  $@
  @debug
-$xsd:  $@
- # <fig>: $xsd
+  @prepend("Europe/Kiev "): $date_field
   @debug
-  @datetime(0, "ru-RU","d M yyyy hh:mm"): $xsd
+   @datetime(0, "ru-UA","VV dd MMMM yyyy HH:mm"): $date_field
   $formated: $@
     @debug
   published_date!: $formated
-  published_date: $formated
-}
+  #published_date: $formated
+ }
 channel: "@glavnoeUA"
 $nt: //*[has-class("newstools")]
 
@@ -115,7 +141,7 @@ $orf: //div[@align="center"][//i]
 
 $links: //*[has-class("seealso_inner")]/a
  #@B($body): "##"
- 
+  
 
  
  @remove: //div[@class="facebook-tools"]
@@ -131,10 +157,6 @@ $links: //*[has-class("seealso_inner")]/a
      @wrap_inner(<related>): //xc
         #@append_to(//related): "Читайте также:"
      @append_to($body): //related
-
-   
-  
-  
  }
 
 
@@ -158,26 +180,7 @@ $to_iframe: //*[contains(@data-oembed-url,"facebook")]//a
   
 body: $body
 
-  @prepend("Europe/Kiev "): $date_field
-  
-
-# interesting: test this
-@combine(" "): $body//div[has-class("newsdate")]/next-sibling::div[has-class("newstime")]
-$date_field: $body//div[has-class("newsdate") or has-class("gallerytime")]
-@replace("^", ""): $date_field
-
-?not_exists: $date_field[contains(text(), ":")]
-@datetime(0, "ru-UA", "dd MMMM yyyy"): $date_field
-published_date: $@
-?exists: $date_field[contains(text(), ":")]
-@prepend("Europe/Kiev "): $date_field
-@datetime(0, "ru-UA", "VV dd MMMM yyyy HH:mm"): $date_field
-published_date: $@
-?true
-#test this
-
   
   
 
  
-
