@@ -1,0 +1,125 @@
+~version: "2.0"
+site_name: "Wall-Street.ro"
+$body: //*[has-class("article-body")]
+@if(  //*[has-class("articleText")]) {
+  $body://*[has-class("articleText")]
+}
+
+ @if(//*[has-class("article-body")]) {
+  $body: //*[has-class("article-body")]
+  @debug
+ 
+}
+ @if(//*[has-class("wsSlideShowArticle")]) {
+  $body: //*[has-class("article-body")]
+  
+}
+ 
+ 
+@wrap_inner(<strong>) : //*[has-class("article-excerpt")]
+
+@prepend_to($body): //*[has-class("article-excerpt")]/next-sibling::hr
+@prepend_to($body): //*[has-class("article-excerpt")]
+
+title: //h1
+cover: //div[has-class("article-picture")]/img
+
+$aut: //*[has-class("editor")]
+@remove: $aut/img
+author: $aut
+
+author_url: $aut/@href
+
+$auth2: //*[has-class("editor")][2]
+#@debug
+@if( $auth2 ) {
+
+ @after(<auth>) : $body
+  $at: //auth 
+@set_attr(data-auth, //*[has-class("editor")][1], ", ", //*[has-class("editor")][2]): $at
+ author: $at/@data-auth
+}
+
+
+<div>: //blockquote[.//img]
+<div>: //blockquote[.//table]
+<div>: //blockquote[.//iframe]
+<div>: //blockquote[.//video]
+<div>: //blockquote[.//embed]
+<div>: //blockquote[.//audio]
+
+<div>: //p[.//img] 
+<div>: //p[.//table]
+<div>: //p[.//iframe]
+<div>: //p[.//video]
+<div>: //p[.//audio]
+<div>: //p[.//embed]
+<div>: $body//p[img]
+
+$ytif: //iframe
+#@replace("-nocookie", ""): $ytif/@data-src
+@set_attr(src, @data-src): $ytif
+
+@set_attr(src,@data-src): //img
+$cover: //div[@class="image"]/img
+cover:$cover
+
+#figcaps:
+$fig: //div[has-class("image-p")][img]
+<figure>: $fig
+
+$figcap: //figure/next-sibling::p[em]
+@wrap_inner(<figcaption>): $figcap
+@combine("\n"):  $figcap
+
+ 
+
+@remove: //*[has-class("articlesList")]
+$rmore: //*[text()[contains(.,'Citeste si:')]]/ancestor::a
+$rmoretext: //*[text()[contains(.,'Citeste si:')]]/ancestor::h5
+<h6>: $rmoretext/span
+@remove : //*[has-class("ad")]
+@remove: $rmore/img
+@wrap(<related>): $rmore
+
+$rmore2: //p[contains(text(),"Citeste si:")]
+
+<related>: $rmore2
+
+@remove: $rmore/img
+
+@append_to(//related): $rmoretext/h6
+@remove: //*[has-class("in-article-recommanded")]//img
+@remove: //*[has-class("in-article-recommanded")]/img
+ 
+@remove: //*[has-class("mobile-hide")]
+@remove: //*[span[has-class("label")]]
+@remove: //*[has-class("article-related-list")]
+$next: //figure[img]/next-sibling::*[text()[contains(.,'Foto:')]]
+ 
+ $rirl ://h1
+ @debug
+ title : $rirl
+
+@wrap_inner(<figcaption>): $next
+@combine("\n"): $next
+<figure>: //div[img]
+
+$next: //figure/next-sibling::div[has-class("in-article-recommanded")]/next-sibling::*[text()[contains(.,'Foto:')]]
+ 
+$figr: //div[has-class("in-article-recommanded")]/prev-sibling::figure
+<figcaption>: $next
+#$wraped: $@
+@append_to($figr): $next
+@debug
+$srcphoto : //*[has-class("source")]
+#<cite>: $srcphoto
+<sup>: $srcphoto
+@debug
+@remove: //*[has-class("related-tags")]
+<div>: //a[.//img]
+ body!: $body
+ @debug
+@append_to($body): //related
+
+

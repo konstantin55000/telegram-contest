@@ -1,13 +1,62 @@
+#mind ua is not present
+https://mind.ua/editorial
+:)
+Illya pishnyak 
+https://mind.ua/publications/20193961-grupovij-portret-v-intereri-7-zapitan-do-privatbanku
+related dynamic block
+
+#партнерський матеріал
+is like Information Is on advertise rights.
+important to keep this link for user.
+
+here is about festival
+here for ex about Kyivstar company
+https://mind.ua/publications/20192122-yak-kiyivstar-pidsadiv-kosmo-ta-shche-50-kompanij-na-veliki-dani
+
+https://mind.ua/news/20194388-u-bryusseli-projde-festival-ukrayinskoyi-kulturi-ukrayinska-vesna
+
+
+https://mind.ua/openmind/20189763-chomu-venchurnij-kapital-ominae-ukrayinskij-rinok
+should be preserved
+
+Agiw blockqoute
+https://mind.ua/publications/20192669-rozumnij-zahist-yak-zaoshchaditi-na-strahuvanni-avtomobilya
+sunny with uzlVer
+
+https://mind.ua/publications/20192669-rozumnij-zahist-yak-zaoshchaditi-na-strahuvanni-avtomobilya
+
 #old 2 aut
 #test
 https://mind.ua/openmind/20194151-u-zoni-turbulentnosti-yak-koncesiya-dopomozhe-ukrayinskim-aeroportam
+!FIGcaption
+fl:
+https://mind.ua/openmind/20175907-hochu-selfi-ale-fotokameru-shche-ne-vinajshli-istoriya-viniknennya-ukrayinskogo-portretu
+
+figc
+https://mind.ua/en/publications/20190743-power-trends-what-energy-projects-are-worth-investing-in
+
+
+should be precent cite
+https://mind.ua/publications/20180681-tiha-gavan-shcho-dp-world-pridbala-v-portu-yuzhnij
+
+https://mind.ua/openmind/20177349-korupciya-po-kiyivski-shcho-yavlyali-soboyu-habari-chasiv-getmanshchini
+_fr right
+https://mind.ua/openmind/20177349-korupciya-po-kiyivski-shcho-yavlyali-soboyu-habari-chasiv-getmanshchini
 
 UzVer template better https://mind.ua/education/934-vnutrishni-komunikaciyi-dlya-vlasnikiv-strategichnij-riven
+
 #support this static page
 https://mind.ua/questions/385-integrities#3
+#marked text
+https://mind.ua/ru/publications/20193696-kilovatty-pod-zashchitoj-kak-zastrahovat-elektromobil
+#marked text
+https://mind.ua/ru/publications/20192337-cena-zdorovya-chto-proishodit-s-individualnym-medicinskim-strahovaniem-v-ukraine
 
-#darnitsya
-https://mind.ua/en/publications/20183473-general-director-of-pharmaceutical-firm-darnitsa-import-substitution-is-nothing-more-than-anothe FIGcapt!
+#!!nested element is not suported https://mind.ua/publications/20192669-rozumnij-zahist-yak-zaoshchaditi-na-strahuvanni-avtomobilya: table
+
+#darnitsya ficc.
+https://mind.ua/en/publications/20183473-general-director-of-pharmaceutical-firm-darnitsa-import-substitution-is-nothing-more-than-anothe 
+
 #https://mind.ua/en/publications/20184607-life-elixir-how-a-pharmaceutical-company-launched-the-production-of-infusions
 #figcaption
 
@@ -73,4 +122,38 @@ https://mind.ua/publications/20193961-grupovij-portret-v-intereri-7-zapitan-do-p
 может структуру https://mind.ua/ru/publications/20193715-kak-izbavitsya-ot-mirovoj-problemy-s-plastikom-dilemma-krupnogo-biznesa
 http://prntscr.com/mp886s
   
+  !large tables
+  https://mind.ua/ru/publications/20186445-rejting-strahovyh-kompanij-2018-kak-rynok-strahovshchikov-v-ukraine-vyhodit-iz-zastoya
 
+sorry for duplicate. issue.
+just did not have time to  all text:
+so Next time dont forget to support this static pages: 
+/about
+/ads
+/editorial
+/shield
+
+and maybe even event this
+static page /questions/385-integrities
+http://prntscr.com/mskfco
+
+All this pages are not obligatory, (at first sight)
+but may became advantage sometime in decisive moment
+
+just returning to you favor, to Not set issue at last minutes.
+Good luck!
+
+
+<div>: //blockquote[.//img]
+<div>: //blockquote[.//table]
+<div>: //blockquote[.//iframe]
+<div>: //blockquote[.//video]
+<div>: //blockquote[.//embed]
+<div>: //blockquote[.//audio]
+
+<div>: //p[.//img]
+<div>: //p[.//table]
+<div>: //p[.//iframe]
+<div>: //p[.//video]
+<div>: //p[.//audio]
+<div>: //p[.//embed]

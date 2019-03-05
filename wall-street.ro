@@ -1,0 +1,55 @@
+ws.ro
+Site name Must be preserved
+https://www.wall-street.ro/catalog/anunt/5896/ALIMAR-COLLECTION-SRL.html
+sitename
+on this static page
+https://www.wall-street.ro/catalog/oferta_servicii
+
+special https://www.wall-street.ro/articol/Social/237592/daruiesti-din-ceea-ce-esti.html
+
+!embed not suported
+https://www.wall-street.ro/articol/Finante-Banci/238817/podcastul-de-fiscalitate-ce-modificari-importante-a-adus-noul-an.html
+2different readmore links:
+https://www.wall-street.ro/articol/Careers/238150/cum-scrii-un-cv-impresionant-daca-nu-ai-deloc-experienta-profesionala.html
+
+separator need to hide in mobile
+<hr class="separator mobile-hide">
+
+special 
+author:
+
+https://www.wall-street.ro/special/romania-fara-hospice/238952/romania-fara-hospice-raluca-kisescu-nu-ma-simt-bine-daca-nu-fac-bine.html
+https://www.wall-street.ro/special/ecomteam/239078/libris-ro-a-vandut-in-2018-carti-in-valoare-de-40-milioane-lei-cu-28-mai-mult-decat-in-anul-anterior.html
+
+https://www.wall-street.ro/articol/eCommerce/239078/libris-ro-a-vandut-in-2018-carti-in-valoare-de-40-milioane-lei-cu-28-mai-mult-decat-in-anul-anterior.html
+not a part of a article
+
+figcaptions:
+https://www.wall-street.ro/special/analize-economice-si-geo-politice/238821/suspendarea-tratatului-inf-oportunitate-pentru-sua-sau-pentru-federatia-rusa.html
+figcapt
+https://www.wall-street.ro/articol/Careers/238150/cum-scrii-un-cv-impresionant-daca-nu-ai-deloc-experienta-profesionala.html
+
+#google docs form
+#https://www.wall-street.ro/articol/Finante-Banci/238903/revolut-angajari-startupfintech.html
+https://www.wall-street.ro/articol/Finante-Banci/239063/analistii-financiari-estimeaza-o-depreciere-a-monedei-nationale-pana-la-4-8884-lei-euro-in-urmatoarele-12-luni.html
+
+tables: 
+https://www.wall-street.ro/articol/International/235429/sua-si-china-art-of-deal-vs-art-of-war.html
+
+
+maybestatic page
+https://conferinte.wall-street.ro/GalaWallStreet2019/index.html
+
+https://www.wall-street.ro/gdpr/prelucrarea-datelor-personale.html
+
+
+in article:
+https://www.wall-street.ro/articol/Companii/238864/apa-nova-nu-accepta-amenda-de-10-000-de-lei-de-la-directia-de-sanatate-publica-argumentand-ca-apa-distribuita-este-potabila.html
+
+
+#several related links
+https://www.wall-street.ro/articol/Careers/238150/cum-scrii-un-cv-impresionant-daca-nu-ai-deloc-experienta-profesionala.html
+
+
+slideshow can be supportwed
+https://www.wall-street.ro/slideshow/Marketing-PR/236531/ce-mai-citim-carti-pe-care-redactia-wall-street-ro-le-recomanda/1/omul-care-isi-confunda-sotia-cu-o-palarie-oliver-sacks.html
