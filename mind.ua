@@ -1,36 +1,69 @@
 #mind ua is not present
 https://mind.ua/editorial
 :)
-Illya pishnyak 
-https://mind.ua/publications/20193961-grupovij-portret-v-intereri-7-zapitan-do-privatbanku
-related dynamic block
+
+ cite are missing https://mind.ua/ru/publications/20183057-ostorozhno-facebook-pochemu-voznik-skandal-s-ispolzovaniem-personalnyh-dannyh
+ 
+ tst https://www.wall-street.ro/raft-afaceri/afaceri-creatie-productie/afacere-creativa-business-genti-pictate.html
+ 
+!nomedia https://mind.ua/publications/20191403-pridbati-kvartiru-i-ne-prograti-7-pomilok-pokupciv-zhitla-na-vtorinnomu-rinku
+
+Looks like i and all other contestant messed up with this page because of 404 media not found err.
+@admin, what we should do in such case?
 
 #партнерський матеріал
 is like Information Is on advertise rights.
 important to keep this link for user.
 
-here is about festival
-here for ex about Kyivstar company
-https://mind.ua/publications/20192122-yak-kiyivstar-pidsadiv-kosmo-ta-shche-50-kompanij-na-veliki-dani
+This post is all about Bulding company
+Label "Partnership content" should be preserved. (check my template)
+User deserves to know, what content was created on "advertise partnership"
+ 
+https://mind.ua/news/20193030-innovacijnij-park-unit-city-zbilshili-vdvichi-ta-vidkrili-tretij-biznes-kampus
+
 
 https://mind.ua/news/20194388-u-bryusseli-projde-festival-ukrayinskoyi-kulturi-ukrayinska-vesna
 
+"we cannot check every page just one page with this issue so it is not critical..."
+True, but this current template will fall with err. each time,  
+when  site author adds table in div class="post__frame"
 
+You choose to highlight this div as blockqoute. Same as me. Cool!
+But it is possible to not fail with error such cases:
+<div class="post__frame">
+    <table>...</table>
+</div>
+
+You may check other template for this page.
+no media found
+
+https://mind.ua/publications/20191403-pridbati-kvartiru-i-ne-prograti-7-pomilok-pokupciv-zhitla-na-vtorinnomu-rinku
+
+<div class="post__frame">
+    <table>...</table>
+</div>
 https://mind.ua/openmind/20189763-chomu-venchurnij-kapital-ominae-ukrayinskij-rinok
 should be preserved
 
-Agiw blockqoute
+! blockqoute nested!
 https://mind.ua/publications/20192669-rozumnij-zahist-yak-zaoshchaditi-na-strahuvanni-avtomobilya
-sunny with uzlVer
+sunny with uzlVer!
 
+Page should be supported. Check my template.
+Looks like you overplaying with blockqoute.
 https://mind.ua/publications/20192669-rozumnij-zahist-yak-zaoshchaditi-na-strahuvanni-avtomobilya
 
 #old 2 aut
 #test
 https://mind.ua/openmind/20194151-u-zoni-turbulentnosti-yak-koncesiya-dopomozhe-ukrayinskim-aeroportam
+
+
+Too much text with large font-size.
+Definetly figcaption and it is possible to support. check my template.
 !FIGcaption
 fl:
 https://mind.ua/openmind/20175907-hochu-selfi-ale-fotokameru-shche-ne-vinajshli-istoriya-viniknennya-ukrayinskogo-portretu
+
 
 figc
 https://mind.ua/en/publications/20190743-power-trends-what-energy-projects-are-worth-investing-in
@@ -44,6 +77,8 @@ _fr right
 https://mind.ua/openmind/20177349-korupciya-po-kiyivski-shcho-yavlyali-soboyu-habari-chasiv-getmanshchini
 
 UzVer template better https://mind.ua/education/934-vnutrishni-komunikaciyi-dlya-vlasnikiv-strategichnij-riven
+
+https://mind.ua/questions/385-integrities
 
 #support this static page
 https://mind.ua/questions/385-integrities#3
@@ -81,6 +116,11 @@ figc missing maybe convert to ficaption
 #tables maybe convert
 https://mind.ua/ru/publications/20172756-gonka-na-vyzhivanie-rejting-strahovyh-kompanij-2017
 
+
+https://mind.ua/news/20194347-zapravilas-u-prozorro-skilki-vitratila-derzhava-byudzhetnih-koshtiv-na-palne
+Figcaptions are missing while they are possible to indentfiy.
+Html struct:
+http://prntscr.com/mu5ar6
 
 https://mind.ua/news/20194293-youcontrol-tretinu-dohodu-biznesu-dnipropetrovshchini-ta-odeshchini-generuyut-ofshorni-kompaniyi
 h6 maybe figcapt

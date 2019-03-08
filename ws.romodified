@@ -16,26 +16,38 @@ site_name: "Wall-Street.ro"
 
 @set_attr("href",./img): //a[./img]/@href
 
- 
+@after_el("./.."): //p/iframe
+@after_el("./.."): //a/img
+<div>: //p/img
+@after_el("./.."): //p/related
 
 # STYLING (add it if you want)
 # <aside>: //*[@style="text-align: center;"]
   
+# REPLACING srcset WITH src 
+# NOTE THAT IV DO NOT SUPPORT srcset!
+# SAFE IF IV STARTS SUPPORTING srcset
+# By @housemusicforhomelessepeople
+$setsrc: $body//img[@srcset]
+@set_attr(src_set, @srcset): 
+@replace("http.+w, ", ""): $setsrc/@src_set
+@replace("(jpe?g|png|gif).+w", "$1"): $setsrc/@src_set
+@set_attr(src, @src_set): $setsrc
 
+# YOUTUBE OBJECT FIXER
+# By @housemusicforhomelessepeople
+@if("//object[contains(@data, \"youtube\")]") {
+  @before(<iframe>): //object[contains(@data, \"youtube\")]
+  @replace("http://www.youtube.com/v/","https://www.youtube.com/embed/"): //object[contains(@data, "youtube")]/@data
+  @set_attr(src, "./next-sibling::object[contains(@data, \"youtube\")]/@data"): //iframe[next-sibling::object[contains(@data, "youtube")]]
+  @remove: //object[contains(@data, "youtube")]
+}
 
-# start
+# REPLACE BODY !!!
 $body: //*[has-class("article-body")]
 @if(  //*[has-class("articleText")]) {
   $body://*[has-class("articleText")]
 }
-$yourmoney: //div[has-class("article-content")]
- @if ($yourmoney){
-$body: $yourmoney
-#@remove: $body//img[1]
-@remove: //*[has-class("slide-navigator")]
-@remove: //*[has-class("slideshow-primary-title")]
-}
-#$chk: //iframe[contains(@src, "video13.onnetwork.tv")]
 
 @if (//*[has-class("idea-content")]){
 title: //h1
@@ -69,16 +81,15 @@ $xsx: //div[has-class("panel-heading")][span]
   $body: //*[has-class("article-body")]
   
 }
-
-$chk : //*[contains(@src, "video.onnetwork.tv")]
-@if( $chk ) {
-  $body: ""
-}
- 
-@debug
- @remove: //*[contains(text(),"Pentru a putea urmari acest video")] 
+ @remove: //*[contains(text(),"Pentru a putea urmari acest video  te rugam sa accepti  plasarea de cookie-uri de marketing.")] 
  @remove: //*[contains(text(),"Accepta toate cookie-urile")] 
- 
+# $slideshow://*[has-class("article-excerpt")]/next-sibling::*[has-class("article-image-social")]
+# @if($slideshow) {
+#  $an :$slideshow//a[@rel="next"]
+#  @wrap(<p>): $an
+#  @prepend_to($body): $@ 
+  
+# }
 @wrap_inner(<strong>) : //*[has-class("article-excerpt")]
 
 @prepend_to($body): //*[has-class("article-excerpt")]/next-sibling::hr
@@ -128,28 +139,9 @@ $ytif: //iframe
 @set_attr(src, @data-src): $ytif
 
 @set_attr(src,@data-src): //img
- 
- 
-$slideshow : //*[has-class("article-image-social")]/div
- @if($slideshow){
- @remove : $slideshow//*[has-class("article-infos")]
-  @remove : $slideshow//*[has-class("ribbon")]
-    $an: //a[@rel="next"]
-    @append("→"): $an
-    @wrap(<figcaption>): $an
-    <figure>: $slideshow
- }
-@if_not($yourmoney  ) {
-   cover: //figure
-}
-   
-@replace("%20"," "): //img/@src
-
 $cover: //div[@class="image"]/img
 cover:$cover
-<div>: //h2[img]
-$tofigx: $@
-@set_attr(class,"image-p"): $tofigx
+
 #figcaps:
 $fig: //div[has-class("image-p")][img]
 <figure>: $fig
@@ -173,7 +165,7 @@ $rmore2: //p[contains(text(),"Citeste si:")]
 
 $rel2: $body//div[has-class("in-article-recommanded")]//h5//a 
 @wrap(<related>): $rel2
-@append_to($body): //related
+
 @debug
 
 @remove: $rmore/img
@@ -194,61 +186,37 @@ $next: //figure[img]/next-sibling::*[text()[contains(.,'Foto:')]]
 # <figure>: //div[img]
 
 $next: //figure/next-sibling::div[has-class("in-article-recommanded")]/next-sibling::*[text()[contains(.,'Foto:')]]
- @debug
+ 
 $figr: //div[has-class("in-article-recommanded")]/prev-sibling::figure
 <figcaption>: $next
-@combine(""): $next
-$fk: //figure/next-sibling::div
-@debug
 #$wraped: $@
 @append_to($figr): $next
-#@debug
+@debug
 $srcphoto : //*[has-class("source")]
 #<cite>: $srcphoto
 <sup>: $srcphoto
 @debug
 @remove: //*[has-class("related-tags")]
 
-@if ($yourmoney){
- #@remove: //h1/next-sibling::div
-}
  
 # <div>: //a[.//img]
  body!: $body
  
 
-
+@append_to($body): //related
 # REPLACE BODY !!!
 
 title: //meta[@property="og:title"]/@content
 description: //meta[@name="description"]/@content
- 
+cover: $body//figure
+cover: $body//img
 image_url: //meta[@property="og:image"]/@content
 image_url: $body//img/@src
- 
- 
+site_name: //meta[@property="site_name"]/@content
+author: //*[has-class("author")]/text()
 
 @datetime(0): //time/@datetime
 published_date
-
-# REPLACING srcset WITH src 
-# NOTE THAT IV DO NOT SUPPORT srcset!
-# SAFE IF IV STARTS SUPPORTING srcset
-# By @housemusicforhomelessepeople
-$setsrc: $body//img[@srcset]
-@set_attr(src_set, @srcset): 
-@replace("http.+w, ", ""): $setsrc/@src_set
-@replace("(jpe?g|png|gif).+w", "$1"): $setsrc/@src_set
-@set_attr(src, @src_set): $setsrc
-
-# YOUTUBE OBJECT FIXER
-# By @housemusicforhomelessepeople
-@if("//object[contains(@data, \"youtube\")]") {
-  @before(<iframe>): //object[contains(@data, \"youtube\")]
-  @replace("http://www.youtube.com/v/","https://www.youtube.com/embed/"): //object[contains(@data, "youtube")]/@data
-  @set_attr(src, "./next-sibling::object[contains(@data, \"youtube\")]/@data"): //iframe[next-sibling::object[contains(@data, "youtube")]]
-  @remove: //object[contains(@data, "youtube")]
-}
 
 #=====LET ME DIE=====
 #Original code/idea by Misho @mushi_f

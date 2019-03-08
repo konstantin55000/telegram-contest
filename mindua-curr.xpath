@@ -10,12 +10,13 @@ $testembed: //*[contains(@src, "//e.issuu.com/embed.js")]
 @if($testembed){
  <iframe>: $testembed
 }
+
 $iframevideo: //div[has-class("block_social_wide")]/next-sibling::div[has-class("video_content__code")]
 @debug
 @prepend_to($body): $iframevideo
 $aside: //*[@class="post__frame"]
 <blockquote>: $aside
-
+@remove://img[contains(@src,".svg")]
 $dv: //p/next-sibling::div[@class="img_source"]
 $dv2: //p/next-sibling::div[@class="img_source"]/next-sibling::div[@class="img_source"]
 #<cite>: $dv2/span
@@ -79,17 +80,20 @@ cover: $phs[1]
 $fig: //*[has-class("img_box2_c")]
 $get: //*[has-class("img_box2_c")]//br/following-sibling::text()[1] 
 @wrap(<z>): $get
-
+<cite>: //*[has-class("img_box2_c")]/div[has-class("img_source")]
 $ax: $@
+@debug
+@wrap(<z>): $ax
+<z>: $fig//p[span]
 <figcaption>: //z
 $cite: //figcaption/next-sibling::*
 #@debug
 #<cite>: $cite
 @wrap(<figcaption>): $cite
 @combine(""): //figcaption/next-sibling::figcaption
-
 <figure>: $fig
 $test: //figure
+@debug
 @wrap(<figcaption>): //figure//cite
 @wrap(<figcaption>): //figure//span
 @wrap_inner(<cite>): //figure//*[has-class("img_source")]
@@ -164,7 +168,7 @@ $figcap: //figure/next-sibling::*[@style="text-align: center;"][strong]
 @combine(<br>): $figcap
 
 $fig: //figure
-
+ 
 $figcap: //figure/next-sibling::*[@style="text-align: center;"][em]
 @wrap_inner(<figcaption>): $figcap
 @combine(<br>): $figcap
@@ -182,7 +186,9 @@ $aut://span[@class="post__info__author__name"]//a
 $sm: //*[has-class("related_news__inner")] 
 
 $to_rel://h3[@style="text-align: center;"]
- 
+@wrap(<related>): $to_rel//a
+$rels: $@
+@append_to($body): $rels
  <h3>: //*[has-class("block_related")]//*[has-class("section_title_small")][1]/*
  #@debug
 @prepend_to($sm): //*[has-class("block_related")]//*[has-class("section_title_small")][1] 
@@ -227,9 +233,14 @@ $torelated: $@
 #@debug
 #@append_to($later): //toh3
  
+$fkd: //*[@class="post__partnership__link"]
+@debug
+@before(<toremove>) :$body//figcaption
+@append_to(//toremove): $fkd
+ 
+@debug
 
-
-
+@remove: //noscript
 
 @append_to($body): $rel
 #@debug
@@ -252,12 +263,8 @@ cover: $img
 @remove: //script
 
 $addr:  //div[@id="box-content"]
-#//*[has-class("event_info__adress")]
-
-
-#@remove://td[iframe] 
-
-
+#//*[has-class("event_info__adress")] 
+#@remove://td[iframe]  
 
 #@wrap(<summary>): $addr
  @wrap(<details>): $addr
@@ -294,28 +301,38 @@ $eve: $@
 
 }
 
+ $tst: (//div[contains(text(),"Матеріал у партнерстві з OLX")])
+ @debug
+?path: /20191403-pridbati-kvartiru-i-ne-prograti-7-pomilok-pokupciv-zhitla-na-vtorinnomu-rinku/.*
+@remove: //noindex[1]
+$hm_img : //img[contains(@data-src,"https://s.mind.ua/img/forall/a/201914/3_header.jpg")]
+@wrap(<figure>): $hm_img
+cover: 
+$tst: (//img[contains(@data-src,"s.mind.ua/img/forall/a/201914/3_header.jpg")])
+@debug
+@remove: $tst
 
-
+#@remove: //cover[1]
 #TEST questions
-?path: .*/questions/.*
-$qbody: //div[@id="accordion"]
-@wrap(<inner>): $qbody
-#body: //div[@id="accordion"]
-@before_el(./..): //*[@class="ac_answer"]//p
-title: //h1[@class="section_title"]
+# ?path: .*/questions/.*
+# $qbody: //div[@id="accordion"]
+# @wrap(<inner>): $qbody
+# #body: //div[@id="accordion"]
+# @before_el(./..): //*[@class="ac_answer"]//p
+# title: //h1[@class="section_title"]
 
-$sums: //h3[@class="ac_question"]
-<span>: $sums//a
-$answs: //*[@class="ac_answer"]
+# $sums: //h3[@class="ac_question"]
+# <span>: $sums//a
+# $answs: //*[@class="ac_answer"]
 
-$desc: //*[@class="qa_description"]
+# $desc: //*[@class="qa_description"]
 
-body: $qbody
-subtitle: $desc
+# body: $qbody
+# subtitle: $desc
 
- @remove: //auth
+#  @remove: //auth
 
-
+@remove: //toremove
 
 #path education
 ?path: .*/editorial
@@ -328,3 +345,28 @@ $cont: //div[@class="content__text"]
 body: //div[@class="content__text"]
 title: //h1
 
+?true
+  
+
+#=====LET ME DIE=====
+#Original code/idea by Misho @mushi_f
+#With modifications by Andrei Afanasiev
+
+$problems: $body
+@while( $problems ) {
+  $test: $body//*[self::blockquote or self::aside or self::figure or (self::img and not(./ancestor::figure)) or self::iframe or self::slideshow or self::related or self::footer or self::table[not(ancestor::table) and not(descendant::table)]]
+ 
+  $problems: $test/self::*[ancestor::anchor or ancestor::blockquote or ancestor::aside or ancestor::footer or ancestor::strong or ancestor::b or ancestor::em or ancestor::i or ancestor::ins or ancestor::u or ancestor::del or ancestor::s or ancestor::strike or ancestor::code or ancestor::kbd or ancestor::samp or ancestor::tt or ancestor::mark or ancestor::sup or ancestor::pic or ancestor::sub or ancestor::a or ancestor::reference or ancestor::h1 or ancestor::h2 or ancestor::h3 or ancestor::h4 or ancestor::h5 or ancestor::h6 or ancestor::p or ancestor::pre or ancestor::hr or ancestor::img or ancestor::br]
+ 
+  @if( $problems ) {
+    $parent: $problems/parent::*
+    @detach: $parent/node()
+    @set_attr("merge", $index): $@
+    <remove>: $parent
+    @after_el("./parent::*"): $problems
+    @combine: $body//self::*[prev-sibling::*/@merge = @merge]
+  }
+}
+#====================
+
+ 
