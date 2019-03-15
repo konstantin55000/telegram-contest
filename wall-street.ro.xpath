@@ -12,15 +12,17 @@ site_name: "Wall-Street.ro"
 
 # PIC RULES
 # By @housemusicforhomelessepeople
-<pic>: //img[ancestor::td] 
+<pic>: //img[ancestor::td]
 
 @set_attr("href",./img): //a[./img]/@href
 
- 
+
 
 # STYLING (add it if you want)
 # <aside>: //*[@style="text-align: center;"]
-  
+
+ #@remove: //iframe[contains(@src, "https://docs.google.com/forms/")]
+#@debug
 
 
 # start
@@ -58,27 +60,29 @@ $xsx: //div[has-class("panel-heading")][span]
 @remove: //small[has-class("typo-medium-gray")]/next-sibling::span
 @remove: //small[has-class("typo-medium-gray")]
 }
- 
+
 
  @if(//*[has-class("article-body")]) {
   $body: //*[has-class("article-body")]
   #@debug
- 
+
 }
  @if(//*[has-class("wsSlideShowArticle")]) {
   $body: //*[has-class("article-body")]
-  
+
 }
 
 $chk : //*[contains(@src, "video.onnetwork.tv")]
 @if( $chk ) {
   $body: ""
 }
- 
+@remove: //script
+$srcf: //*[has-class("source")]/prev-sibling::div[has-class("embed-responsive")]
 @debug
- @remove: //*[contains(text(),"Pentru a putea urmari acest video")] 
- @remove: //*[contains(text(),"Accepta toate cookie-urile")] 
- 
+@remove: $srcf
+ @remove: //*[contains(text(),"Pentru a putea urmari acest video")]
+ @remove: //*[contains(text(),"Accepta toate cookie-urile")]
+
 @wrap_inner(<strong>) : //*[has-class("article-excerpt")]
 
 @prepend_to($body): //*[has-class("article-excerpt")]/next-sibling::hr
@@ -98,7 +102,7 @@ $auth2: //*[has-class("editor")][2]
 @if( $auth2 ) {
 
  @after(<auth>) : $body
-  $at: //auth 
+  $at: //auth
 @set_attr(data-auth, //*[has-class("editor")][1], ", ", //*[has-class("editor")][2]): $at
  author: $at/@data-auth
 }
@@ -112,7 +116,7 @@ $auth2: //*[has-class("editor")][2]
 <div>: //blockquote[.//embed]
 <div>: //blockquote[.//audio]
 
-<div>: //p[.//img] 
+<div>: //p[.//img]
 <div>: //p[.//table]
 <div>: //p[.//iframe]
 <div>: //p[.//video]
@@ -121,15 +125,15 @@ $auth2: //*[has-class("editor")][2]
 <div>: $body//p[img]
 @after(<br>): $body//blockquote//p
 <div>: $body//div[not(has-class("in-article-recommanded"))]/a[img]
-$tst: $@ 
+$tst: $@
 @debug
 $ytif: //iframe
 #@replace("-nocookie", ""): $ytif/@data-src
 @set_attr(src, @data-src): $ytif
 
 @set_attr(src,@data-src): //img
- 
- 
+
+
 $slideshow : //*[has-class("article-image-social")]/div
  @if($slideshow){
  @remove : $slideshow//*[has-class("article-infos")]
@@ -142,14 +146,15 @@ $slideshow : //*[has-class("article-image-social")]/div
 @if_not($yourmoney  ) {
    cover: //figure
 }
-   
+
 @replace("%20"," "): //img/@src
 
 $cover: //div[@class="image"]/img
 cover:$cover
-<div>: //h2[img]
+@wrap_inner(<div>): //h2[img]
 $tofigx: $@
-@set_attr(class,"image-p"): $tofigx
+@before(../..): //h2[img]
+#@set_attr(class,"image-p"): $tofigx
 #figcaps:
 $fig: //div[has-class("image-p")][img]
 <figure>: $fig
@@ -158,7 +163,7 @@ $figcap: //figure/next-sibling::p[em]
 @wrap_inner(<figcaption>): $figcap
 @combine("\n"):  $figcap
 
- 
+
 
 @remove: //*[has-class("articlesList")]
 $rmore: //*[text()[contains(.,'Citeste si:')]]/ancestor::a
@@ -171,7 +176,7 @@ $rmoretext: //*[text()[contains(.,'Citeste si:')]]/ancestor::h5
 $rmore2: //p[contains(text(),"Citeste si:")]
 <related>: $rmore2
 
-$rel2: $body//div[has-class("in-article-recommanded")]//h5//a 
+$rel2: $body//div[has-class("in-article-recommanded")]//h5//a
 @wrap(<related>): $rel2
 @append_to($body): //related
 @debug
@@ -182,14 +187,14 @@ $rel2: $body//div[has-class("in-article-recommanded")]//h5//a
 @remove: //*[has-class("in-article-recommanded")]//img
 @remove: //*[has-class("in-article-recommanded")]/img
  #$test: //*[has-class("mobile-hide")]
- 
+
 @remove: //*[has-class("mobile-hide")]
 @remove: //*[span[has-class("label")]]
 @remove: //*[has-class("article-related-list")]
 $next: //figure[img]/next-sibling::*[text()[contains(.,'Foto:')]]
-  
- <figure>: //*[@class="image-p"] 
- 
+
+ <figure>: //*[@class="image-p"]
+
 # @combine("\n"): $next
 # <figure>: //div[img]
 
@@ -212,31 +217,31 @@ $srcphoto : //*[has-class("source")]
 @if ($yourmoney){
  #@remove: //h1/next-sibling::div
 }
- 
+
 # <div>: //a[.//img]
  body!: $body
- 
+
 
 
 # REPLACE BODY !!!
 
 title: //meta[@property="og:title"]/@content
 description: //meta[@name="description"]/@content
- 
+
 image_url: //meta[@property="og:image"]/@content
 image_url: $body//img/@src
- 
- 
+
+
 
 @datetime(0): //time/@datetime
 published_date
 
-# REPLACING srcset WITH src 
+# REPLACING srcset WITH src
 # NOTE THAT IV DO NOT SUPPORT srcset!
 # SAFE IF IV STARTS SUPPORTING srcset
 # By @housemusicforhomelessepeople
 $setsrc: $body//img[@srcset]
-@set_attr(src_set, @srcset): 
+@set_attr(src_set, @srcset):
 @replace("http.+w, ", ""): $setsrc/@src_set
 @replace("(jpe?g|png|gif).+w", "$1"): $setsrc/@src_set
 @set_attr(src, @src_set): $setsrc
@@ -254,12 +259,14 @@ $setsrc: $body//img[@srcset]
 #Original code/idea by Misho @mushi_f
 #With modifications by Andrei Afanasiev
 
+
+
 $problems: $body
 @while( $problems ) {
   $test: $body//*[self::blockquote or self::aside or self::figure or (self::img and not(./ancestor::figure)) or self::iframe or self::slideshow or self::related or self::footer or self::table[not(ancestor::table) and not(descendant::table)]]
- 
+
   $problems: $test/self::*[ancestor::anchor or ancestor::blockquote or ancestor::aside or ancestor::footer or ancestor::strong or ancestor::b or ancestor::em or ancestor::i or ancestor::ins or ancestor::u or ancestor::del or ancestor::s or ancestor::strike or ancestor::code or ancestor::kbd or ancestor::samp or ancestor::tt or ancestor::mark or ancestor::sup or ancestor::pic or ancestor::sub or ancestor::a or ancestor::reference or ancestor::h1 or ancestor::h2 or ancestor::h3 or ancestor::h4 or ancestor::h5 or ancestor::h6 or ancestor::p or ancestor::pre or ancestor::hr or ancestor::img or ancestor::br]
- 
+
   @if( $problems ) {
     $parent: $problems/parent::*
     @detach: $parent/node()
@@ -269,9 +276,3 @@ $problems: $body
     @combine: $body//self::*[prev-sibling::*/@merge = @merge]
   }
 }
-
- 
-
-
-
-

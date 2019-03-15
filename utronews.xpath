@@ -1,0 +1,147 @@
+~version: "2.0"
+?path: /.+
+site_name: "УтроNews"
+$body: //*[has-class("container")]//div[has-class("col-sm-9")]//div[has-class("news-additional-banners")]
+?exists: $body
+@replace("^\\s+$", ""): //text()
+title: //h1
+ $chk: //img[contains(@src,"rg.ru")]
+
+$toc: //*[has-class("detail_picture")]
+#@debug
+$cont: //div[has-class("col-sm-9")]
+$hrf://hr[@size="1"]
+$hrb://hr[@size="2"]
+$dtcont:  $hrf/prev-sibling::span
+@datetime(0) : $dtcont/text()
+published_date
+
+$t: $dtcont
+$aut:  ($body/text())[2]
+@replace("Автор:", ""):  $aut
+$toauthor: $@
+@replace("^(\\s).+", "") : $toauthor
+author: $toauthor
+<p>: $body/div
+@wrap(<figure>): $body//img
+@debug
+@remove: $aut
+@remove: $dtcont
+@remove: $hrf
+#cover: //div[has-class("above-content-image")]/img
+#author_url: //a[@rel="author"]/@href
+#nbsp fixer
+@style_to_attrs(text-align, textalign): //span
+@remove: $hrb
+$todescr: //span[@textalign="center"]
+description: $todescr/b
+<p> :$todescr
+$desrc: $@
+
+
+#Fixes:
+@after_el(./..):   //blockquote/img
+
+<div>: //blockquote[.//video]
+
+<div>: //blockquote[.//audio]
+
+
+<div>: //p[.//video]
+<div>: //p[.//audio]
+
+<div>: $body//p[img]
+@after(<br>): $body//blockquote//p
+$torem: //*[has-class("headerbanners-margin")]
+@remove: $torem
+$torel: //*[has-class("news-list")]
+#@debug
+<related>: $torel
+$fixrelated: $@
+
+@remove: //*[has-class("the-tags")]
+$a: //a[contains(@href, "@utronews")]
+$tags:   //a[contains(@href, "/tags")]
+@remove : $tags
+@remove : $a
+#  $rel: //ul/li/a/strong/ancestor::ul
+#  @if( $rel/prev-sibling::p ) {
+#     <related>: $rel
+#  }
+
+
+ @style_to_attrs(clear,clear): $body//div
+ $bf: //div[@clear="both"]
+ $br: $bf/next-sibling::br
+ #@debug
+
+<p>: $body/span
+ @remove: $body/text()
+$slideshow: //div[has-class("gallery")]
+$hrefs: $slideshow//a//img
+@replace("-150x150", ""): $hrefs/@src
+<slideshow>: $slideshow
+# @map( $hrefs ) {
+#   $curr: $@
+#   @set_attr("src", $curr/@href): $curr//img
+# }
+@remove: //script
+#@remove: //noscript
+$ftable: //table[has-class("table")]
+@if( $ftable/tr/td/div[has-class("fb-like")] ) {
+  @debug
+  @remove: $ftable
+}
+
+
+
+#@replace("/upload", "http://utronews.org"): $toc/@src
+$dbm: $toc/@src
+
+@prepend_to($body): $toc
+cover!: $toc
+image_url: $toc
+body: $body
+
+title: //meta[@property="og:title"]/@content
+#description: //meta[@name="description"]/@content
+
+
+cover: $body//figure
+cover: $body//img
+image_url: //meta[@property="og:image"]/@content
+image_url: $body//img/@src
+
+@append_to($body): $fixrelated
+# twitter-tweet
+<iframe>: //twitter-widget[starts-with(@data-tweet-id,"https://twitter.com/")]
+@set_attr(src,./@data-tweet-id): $@
+@replace:
+
+
+<pic>: //img[ancestor::td]
+
+# YOUTUBE OBJECT FIXER
+# By @housemusicforhomelessepeople
+@if("//object[contains(@data, \"youtube\")]") {
+  @before(<iframe>): //object[contains(@data, \"youtube\")]
+  @replace("http://www.youtube.com/v/","https://www.youtube.com/embed/"): //object[contains(@data, "youtube")]/@data
+  @set_attr(src, "./next-sibling::object[contains(@data, \"youtube\")]/@data"): //iframe[next-sibling::object[contains(@data, "youtube")]]
+  @remove: //object[contains(@data, "youtube")]
+}
+
+$problems: $body
+@while( $problems ) {
+  $test: $body//*[self::blockquote or self::aside or self::figure or (self::img and not(./ancestor::figure)) or self::iframe or self::slideshow or self::related or self::footer or self::table[not(ancestor::table) and not(descendant::table)]]
+
+  $problems: $test/self::*[ancestor::anchor or ancestor::blockquote or ancestor::aside or ancestor::footer or ancestor::strong or ancestor::b or ancestor::em or ancestor::i or ancestor::ins or ancestor::u or ancestor::del or ancestor::s or ancestor::strike or ancestor::code or ancestor::kbd or ancestor::samp or ancestor::tt or ancestor::mark or ancestor::sup or ancestor::pic or ancestor::sub or ancestor::a or ancestor::reference or ancestor::h1 or ancestor::h2 or ancestor::h3 or ancestor::h4 or ancestor::h5 or ancestor::h6 or ancestor::p or ancestor::pre or ancestor::hr or ancestor::img or ancestor::br]
+
+  @if( $problems ) {
+    $parent: $problems/parent::*
+    @detach: $parent/node()
+    @set_attr("merge", $index): $@
+    <remove>: $parent
+    @after_el("./parent::*"): $problems
+    @combine: $body//self::*[prev-sibling::*/@merge = @merge]
+  }
+}

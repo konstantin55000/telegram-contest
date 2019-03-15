@@ -3,9 +3,19 @@ https://mind.ua/editorial
 :)
 
  cite are missing https://mind.ua/ru/publications/20183057-ostorozhno-facebook-pochemu-voznik-skandal-s-ispolzovaniem-personalnyh-dannyh
- 
- tst https://www.wall-street.ro/raft-afaceri/afaceri-creatie-productie/afacere-creativa-business-genti-pictate.html
- 
+
+https://mind.ua/education/899-programa-ukrainian-mba
+this need to be fixed
+
+ https://mind.ua/news/20194347-zapravilas-u-prozorro-skilki-vitratila-derzhava-byudzhetnih-koshtiv-na-palne
+ Figcaptions are missing while they are possible to indentfiy.
+ Html struct:
+ http://prntscr.com/mu5ar6
+
+ https://mind.ua/news/20194293-youcontrol-tretinu-dohodu-biznesu-dnipropetrovshchini-ta-odeshchini-generuyut-ofshorni-kompaniyi
+ h6 maybe figcapt
+
+
 !nomedia https://mind.ua/publications/20191403-pridbati-kvartiru-i-ne-prograti-7-pomilok-pokupciv-zhitla-na-vtorinnomu-rinku
 
 Looks like i and all other contestant messed up with this page because of 404 media not found err.
@@ -18,14 +28,14 @@ important to keep this link for user.
 This post is all about Bulding company
 Label "Partnership content" should be preserved. (check my template)
 User deserves to know, what content was created on "advertise partnership"
- 
+
 https://mind.ua/news/20193030-innovacijnij-park-unit-city-zbilshili-vdvichi-ta-vidkrili-tretij-biznes-kampus
 
 
 https://mind.ua/news/20194388-u-bryusseli-projde-festival-ukrayinskoyi-kulturi-ukrayinska-vesna
 
 "we cannot check every page just one page with this issue so it is not critical..."
-True, but this current template will fall with err. each time,  
+True, but this current template will fall with err. each time,
 when  site author adds table in div class="post__frame"
 
 You choose to highlight this div as blockqoute. Same as me. Cool!
@@ -68,6 +78,9 @@ https://mind.ua/openmind/20175907-hochu-selfi-ale-fotokameru-shche-ne-vinajshli-
 figc
 https://mind.ua/en/publications/20190743-power-trends-what-energy-projects-are-worth-investing-in
 
+my bug
+https://www.g4media.ro/video-documente-deputatul-florin-roman-acuzatii-grave-la-adresa-psd-cu-privile-la-chelutirea-subventiei-de-la-stat-ii-acuz-deschis-de-spalare-de-bani-si-deturnare-de-fonduri.html
+https://www.g4media.ro/episcopia-husilor-anunta-ca-a-luat-act-de-condamnarea-preotilor-care-l-au-santajat-pe-fostul-episcop-foto-acesta-din-urma-a-fost-acuzat-de-relatii-sexuale-cu-un-elev-de-seminar.html
 
 should be precent cite
 https://mind.ua/publications/20180681-tiha-gavan-shcho-dp-world-pridbala-v-portu-yuzhnij
@@ -80,7 +93,9 @@ UzVer template better https://mind.ua/education/934-vnutrishni-komunikaciyi-dlya
 
 https://mind.ua/questions/385-integrities
 
-#support this static page
+fk. kostia
+https://www.g4media.ro/protocolul-tinut-secret-de-tudorel-toader-ministrul-justitiei-refuza-sa-faca-publice-numele-membrilor-comisiei-sipa.html
+
 https://mind.ua/questions/385-integrities#3
 #marked text
 https://mind.ua/ru/publications/20193696-kilovatty-pod-zashchitoj-kak-zastrahovat-elektromobil
@@ -90,7 +105,7 @@ https://mind.ua/ru/publications/20192337-cena-zdorovya-chto-proishodit-s-individ
 #!!nested element is not suported https://mind.ua/publications/20192669-rozumnij-zahist-yak-zaoshchaditi-na-strahuvanni-avtomobilya: table
 
 #darnitsya ficc.
-https://mind.ua/en/publications/20183473-general-director-of-pharmaceutical-firm-darnitsa-import-substitution-is-nothing-more-than-anothe 
+https://mind.ua/en/publications/20183473-general-director-of-pharmaceutical-firm-darnitsa-import-substitution-is-nothing-more-than-anothe
 
 #https://mind.ua/en/publications/20184607-life-elixir-how-a-pharmaceutical-company-launched-the-production-of-infusions
 #figcaption
@@ -151,7 +166,7 @@ check for generateion
 2 authors https://mind.ua/ru/publications/20173816-strahovoj-sluchaj-pochemu-kompanii-yuriya-yavtushenko-lishili-licenzij
 
 #https://mind.ua/ru/publications/20193751-dengi-na-svalke-pochemu-stoit-stroit-biotec-v-ukraine
- 
+
  #related articles
  https://mind.ua/openmind/20193742-8-mlrd-neefektivnosti-abo-chomu-ukrayinci-platyat-za-perevitrati-u-svinarstvi
 
@@ -161,13 +176,13 @@ https://mind.ua/publications/20193961-grupovij-portret-v-intereri-7-zapitan-do-p
 читайте-також плохо выделянемый
 может структуру https://mind.ua/ru/publications/20193715-kak-izbavitsya-ot-mirovoj-problemy-s-plastikom-dilemma-krupnogo-biznesa
 http://prntscr.com/mp886s
-  
+
   !large tables
   https://mind.ua/ru/publications/20186445-rejting-strahovyh-kompanij-2018-kak-rynok-strahovshchikov-v-ukraine-vyhodit-iz-zastoya
 
 sorry for duplicate. issue.
 just did not have time to  all text:
-so Next time dont forget to support this static pages: 
+so Next time dont forget to support this static pages:
 /about
 /ads
 /editorial

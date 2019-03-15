@@ -1,1 +1,33 @@
-polsatnews.pl
+
+
+Author links pointing to inappropriate page. Must be removed.
+checklist#6-3-5-author-links
+In this case it leads user to facebook.
+This is 100% post author link, in this case gallery fotoauthor.
+so this is a valid issue.
+http://prntscr.com/mvd9o4
+Moreover, you'd must convert it to "author" property,
+but because of such cases like different author captions sometime
+it ok to leave it as is.
+embed gdocs
+https://glavnoe.ua/articles/a12369-v-sistemi-cinnostej-zhiteliv-shodu-ukraini-na-pershomu-misci-%E2%80%93-svoboda
+
+https://glavnoe.ua/articles/a12369-v-sistemi-cinnostej-zhiteliv-shodu-ukraini-na-pershomu-misci-–-svoboda
+
+https://glavnoe.ua/news/n356984668-antimonopolnyj-komitet-ukrainy-zajavil-o-neobosnovannosti-povyshenija-cen-na-proezd-v-harkovskom-metropolitene
+
+https://glavnoe.ua/news/n263165
+vera
+figcaption
+appended figcaptions by script
+https://glavnoe.ua/articles/a12454-arsen-avakov-ja-ne-v-karmane-u-timoshenko.-ja-ne-vojuju-protiv-poroshenko.-ja-ni-s-kem-ne-dogovarivalsja
+
+https://glavnoe.ua/news/n356984677-jacenjuk-obsudil-s-volkerom-politicheskuju-situaciju-v-ukraine-nakanune-prezidentskih-vyborov
+You've changed sequence of original elems in content
+I understand that related links is not allowed in blockqoute; but why to change se sequence?
+You never know what will be behavior other pages.
+
+
+Often, it is Better to append it @after body
+and keep title "Читайте также".
+Check my template for this case.

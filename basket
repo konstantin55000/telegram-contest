@@ -1,0 +1,130 @@
+# TEMPLATE MASTER BY MYSH (git.hugmouse.com)
+~version: "2.0"
+?path: /.+
+site_name: "basket.lv"
+# $(NBSP) FIXER
+@replace("^\\s+$", ""): //text()
+
+# twitter-tweet
+<iframe>: //twitter-widget[starts-with(@data-tweet-id,"https://twitter.com/")]
+@set_attr(src,./@data-tweet-id): $@
+@replace:
+
+# PIC RULES
+# By @housemusicforhomelessepeople
+<pic>: //img[ancestor::td]
+
+@set_attr("href",./img): //a[./img]/@href
+
+@after_el("./.."): //p/iframe
+@after_el("./.."): //a/img
+<div>: //p/img
+@after_el("./.."): //p/related
+
+# STYLING (add it if you want)
+# <aside>: //*[@style="text-align: center;"]
+
+# REPLACING srcset WITH src
+# NOTE THAT IV DO NOT SUPPORT srcset!
+# SAFE IF IV STARTS SUPPORTING srcset
+# By @housemusicforhomelessepeople
+$setsrc: $body//img[@srcset]
+@set_attr(src_set, @srcset):
+@replace("http.+w, ", ""): $setsrc/@src_set
+@replace("(jpe?g|png|gif).+w", "$1"): $setsrc/@src_set
+@set_attr(src, @src_set): $setsrc
+
+# YOUTUBE OBJECT FIXER
+# By @housemusicforhomelessepeople
+@if("//object[contains(@data, \"youtube\")]") {
+  @before(<iframe>): //object[contains(@data, \"youtube\")]
+  @replace("http://www.youtube.com/v/","https://www.youtube.com/embed/"): //object[contains(@data, "youtube")]/@data
+  @set_attr(src, "./next-sibling::object[contains(@data, \"youtube\")]/@data"): //iframe[next-sibling::object[contains(@data, "youtube")]]
+  @remove: //object[contains(@data, "youtube")]
+}
+
+# REPLACE BODY !!!
+$body:  //div[has-class("single-text-wrapper")]
+
+title: //h1
+
+@if( //div[has-class("famehall")]//div[has-class("full-column")] ) {
+  body: //div[has-class("famehall")]//div[has-class("full-column")]
+}
+$gal: //*[@id="lightgallery"]
+@if( $gal ) {
+subtitle: //h1/next-sibling::h2[has-class("section-header")]
+
+  $body: //div[has-class("two-third")]
+   #$body: //div[has-class("photo-gallery")]
+   @debug
+   $dtattr: $gal//li/@data-src
+  # @set_attr(src,$dtattr): $gal//li//img
+  $tx: $gal//li
+   @map( $tx ) {
+  $curr: $@
+   @set_attr(src, $curr/@data-src): $curr//img
+ }
+   <div>: $gal//li
+   <div>: $gal
+}
+ ?path: .*gallery/.*
+  $body:  //div[has-class("photo-gallery")]
+  ?true:
+@wrap_inner(<related>): //div[has-class("one-third")]
+$rel: $@
+
+
+$pos_author: //div[has-class("content")]//p[last()]/strong
+@if( $pos_author ) {
+  author: $pos_author
+}
+ @if( //*[has-class("full-item")] ) {
+   $body: //*[has-class("full-item")]
+   @set_attr(src,@data-original): $body//img
+   @remove: //*[has-class("back-button")]
+   subtitle: //*[has-class("list-item-text")]//h2
+ }
+title: //meta[@property="og:title"]/@content
+description: //meta[@name="description"]/@content
+
+image_url: //meta[@property="og:image"]/@content
+image_url: $body//img/@src
+site_name: //meta[@property="site_name"]/@content
+author: //*[has-class("author")]/text()
+@if_not($gal) {
+  cover: //div[has-class("two-third")]/figure
+  cover: //div[has-class("two-third")]/img
+}
+@remove: //*[has-class("share-buttons")]
+@remove: //img[contains(@src,".svg")]
+@datetime(0): //time/@datetime
+published_date
+
+$gal2: //div[has-class("single-text-wrapper")]/next-sibling::div[has-class("photo-gallery")]
+@if( $gal2 ) {
+  <slideshow>: $gal2
+}
+
+@append_to($body): $rel
+body: $body
+#=====LET ME DIE=====
+#Original code/idea by Misho @mushi_f
+#With modifications by Andrei Afanasiev
+
+$problems: $body
+@while( $problems ) {
+  $test: $body//*[self::blockquote or self::aside or self::figure or (self::img and not(./ancestor::figure)) or self::iframe or self::slideshow or self::related or self::footer or self::table[not(ancestor::table) and not(descendant::table)]]
+
+  $problems: $test/self::*[ancestor::anchor or ancestor::blockquote or ancestor::aside or ancestor::footer or ancestor::strong or ancestor::b or ancestor::em or ancestor::i or ancestor::ins or ancestor::u or ancestor::del or ancestor::s or ancestor::strike or ancestor::code or ancestor::kbd or ancestor::samp or ancestor::tt or ancestor::mark or ancestor::sup or ancestor::pic or ancestor::sub or ancestor::a or ancestor::reference or ancestor::h1 or ancestor::h2 or ancestor::h3 or ancestor::h4 or ancestor::h5 or ancestor::h6 or ancestor::p or ancestor::pre or ancestor::hr or ancestor::img or ancestor::br]
+
+  @if( $problems ) {
+    $parent: $problems/parent::*
+    @detach: $parent/node()
+    @set_attr("merge", $index): $@
+    <remove>: $parent
+    @after_el("./parent::*"): $problems
+    @combine: $body//self::*[prev-sibling::*/@merge = @merge]
+  }
+}
+#====================

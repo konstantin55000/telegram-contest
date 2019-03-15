@@ -1,0 +1,215 @@
+~version: "2.0"
+site_name: "Главное™"
+
+$body: //*[has-class("one-article")]
+title: //h1
+#subtitle://h2[has-class("newsshorttext")]
+@remove: //*[contains(@href,"metrika.yandex.ua")]
+
+@if( //*[has-class("onegallery")] ) {
+
+  $body: //*[has-class("onegallery")]
+  title: $body//h1
+
+
+  $last_pager: (//div[has-class("pager")])[last()]
+  @if ($last_pager) {
+
+   <wag>: //a[img]
+   $last_img: (//wag)[last()]
+
+ @debug
+  $tx: $last_pager/a[has-class("prev")]
+  @if( $tx ) {
+  @debug
+     @after(<iframex>): $last_img
+      $xs: $@
+   @set_attr(src, $tx/@href): $xs
+  }
+   $tx: $last_pager/a[has-class("next")]
+# @remove: //div[has-class("pager")]
+@if( $tx ) {
+  @debug
+     @after(<iframex>): $last_img
+      $xs: $@
+   @set_attr(src, $tx/@href): $xs
+   @debug
+  }
+
+#  @map( $tx ) {
+#   $curr: $@
+#   @after(<iframex>): $d
+#   $xs: $@
+#    @set_attr(src, $curr/@href): $xs
+#  }
+ #@inline: //iframex
+ $source: $body//div[has-class("images")]
+<iframe>: //iframex
+@debug
+@inline: //iframe
+$inlined: $@
+#@clone: $inlined
+#$testclone: $@
+
+#$needGal: $@
+
+  <wag>:  //a[img]
+
+ @set_attr(src, $tx/@href): //vstavit
+#   @map( //wag[img] ) {
+#   $wrp: $@
+#    @set_attr(src, $wrp/@href): $wrp/img
+#  }
+  @prepend_to($body) : "-=-=-=-=-=-=-=-"
+  #@prepend_to($body) : $inlined//div[@class="images"]
+
+  @append_to($last_img): $inlined//div[@class="images"]
+  @after_el(/html): $inlined
+  @remove: /html/next-sibling::*
+# @append_to($last_img):$needGal[2]
+
+  }
+
+# @map( //wag[img] ) {
+ # $wrp: $@
+#   @set_attr(src, $wrp/@href): $wrp/img
+# }
+
+  #https://glavnoe.ua/galleries/g824
+  $aut: //*[has-class("gallerytext")][2]/p
+   <p>:$aut
+
+    # @remove: //*[has-class("pager")]
+  $dtt: //*[has-class("gallerytext")][1]
+  @datetime(0, "ru-UA","d M yyyy hh:mm"): $dtt
+
+  $formated: $@
+  published_date: $formated
+
+  @remove: //*[has-class("gallerytext")][1]
+ $ar: //*[has-class("gallerytext")]/a[contains(text(),"Все фотогалереи")]
+ @remove: $ar/..
+
+ $rel: //div[@class="info"]//*[has-class("headed-block")]
+
+ <h3>: $rel/div[has-class("gray")][1]
+ <related>: $rel
+ $relhm: $@
+
+   @after(<xz>): $body
+   $relx: //xz
+   @debug
+   @append_to($body):  $relhm
+@debug
+$relinner://*[has-class("gallery-seealso")]
+ # @remove: //*[has-class("headed-block")]
+ #@after(<iframe>):$body
+  body!!: $body
+}
+?exists: $body
+$dt: $body//div[has-class("newsdate")]
+ $gal: //*[has-class("onegallery")]
+ <p>: //a[./img]
+#<div class="newsdate">20 февраля 2019</div>
+#<div class="newstime">07:04</div>
+#replace facebook
+$time: $body//div[has-class("newstime")]
+@after(<br>): //blockquote/p
+@debug
+#@datetime(0, "ru-RU","d M yyyy, hh:mm"): $dt
+@datetime(0, "ru-UA","d M yyyy"): $dt
+@debug
+$formated: $@
+published_date: $formated
+@remove: $body//img[contains(@src,"informer.yandex.ru")]
+@remove: //img[contains(@src,"logo-large.jpg")]
+
+$an_img: //p/img/ancestor::p
+
+<figure>: $an_img
+#@after_el(./..):  $an_img
+
+
+#subtitle: $body//h3
+$last: $body//p[contains(@style,"right")]
+$aut:  //*[has-class("newsauthor")]
+
+author: $aut/*/text()
+@wrap(<p>): //blockquote//p
+#@after(<br>): //blockquote/p
+author_url: $aut//*/@href
+#test
+ $fb_post: $body//div[has-class("fb-post")][@data-href]
+ @debug
+@urlencode: $fb_post/@data-href
+@set_attr(data-src, "https://www.facebook.com/plugins/post.php?href=", @data-href, "&show_text=", @data-show-text, "&width=640"): $fb_post
+@before(<iframe>, src, @data-src, class, "fb-post"): $fb_post
+#@remove
+<div>: //p[//iframe]
+ @if( $time/text() ) {
+
+
+ @combine(" "): $body//div[has-class("newsdate")]/next-sibling::*[has-class("newstime")]
+ $date_field:  $@
+ @debug
+  @prepend("Europe/Kiev "): $date_field
+  @debug
+   @datetime(0, "ru-UA","VV dd MMMM yyyy HH:mm"): $date_field
+  $formated: $@
+    @debug
+  published_date!: $formated
+  #published_date: $formated
+ }
+channel: "@glavnoeUA"
+$nt: //*[has-class("newstools")]
+
+@remove: $nt
+$nt: //*[has-class("newscred")]
+@remove: $nt
+$orf: //p[@align="center"][//i]
+@debug
+@remove: $orf
+$orf: //div[@align="center"][//i]
+@remove: $orf
+@remove: //noindex
+
+$links: //*[has-class("seealso_inner")]/a
+ #@B($body): "##"
+
+
+
+ @remove: //div[@class="facebook-tools"]
+
+ @if( $links ) {
+
+   #@wrap(<h3>): $@
+  # @wrap(<related>):$links
+   @after(<xc>): $body
+   $rel: //xc
+   @debug
+      @append_to($rel): $links
+     @wrap_inner(<related>): //xc
+        #@append_to(//related): "Читайте также:"
+     @append_to($body): //related
+ }
+
+
+@remove://*[has-class("seealso_inner")]
+
+#iframe
+$to_iframe: //*[contains(@data-oembed-url,"facebook")]//a
+
+
+@set_attr(src, "https://www.facebook.com/plugins/video.php?href=", $to_iframe/@href): $to_iframe
+#NEEDED TO
+#https://www.facebook.com/plugins/video.php?" + $to_iframe/@href
+<iframe>: $to_iframe
+@debug
+#@remove: $to#
+@debug
+# encode-for-uri()
+#!path_not: .*/map.html
+
+#?path: .*galleries/.*
+
+body: $body

@@ -4,7 +4,7 @@ site_name: "Mind.ua"
 $body: //article[has-class("post")]
 channel: "@mindua"
 subtitle: //h2[@class="post__subtitle"]
- 
+
 $testembed: //*[contains(@src, "//e.issuu.com/embed.js")]
 #@debug
 @if($testembed){
@@ -15,7 +15,8 @@ $iframevideo: //div[has-class("block_social_wide")]/next-sibling::div[has-class(
 @debug
 @prepend_to($body): $iframevideo
 $aside: //*[@class="post__frame"]
-<blockquote>: $aside
+@before(<hr>): $aside
+@after(<hr>): $aside
 @remove://img[contains(@src,".svg")]
 $dv: //p/next-sibling::div[@class="img_source"]
 $dv2: //p/next-sibling::div[@class="img_source"]/next-sibling::div[@class="img_source"]
@@ -28,21 +29,22 @@ $dv2: //p/next-sibling::div[@class="img_source"]/next-sibling::div[@class="img_s
 @debug
 $ptn: //a[contains(@href,"mind.ua/partnership")]
 #@debug
+#@after(<footer>): $body
 @wrap_inner(<mark>):$ptn
-#@wrap_inner(<b>):$ptn
-<div>: //blockquote[.//img]
-<div>: //blockquote[.//table]
-<div>: //blockquote[.//iframe]
-<div>: //blockquote[.//video]
-<div>: //blockquote[.//embed]
-<div>: //blockquote[.//audio]
+#@append_to(//footer): $ptn
+@wrap(<footer>): $ptn
+$ft: $@
 
-<div>: //p[.//img]
-<div>: //p[.//table]
-<div>: //p[.//iframe]
-<div>: //p[.//video]
-<div>: //p[.//audio]
-<div>: //p[.//embed]
+$h1check: //h1[string-length(text())=0]
+@debug
+
+@if( $h1check ) {
+  title!: //meta[@property="og:title"]/@content
+}
+
+?true:
+#@wrap_inner(<b>):$ptn
+
 $spn: //span[@style="color:#ffffff;"]
 <mark>: $spn
 #figcaptions
@@ -51,15 +53,15 @@ $spn: //span[@style="color:#ffffff;"]
 @wrap(<figcaption>): $@
 <cite>: //*[has-class("img_box2_fl")]/*[has-class("img_source")]
 #@debug
-@wrap(<figcaption>): $@ 
+@wrap(<figcaption>): $@
 <figure>: //*[has-class("img_box2_fl")]
 
-#@debug 
+#@debug
 <cite>: //*[has-class("img_box2_fr")]/span
 @wrap(<figcaption>): $@
 <cite>: //*[has-class("img_box2_fr")]/*[has-class("img_source")]
 #@debug
-@wrap(<figcaption>): $@ 
+@wrap(<figcaption>): $@
 <figure>: //*[has-class("img_box2_fr")]
 
 $fig: //div[has-class("post__photo")]
@@ -68,17 +70,19 @@ $get: //img
 $find: //img/next-sibling::br/next-sibling::span
 
 $to_cap: //div[has-class("post__frame")]
- 
- 
+
+$rel: //*/em/strong/a
+<related>: $rel/ancestor::em
+
 <figcaption>: $find
 <figcaption>: $fig//div[has-class("post__photo__about")]
 <cite>: $fig//div[has-class("post__photo__source")]
- 
+
 <figure>: $fig
 $phs: $@
 cover: $phs[1]
 $fig: //*[has-class("img_box2_c")]
-$get: //*[has-class("img_box2_c")]//br/following-sibling::text()[1] 
+$get: //*[has-class("img_box2_c")]//br/following-sibling::text()[1]
 @wrap(<z>): $get
 <cite>: //*[has-class("img_box2_c")]/div[has-class("img_source")]
 $ax: $@
@@ -119,6 +123,14 @@ $spn: //span[@style="color: rgb(102, 102, 102); font-size: 14px;"]
 #$zxz: $@
 
 #@debug
+$ckd: //div/em/next-sibling::br
+$fk:  $ckd/ancestor::*[@style="text-align: right;"][1]
+@debug
+<aside>: $fk
+$ckd: //div[@style="text-align: right;"]/p/em
+<aside>: $ckd
+
+
 @after(<auth>) : $body
 $at: //auth
 @set_attr(data-auth, //span[@class="post__info__author__name"]/a): $at
@@ -130,18 +142,18 @@ $check: //span[@class="post__info__author__name"]/a[2]
 #@debug
 @remove: $awith_text/text()
 @set_attr(data-auth, //span[@class="post__info__author__name"]/a[1], ", ", //span[@class="post__info__author__name"]/a[2]): $at
- 
+
 }
 
 $check: //span[@class="post__info__author__name"][2]
 #@debug
 @if( $check ) {
- 
+
   $awith_text: //span[@class="post__info__author__name"][2][contains(text(),",")]
 #@debug
 @remove: $awith_text/text()
 @set_attr(data-auth, //span[@class="post__info__author__name"][1]/a, ", ", //span[@class="post__info__author__name"][2]/a): $at
- 
+
 }
 $check://span[@class="post__info__author__name"][3]
 #3 auth
@@ -153,13 +165,14 @@ $check://span[@class="post__info__author__name"][3]
 
 }
 
- 
+@remove: //*[@class="post__partnership__text"]
+@remove: //*[@class="post__partnership_img"]
 
 $fig: //figure
 
-$figcap: //figure/next-sibling::*[has-class("img_source")] 
+$figcap: //figure/next-sibling::*[has-class("img_source")]
 @wrap_inner(<figcaption>): $figcap
-@combine(<br>): //figure/next-sibling::*[has-class("img_source")] 
+@combine(<br>): //figure/next-sibling::*[has-class("img_source")]
 
 $fig: //figure
 
@@ -168,14 +181,15 @@ $figcap: //figure/next-sibling::*[@style="text-align: center;"][strong]
 @combine(<br>): $figcap
 
 $fig: //figure
- 
+
 $figcap: //figure/next-sibling::*[@style="text-align: center;"][em]
 @wrap_inner(<figcaption>): $figcap
 @combine(<br>): $figcap
 
- #@remove: //*[contains(@href,"https://mind.ua/partnership")]
+ @remove: //*[contains(@href,"https://mind.ua/partnership")]
+  @remove: //*[contains(@href,"https://mind.ua/ad")]
 $dt: //span[has-class("post__info__date")]
-@datetime(0): $dt  
+@datetime(0): $dt
 published_date: $@
 $later: //div[@class="post_language"]/a
 
@@ -183,7 +197,7 @@ $aut://span[@class="post__info__author__name"]//a
 @combine(", "): //span[@class="post__info__author__name"]/next-sibling::span
 #@debug
 @remove: //*[@id="comment_header_layer"]
-$sm: //*[has-class("related_news__inner")] 
+$sm: //*[has-class("related_news__inner")]
 
 $to_rel://h3[@style="text-align: center;"]
 @wrap(<related>): $to_rel//a
@@ -191,7 +205,7 @@ $rels: $@
 @append_to($body): $rels
  <h3>: //*[has-class("block_related")]//*[has-class("section_title_small")][1]/*
  #@debug
-@prepend_to($sm): //*[has-class("block_related")]//*[has-class("section_title_small")][1] 
+@prepend_to($sm): //*[has-class("block_related")]//*[has-class("section_title_small")][1]
 #@debug
 @wrap(<related>): $sm
 $rel: $@
@@ -208,10 +222,11 @@ author: $at/@data-auth
 $rls: //div[@class="read-also"]
 $adv: //div[@class="post__adv"]
 $adv2: //div[@class="post__frame"]
+
 #<blockqoute>: $adv2
-<div>: //p[./img]
-<div>: //p[./iframe]
-<div>: //a[./img]
+# <div>: //p[./img]
+# <div>: //p[./iframe]
+# <div>: //a[./img]
 @remove: $adv
 @remove: $rls
 $tv: //div[@class="post__tags"]
@@ -221,7 +236,10 @@ $tv: //div[@class="post__tags"]
 body: $body
 
 
-@prepend_to($body): $ptn
+
+#@wrap(<footer>): $ptn
+
+#@append_to($body): $ptn/ancestor::footer
 
 #@append_to($later): $later/text()
 @append_to($body):$later
@@ -230,14 +248,19 @@ $torelated: $@
 @clone: $later
 <h6>: $later[1]
 <related>://torelated
+$rels : //p/strong/em[contains(text(),"Читайте также:")]
+<related>: $rels/ancestor::p
+# <related>: $rel
+# $relx: $@
+# @append_to($body): $relx
 #@debug
 #@append_to($later): //toh3
- 
+
 $fkd: //*[@class="post__partnership__link"]
 @debug
 @before(<toremove>) :$body//figcaption
 @append_to(//toremove): $fkd
- 
+
 @debug
 
 @remove: //noscript
@@ -263,19 +286,19 @@ cover: $img
 @remove: //script
 
 $addr:  //div[@id="box-content"]
-#//*[has-class("event_info__adress")] 
-#@remove://td[iframe]  
+#//*[has-class("event_info__adress")]
+#@remove://td[iframe]
 
 #@wrap(<summary>): $addr
  @wrap(<details>): $addr
 $details: $@
 @prepend(<summary>): $details
  #@debug
- 
+
  $map: $@
  #@debug
 # @clone : //*[has-class("event_info__adress")]
-# $sum: $@ 
+# $sum: $@
 #@debug
  @append_to($details//summary): //*[has-class("event_info__adress")]
  #@debug
@@ -287,9 +310,9 @@ $details: $@
 #@replace("[$]events", "") : //details
 
 @wrap_inner(<strong>) : //*[has-class("event_info__description")]
-<td>: $events//div[@class="event_info__item"]//div 
+<td>: $events//div[@class="event_info__item"]//div
 @combine(" "): $events//*[@class="event_info__place"]/next-sibling::td
- 
+
 @set_attr(colspan, "2"): $events//td[@class="event_info__place__url"]
 #@debug
 <tr>: $events//div[@class="event_info__item"]
@@ -299,15 +322,23 @@ $eve: $@
 @wrap_inner(<strong>): $eve/tr/td[2]
 @prepend_to($body): $eve
 
+#description: //p[1]
+#description: //div[has-class("event_info")]/text()
 }
-
+$pfirst: //p[1]
+@debug
+$contains: $pfirst/strong[contains(text(),"Початок навчання")]
+@debug
+@if(  $contains) {
+  description: $pfirst
+}
  $tst: (//div[contains(text(),"Матеріал у партнерстві з OLX")])
  @debug
 ?path: /20191403-pridbati-kvartiru-i-ne-prograti-7-pomilok-pokupciv-zhitla-na-vtorinnomu-rinku/.*
 @remove: //noindex[1]
 $hm_img : //img[contains(@data-src,"https://s.mind.ua/img/forall/a/201914/3_header.jpg")]
 @wrap(<figure>): $hm_img
-cover: 
+cover:
 $tst: (//img[contains(@data-src,"s.mind.ua/img/forall/a/201914/3_header.jpg")])
 @debug
 @remove: $tst
@@ -346,7 +377,7 @@ body: //div[@class="content__text"]
 title: //h1
 
 ?true
-  
+
 
 #=====LET ME DIE=====
 #Original code/idea by Misho @mushi_f
@@ -355,9 +386,9 @@ title: //h1
 $problems: $body
 @while( $problems ) {
   $test: $body//*[self::blockquote or self::aside or self::figure or (self::img and not(./ancestor::figure)) or self::iframe or self::slideshow or self::related or self::footer or self::table[not(ancestor::table) and not(descendant::table)]]
- 
+
   $problems: $test/self::*[ancestor::anchor or ancestor::blockquote or ancestor::aside or ancestor::footer or ancestor::strong or ancestor::b or ancestor::em or ancestor::i or ancestor::ins or ancestor::u or ancestor::del or ancestor::s or ancestor::strike or ancestor::code or ancestor::kbd or ancestor::samp or ancestor::tt or ancestor::mark or ancestor::sup or ancestor::pic or ancestor::sub or ancestor::a or ancestor::reference or ancestor::h1 or ancestor::h2 or ancestor::h3 or ancestor::h4 or ancestor::h5 or ancestor::h6 or ancestor::p or ancestor::pre or ancestor::hr or ancestor::img or ancestor::br]
- 
+
   @if( $problems ) {
     $parent: $problems/parent::*
     @detach: $parent/node()

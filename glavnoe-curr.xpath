@@ -1,0 +1,254 @@
+~version: "2.0"
+site_name: "Главное™"
+
+# $(NBSP) FIXER
+@replace("^\\s+$", ""): //text()
+
+# twitter-tweet
+<iframe>: //twitter-widget[starts-with(@data-tweet-id,"https://twitter.com/")]
+@set_attr(src,./@data-tweet-id): $@
+@replace:
+# YOUTUBE OBJECT FIXER
+# By @housemusicforhomelessepeople
+@if("//object[contains(@data, \"youtube\")]") {
+  @before(<iframe>): //object[contains(@data, \"youtube\")]
+  @replace("http://www.youtube.com/v/","https://www.youtube.com/embed/"): //object[contains(@data, "youtube")]/@data
+  @set_attr(src, "./next-sibling::object[contains(@data, \"youtube\")]/@data"): //iframe[next-sibling::object[contains(@data, "youtube")]]
+  @remove: //object[contains(@data, "youtube")]
+}
+# PIC RULES
+# By @housemusicforhomelessepeople
+<pic>: //img[ancestor::td]
+
+$body: //*[has-class("one-article")]
+title: //h1
+#subtitle://h2[has-class("newsshorttext")]
+@remove: //*[contains(@href,"metrika.yandex.ua")]
+
+@if( //*[has-class("onegallery")] ) {
+
+  $body: //*[has-class("onegallery")]
+  title: $body//h1
+
+   #https://glavnoe.ua/galleries/g824
+  $last_pager: (//div[has-class("pager")])[last()]
+  @if ($last_pager) {
+
+   <wag>: //a[img]
+   $last_img: (//wag)[last()]
+
+
+  $tx: $last_pager/a[has-class("prev")]
+  @if( $tx ) {
+  @debug
+     @after(<iframex>): $last_img
+      $xs: $@
+   @set_attr(src, $tx/@href): $xs
+  }
+   $tx: $last_pager/a[has-class("next")]
+# @remove: //div[has-class("pager")]
+@if( $tx ) {
+  @debug
+     @after(<iframex>): $last_img
+      $xs: $@
+   @set_attr(src, $tx/@href): $xs
+   @debug
+  }
+
+ #get all pages
+#  @map( $tx ) {
+#   $curr: $@
+#   @after(<iframex>): $d
+#   $xs: $@
+#    @set_attr(src, $curr/@href): $xs
+#  }
+ #@inline: //iframex
+ $source: $body//div[has-class("images")]
+<iframe>: //iframex
+@debug
+@inline: //iframe
+$inlined: $@
+
+
+  <wag>:  //a[img]
+
+ @set_attr(src, $tx/@href): //vstavit
+
+
+  @append_to($last_img): $inlined//div[@class="images"]
+  @after_el(/html): $inlined
+  @remove: /html/next-sibling::*
+# @append_to($last_img):$needGal[2]
+
+  }
+  <wag>:  //a[img]
+@map( //wag[img] ) {
+ $wrp: $@
+  @set_attr(src, $wrp/@href): $wrp/img
+}
+
+#remove pager
+@remove: //div[has-class("pager")]
+
+ $an: //div[has-class("info")]//p/strong[contains(text(), "ото")]/a
+ <span>: $an
+  $an: //div[has-class("info")]//p[contains(text(), "ото")]/a
+ <span>: $an
+ @debug
+  $aut: //*[has-class("gallerytext")][2]/p
+   <p>:$aut
+
+    # @remove: //*[has-class("pager")]
+  $dtt: //*[has-class("gallerytext")][1]
+  @datetime(0, "ru-UA","d M yyyy hh:mm"): $dtt
+
+  $formated: $@
+  published_date: $formated
+
+  @remove: //*[has-class("gallerytext")][1]
+ $ar: //*[has-class("gallerytext")]/a[contains(text(),"Все фотогалереи")]
+ @remove: $ar/..
+
+ $rel: //div[@class="info"]//*[has-class("headed-block")]
+
+ <h3>: $rel/div[has-class("gray")][1]
+ <related>: $rel
+ $relhm: $@
+
+   @after(<xz>): $body
+   $relx: //xz
+   @debug
+   @append_to($body):  $relhm
+@debug
+$relinner://*[has-class("gallery-seealso")]
+ # @remove: //*[has-class("headed-block")]
+ #@after(<iframe>):$body
+  body!!: $body
+}
+?exists: $body
+$dt: $body//div[has-class("newsdate")]
+ $gal: //*[has-class("onegallery")]
+ <p>: //a[./img]
+#<div class="newsdate">20 февраля 2019</div>
+#<div class="newstime">07:04</div>
+#replace facebook
+$time: $body//div[has-class("newstime")]
+@after(<br>): //blockquote/p
+@debug
+#@datetime(0, "ru-RU","d M yyyy, hh:mm"): $dt
+@datetime(0, "ru-UA","d M yyyy"): $dt
+@debug
+$formated: $@
+published_date: $formated
+@remove: $body//img[contains(@src,"informer.yandex.ru")]
+@remove: //img[contains(@src,"logo-large.jpg")]
+
+$an_img: //p/img/ancestor::p
+
+<figure>: $an_img
+#@after_el(./..):  $an_img
+
+
+#subtitle: $body//h3
+$last: $body//p[contains(@style,"right")]
+$aut:  //*[has-class("newsauthor")]
+
+author: $aut/*/text()
+@wrap(<p>): //blockquote//p
+#@after(<br>): //blockquote/p
+author_url: $aut//*/@href
+#test
+ $fb_post: $body//div[has-class("fb-post")][@data-href]
+ @debug
+@urlencode: $fb_post/@data-href
+@set_attr(data-src, "https://www.facebook.com/plugins/post.php?href=", @data-href, "&show_text=", @data-show-text, "&width=640"): $fb_post
+@before(<iframe>, src, @data-src, class, "fb-post"): $fb_post
+#@remove
+<div>: //p[//iframe]
+ @if( $time/text() ) {
+
+
+ @combine(" "): $body//div[has-class("newsdate")]/next-sibling::*[has-class("newstime")]
+ $date_field:  $@
+ @debug
+  @prepend("Europe/Kiev "): $date_field
+  @debug
+   @datetime(0, "ru-UA","VV dd MMMM yyyy HH:mm"): $date_field
+  $formated: $@
+    @debug
+  published_date!: $formated
+  #published_date: $formated
+ }
+channel: "@glavnoeUA"
+$nt: //*[has-class("newstools")]
+
+@remove: $nt
+$nt: //*[has-class("newscred")]
+@remove: $nt
+$orf: //p[@align="center"][//i]
+@debug
+@remove: $orf
+$orf: //div[@align="center"][//i]
+@remove: $orf
+@remove: //noindex
+
+
+ #@B($body): "##"
+
+
+
+ @remove: //div[@class="facebook-tools"]
+$torel: //*[has-class("seealso_inner")]
+@wrap_inner(<h3>): (//*[has-class("seealso_inner")])[1]
+<related>: $torel
+@append_to($body): //related
+# $links: //*[has-class("seealso_inner")]/a
+#  @if( $links ) {
+
+#    #@wrap(<h3>): $@
+#   # @wrap(<related>):$links
+#    @after(<xc>): $body
+#    $rel: //xc
+#    @debug
+#       @append_to($rel): $links
+#      @wrap_inner(<related>): //xc
+#         #@append_to(//related): "Читайте также:"
+#      @append_to($body): //related
+#  }
+
+
+# @remove://*[has-class("seealso_inner")]
+
+#iframe
+$to_iframe: //*[contains(@data-oembed-url,"facebook")]//a
+
+
+@set_attr(src, "https://www.facebook.com/plugins/video.php?href=", $to_iframe/@href): $to_iframe
+#NEEDED TO
+#https://www.facebook.com/plugins/video.php?" + $to_iframe/@href
+<iframe>: $to_iframe
+@debug
+#@remove: $to#
+@debug
+# encode-for-uri()
+#!path_not: .*/map.html
+
+#?path: .*galleries/.*
+
+  $problems: $body
+@while( $problems ) {
+  $test: $body//*[self::blockquote or self::aside or self::figure or (self::img and not(./ancestor::figure)) or self::iframe or self::slideshow or self::related or self::footer or self::table[not(ancestor::table) and not(descendant::table)]]
+
+  $problems: $test/self::*[ancestor::anchor or ancestor::blockquote or ancestor::aside or ancestor::footer or ancestor::strong or ancestor::b or ancestor::em or ancestor::i or ancestor::ins or ancestor::u or ancestor::del or ancestor::s or ancestor::strike or ancestor::code or ancestor::kbd or ancestor::samp or ancestor::tt or ancestor::mark or ancestor::sup or ancestor::pic or ancestor::sub or ancestor::a or ancestor::reference or ancestor::h1 or ancestor::h2 or ancestor::h3 or ancestor::h4 or ancestor::h5 or ancestor::h6 or ancestor::p or ancestor::pre or ancestor::hr or ancestor::img or ancestor::br]
+
+  @if( $problems ) {
+    $parent: $problems/parent::*
+    @detach: $parent/node()
+    @set_attr("merge", $index): $@
+    <remove>: $parent
+    @after_el("./parent::*"): $problems
+    @combine: $body//self::*[prev-sibling::*/@merge = @merge]
+  }
+}
+
+body: $body

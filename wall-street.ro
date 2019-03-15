@@ -1,13 +1,21 @@
 ws.ro
 Site name Must be preserved
+template should not gen this page
+!http://prntscr.com/mvlx6a
+https://www.wall-street.ro/articol/Careers/239248/hub-manager-recrutarea-trebuie-sa-se-faca-pe-potential-nu-pe-diplome-si-experienta-profesionala.html
+https://www.wall-street.ro/articol/IT-C-Tehnologie/237094/siscale-business-romanesc-de-milioane-de-euro-coordonat-la-new-york.html
+https://www.wall-street.ro/articol/Finante-Banci/237992/steven-van-groningen-taxa-pe-activele-bancare-va-fi-platita-de-consumatori-bancile-doar-o-colecteaza.html
+ tst https://www.wall-street.ro/raft-afaceri/afaceri-creatie-productie/afacere-creativa-business-genti-pictate.html
+ 
 figcaption https://www.wall-street.ro/special/analize-economice-si-geo-politice/238821/suspendarea-tratatului-inf-oportunitate-pentru-sua-sau-pentru-federatia-rusa.html
 maybe ficcapt https://www.wall-street.ro/articol/Lifestyle/238608/top-10-cele-mai-scumpe-orase-din-lume-in-2019.html
 elian https://www.wall-street.ro/articol/Lifestyle/238608/top-10-cele-mai-scumpe-orase-din-lume-in-2019.html
 obligatory related links
 !to figcaption
+elian doran
 https://www.wall-street.ro/articol/IT-C-Tehnologie/237756/ces-2019-ce-noutati-au-prezentat-samsung-dell-asus-si-acer.html
 Interesting gallery
-here to ehre: 
+here to ehre:
 https://www.wall-street.ro/articol/IT-C-Tehnologie/239010/lansarile-importante-de-la-mwc-2019.html
 get date And author
 https://www.wall-street.ro/articol/IT-C-Tehnologie/239010/lansarile-importante-de-la-mwc-2019.html
@@ -26,7 +34,7 @@ keep link
 https://www.wall-street.ro/special/10yearsofgalaxy/239010/lansarile-importante-de-la-mwc-2019/galerie/MWC/3088/43109.html
 
 что с видео https://www.wall-street.ro/articol/Careers/239051/lider-ptir-daca-pana-acum-companiile-isi-alegeau-angajatii-acum-angajatii-isi-aleg-companiile.html
-should not be generated 
+should not be generated
 https://www.wall-street.ro/articol/Careers/239051/lider-ptir-daca-pana-acum-companiile-isi-alegeau-angajatii-acum-angajatii-isi-aleg-companiile.html
 due to this embed: http://prntscr.com/mupoad
 
@@ -61,19 +69,19 @@ https://www.wall-street.ro/articol/Careers/238150/cum-scrii-un-cv-impresionant-d
 separator need to hide in mobile
 <hr class="separator mobile-hide">
 
- 
+
 @append_to($body): //div[@class="read_more"]
 <related>: $body//div[@class="read_more"]
 
-special 
+special
 author:
-!imp page 
+!imp page
 full
 test: slideshow:
 https://www.wall-street.ro/articol/Marketing-PR/236531/ce-mai-citim-carti-pe-care-redactia-wall-street-ro-le-recomanda.html?full
 nested element
 https://www.wall-street.ro/articol/Real-Estate/239174/colliers-competitia-dezvoltatorilor-de-a-livra-parcuri-de-retail-continua-si-in-2019.html
-AUDIO: 
+AUDIO:
 https://www.wall-street.ro/articol/Finante-Banci/238817/podcastul-de-fiscalitate-ce-modificari-importante-a-adus-noul-an.html
 
 https://www.wall-street.ro/special/romania-fara-hospice/238952/romania-fara-hospice-raluca-kisescu-nu-ma-simt-bine-daca-nu-fac-bine.html
@@ -95,7 +103,7 @@ https://www.wall-street.ro/articol/Turism/238057/tendinte-de-calatorie-in-2019-d
 #https://www.wall-street.ro/articol/Finante-Banci/238903/revolut-angajari-startupfintech.html
 https://www.wall-street.ro/articol/Finante-Banci/239063/analistii-financiari-estimeaza-o-depreciere-a-monedei-nationale-pana-la-4-8884-lei-euro-in-urmatoarele-12-luni.html
 
-tables: 
+tables:
 https://www.wall-street.ro/articol/International/235429/sua-si-china-art-of-deal-vs-art-of-war.html
 
 kostia bloqoute is missing
@@ -130,7 +138,7 @@ https://www.wall-street.ro/catalog/anunt/5896/ALIMAR-COLLECTION-SRL.html
 !embed not displayed
 https://www.wall-street.ro/articol/Careers/239051/lider-ptir-daca-pana-acum-companiile-isi-alegeau-angajatii-acum-angajatii-isi-aleg-companiile.html
 
-tv pages 
+tv pages
 https://www.wall-street.ro/tv/profesionistii-in-banking/profesionistii-in-banking/index.html
 
 part of blockqoute

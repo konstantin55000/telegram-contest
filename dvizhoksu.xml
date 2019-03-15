@@ -1,0 +1,162 @@
+# TEMPLATE MASTER BY MYSH (git.hugmouse.com)
+~version: "2.0"
+?path: /.+
+site_name: "Dvizhok.su"
+# $(NBSP) FIXER
+@replace("^\\s+$", ""): //text()
+
+# twitter-tweet
+<iframe>: //twitter-widget[starts-with(@data-tweet-id,"https://twitter.com/")]
+@set_attr(src,./@data-tweet-id): $@
+@replace:
+
+# PIC RULES
+# By @housemusicforhomelessepeople
+<pic>: //img[ancestor::td]
+@remove: //p[contains(text(), "________________")]
+
+
+@after_el("./.."): //p/iframe
+@after_el("./.."): //a/img
+<div>: //p/img
+@after_el("./.."): //p/related
+
+
+# STYLING (add it if you want)
+# <aside>: //*[@style="text-align: center;"]
+
+# REPLACING srcset WITH src
+# NOTE THAT IV DO NOT SUPPORT srcset!
+# SAFE IF IV STARTS SUPPORTING srcset
+# By @housemusicforhomelessepeople
+$setsrc: $body//img[@srcset]
+@set_attr(src_set, @srcset):
+@replace("http.+w, ", ""): $setsrc/@src_set
+@replace("(jpe?g|png|gif).+w", "$1"): $setsrc/@src_set
+@set_attr(src, @src_set): $setsrc
+
+# YOUTUBE OBJECT FIXER
+# By @housemusicforhomelessepeople
+@if("//object[contains(@data, \"youtube\")]") {
+  @before(<iframe>): //object[contains(@data, \"youtube\")]
+  @replace("http://www.youtube.com/v/","https://www.youtube.com/embed/"): //object[contains(@data, "youtube")]/@data
+  @set_attr(src, "./next-sibling::object[contains(@data, \"youtube\")]/@data"): //iframe[next-sibling::object[contains(@data, "youtube")]]
+  @remove: //object[contains(@data, "youtube")]
+}
+
+<div>: //blockquote[.//table]
+<div>: //blockquote[.//iframe]
+<div>: //blockquote[.//video]
+<div>: //blockquote[.//embed]
+<div>: //blockquote[.//audio]
+
+<div>: //p[.//img]
+<div>: //p[.//table]
+<div>: //p[.//iframe]
+<div>: //p[.//video]
+<div>: //p[.//audio]
+<div>: //p[.//embed]
+<div>: $body//p[img]
+
+@after(<br>): $body//blockquote//p
+
+# REPLACE BODY !!!
+
+title: //h1
+?exists: //div[@itemprop="reviewBody"]
+$body: //div[@itemprop="reviewBody"]
+@remove: //*[has-class("banner")]
+@remove: //*[has-class("fb-like")]
+@remove: //*[has-class("tags")]
+
+<related>: //*[has-class("article-box")]
+$x: $@
+<h3>: $x//span[has-class("article-box-title-small")]
+
+# REPLACE BODY !!!
+
+#@set_attr("src",./img):
+title: //meta[@property="og:title"]/@content
+description: //meta[@name="description"]/@content
+cover: //*[@id="fullArticle"]//figure
+cover: //*[@id="fullArticle"]//img
+image_url: //meta[@property="og:image"]/@content
+image_url: $body//img/@src
+site_name: //meta[@property="site_name"]/@content
+
+author: //*[@itemprop="author"]//*[@itemprop="name"]
+@remove: //div[has-class("tags")]
+@remove: //div[has-class("alltags")]
+
+$to_rel: //section[has-class("articles")]/article/div
+#<related>: $to_rel
+@remove: $to_rel//div[has-class("artImage")]//img
+<span>:  $to_rel//*[has-class("artTit")]/h3/a
+<h2>:  $to_rel//*[has-class("artTit")]/h3
+<related>: //section[has-class("articles")]/article/div
+
+$to_rel2: //section[has-class("articlesList")]
+@remove: $to_rel2//div[has-class("artIntro")]
+@remove: $to_rel2//div[has-class("artImage")]
+#@before_el("./../.."): $to_rel//*[has-class("artTit")]/h3
+<related>: $to_rel2//div[has-class("artTit")]
+$tst: $@
+
+
+
+#$dt_field: //meta[@itemprop="datePublished"]/@content
+$dt_field: //*[has-class("articleDate")]
+@datetime(0): $dt_field
+$dt: $@
+
+published_date: $dt
+
+
+#  $tohref: $body//a[@data-fancybox]
+#  @debug
+#  @map( $tohref ) {
+#    $curr:$@
+#    $fk: $curr[contains(@href,"dvizok-line-aksessuari.jpg")]
+#     @remove: $fk/img
+#     @remove: $fk
+#     @if_not( $fk ) {
+#    @append(<img>): $curr
+
+#    $getval: $curr/@href
+
+#    @set_attr(src, $getval):  $curr/img
+#    $ck: $curr/img
+#    #@debug
+
+#     }
+
+
+#    #@debug
+#  }
+#@debug
+#@set_attr(href, $tohref):  //a//img
+#@set_attr(src, @href):  //a//img
+#@debug
+ <slideshow>: $body//div[has-class("iGrid31")]
+@remove: //*[has-class("article-heading-info")]
+#=====LET ME DIE=====
+#Original code/idea by Misho @mushi_f
+#With modifications by Andrei Afanasiev
+body: $body
+@append_to($body): ($to_rel2)[2]
+$problems: $body
+@while( $problems ) {
+  $test: $body//*[self::blockquote or self::aside or self::figure or (self::img and not(./ancestor::figure)) or self::iframe or self::slideshow or self::related or self::footer or self::table[not(ancestor::table) and not(descendant::table)]]
+
+  $problems: $test/self::*[ancestor::anchor or ancestor::blockquote or ancestor::aside or ancestor::footer or ancestor::strong or ancestor::b or ancestor::em or ancestor::i or ancestor::ins or ancestor::u or ancestor::del or ancestor::s or ancestor::strike or ancestor::code or ancestor::kbd or ancestor::samp or ancestor::tt or ancestor::mark or ancestor::sup or ancestor::pic or ancestor::sub or ancestor::a or ancestor::reference or ancestor::h1 or ancestor::h2 or ancestor::h3 or ancestor::h4 or ancestor::h5 or ancestor::h6 or ancestor::p or ancestor::pre or ancestor::hr or ancestor::img or ancestor::br]
+
+  @if( $problems ) {
+    $parent: $problems/parent::*
+    @detach: $parent/node()
+    @set_attr("merge", $index): $@
+    <remove>: $parent
+    @after_el("./parent::*"): $problems
+    @combine: $body//self::*[prev-sibling::*/@merge = @merge]
+  }
+}
+#====================
