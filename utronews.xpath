@@ -5,7 +5,12 @@ $body: //*[has-class("container")]//div[has-class("col-sm-9")]//div[has-class("n
 ?exists: $body
 @replace("^\\s+$", ""): //text()
 title: //h1
- $chk: //img[contains(@src,"rg.ru")]
+$chk: //img[contains(@src,"rg.ru")]
+
+$plsholder: $body//img[contains(@src,"1E7278AF-F567-4C9B-A5BC-894FAF9FD544_w1023_r1_s.jpg")]
+@remove: $plsholder
+@replace("jpg%20", "jpg"): $body//img/@src
+
 
 $toc: //*[has-class("detail_picture")]
 #@debug
@@ -38,7 +43,7 @@ description: $todescr/b
 <p> :$todescr
 $desrc: $@
 
-
+@remove: //script
 #Fixes:
 @after_el(./..):   //blockquote/img
 
@@ -69,14 +74,23 @@ $tags:   //a[contains(@href, "/tags")]
 #     <related>: $rel
 #  }
 
+  $tchk: //*[contains(text(), "Теги:")]
+ @remove: $tchk
 
- @style_to_attrs(clear,clear): $body//div
- $bf: //div[@clear="both"]
+  #$tchk: $body//*[contains(text(), "Теги:")]
+ #@remove: $tchk
+
+
+ @style_to_attrs(clear,clear): $body//p
+ $bf: //p[@clear="both"]
  $br: $bf/next-sibling::br
- #@debug
+ @debug
+ $tagtext: $br//following-sibling::text()
+ @debug
+ @remove: $tagtext
 
 <p>: $body/span
- @remove: $body/text()
+# @remove: $body/text()
 $slideshow: //div[has-class("gallery")]
 $hrefs: $slideshow//a//img
 @replace("-150x150", ""): $hrefs/@src
@@ -101,7 +115,7 @@ $dbm: $toc/@src
 @prepend_to($body): $toc
 cover!: $toc
 image_url: $toc
-body: $body
+
 
 title: //meta[@property="og:title"]/@content
 #description: //meta[@name="description"]/@content
@@ -129,6 +143,8 @@ image_url: $body//img/@src
   @set_attr(src, "./next-sibling::object[contains(@data, \"youtube\")]/@data"): //iframe[next-sibling::object[contains(@data, "youtube")]]
   @remove: //object[contains(@data, "youtube")]
 }
+
+body: $body
 
 $problems: $body
 @while( $problems ) {
