@@ -3,13 +3,23 @@
 site_name: "G4Media.ro"
 $body: //*[@itemtype="http://schema.org/Article"]
 ?exists: $body
-@remove://div[has-class("code-block")]
+
 title: //h1
+ $posfigc: //div[has-class("at-above-post")][contains(@data-url, "bombonica-prodana-si-a-achitat-prejudiciul")]/next-sibling::p[em]
+ #@remove: $posfigc
+@append_to($body): $posfigc
 $a: //*[@itemprop="author"]//span/text()
 author: $a
 $cont: //div[has-class("container")]
 <figure>: //div[has-class("post-image")]
 <figure>: //div[has-class("intro-large")][img]
+<figure>: //div[has-class("intro-medium")][img]
+<figure>: //div[has-class("intro-small")][img]
+
+ $code: //*[has-class("code-block")]
+ #<h4>: $code//span
+ <p>: $code
+
 $tofig: $cont//figure
 cover: $tofig
 
@@ -28,6 +38,11 @@ author_url: //a[@rel="author"]/@href
 #    $torel: $body//p/a[strong]
 #    <related>: $torel
 #  }
+
+
+ #@after_el($body): $posfigc
+ @remove://div[has-class("code-block")]
+@remove: //div[has-class("addthis_tool")]
 
  $ckk: $body//p//strong[contains(text(),"Citiți și")]
  @if( $ckk ) {
@@ -64,18 +79,17 @@ author_url: //a[@rel="author"]/@href
 
 $ckrel: //p/strong[contains(text(), "Citește")]
 $par: $ckrel/ancestor::p
-$process : $par/next-sibling::p/strong/a
+$process : $par/next-sibling::p//strong
 @if($process) {
  <related>: $process/ancestor::p
 }
 
-$process_next : $par/next-sibling::related/next-sibling::p/strong/a
+$process_next : $par/next-sibling::related/next-sibling::p//strong
 @if($process_next) {
  <related>: $par/next-sibling::related/next-sibling::p
 }
 
 #p a strong:
-
 
 $ckrel: //p/strong[contains(text(), "Citește")]
 $par: $ckrel/ancestor::p
@@ -102,6 +116,19 @@ $process_next : $par/next-sibling::related/next-sibling::related/next-sibling::p
 @wrap_inner(<h2>): $ckrel
 @append_to(//related): $ckrel
 
+$torelc: //p//strong/a[starts-with(text(), "Citiți ")]
+<related>: $torelc/ancestor::p
+
+$torelc: //p//strong/a[starts-with(text(), "Citește ")]
+<related>: $torelc/ancestor::p
+
+$torelc: //p//a/strong[starts-with(text(), "Citiți ")]
+@debug
+<related>: $torelc/ancestor::p
+
+$torelc: //p//a/strong[starts-with(text(), "Citeşte ")]
+@debug
+<related>: $torelc/ancestor::p
 #$toappend:
 #Fixes:
 @after_el(./..):   //blockquote/img
@@ -125,7 +152,7 @@ $process_next : $par/next-sibling::related/next-sibling::related/next-sibling::p
 #     <related>: $rel
 #  }
 
-@append_to($body): $rel
+
 $rel: //ul/li/strong/a/ancestor::ul
  @if( $rel/prev-sibling::p ) {
     <related>: $rel
@@ -144,8 +171,14 @@ $hrefs: $slideshow//a//img
 
 
 
-cover: $body//figure
-cover: $body//img
+#cover: $body//figure
+#cover: $body//img
+# $notcover: //div[has-class("post-content")]/figure[has-class("wp-caption")]
+# @debug
+# @if( $notcover ) {
+#   cover!:""
+# }
+#@after_el($body): $notcover
 body: $body
 
 title: //meta[@property="og:title"]/@content

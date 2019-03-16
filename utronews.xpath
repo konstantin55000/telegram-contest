@@ -2,6 +2,9 @@
 ?path: /.+
 site_name: "УтроNews"
 $body: //*[has-class("container")]//div[has-class("col-sm-9")]//div[has-class("news-additional-banners")]
+@if_not( $body ) {
+  $body: //*[has-class("container")]//div[has-class("col-sm-9")]//div[has-class("news-detail")]
+}
 ?exists: $body
 @replace("^\\s+$", ""): //text()
 title: //h1
@@ -18,15 +21,33 @@ $cont: //div[has-class("col-sm-9")]
 $hrf://hr[@size="1"]
 $hrb://hr[@size="2"]
 $dtcont:  $hrf/prev-sibling::span
-@datetime(0) : $dtcont/text()
+@if_not( $dtcont ) {
+  $dtcont:  //span[@class="news-date-time"][1]
+   $attext: $dtcont//following-sibling::text()
+  @debug
+}
+ $attext: $dtcont//following-sibling::text()
+ @debug
+
+ $hchk: $attext[contains(., "Автор:")]
+
+ @datetime(0) : $dtcont/text()
 published_date
 
 $t: $dtcont
 $aut:  ($body/text())[2]
-@replace("Автор:", ""):  $aut
+
+@replace("Автор:", ""):  $attext
 $toauthor: $@
-@replace("^(\\s).+", "") : $toauthor
-author: $toauthor
+$toauthor: ($toauthor)[1]
+@debug
+#@replace("^(\\s).+", "") : $toauthor
+@replace("^(\\s).+", ""): $toauthor
+author: $@
+
+
+
+
 <p>: $body/div
 @wrap(<figure>): $body//img
 @debug
