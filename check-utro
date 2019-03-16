@@ -1,4 +1,5 @@
 http://utronews.org/redactor/temnye_veka_rossiyskikh_bankov_bBh_2017/
+@replace("Автор:",""):$uzkiy-selector/node()[contains(.,"Автор:")]
 
 nomedia found
 http://utronews.org/redactor/temnye_veka_rossiyskikh_bankov_bBh_2017/
@@ -13,7 +14,7 @@ http://utronews.org/sport/premer_ministr_rf_priletel_na_zakrytie_universiady_c19
 related enough
 http://utronews.org/sport/opredelilis_pary_1_4_finala_ligi_chempionov_5AojL_2019/
 
-
+[contains(/text(),"string")]
 jpg found
 http://utronews.org/redactor/temnye_veka_rossiyskikh_bankov_bBh_2017/
 

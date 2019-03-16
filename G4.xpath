@@ -41,7 +41,7 @@ author_url: //a[@rel="author"]/@href
 
 
  #@after_el($body): $posfigc
- @remove://div[has-class("code-block")]
+# @remove://div[has-class("code-block")]
 @remove: //div[has-class("addthis_tool")]
 
  $ckk: $body//p//strong[contains(text(),"Citiți și")]
@@ -91,24 +91,39 @@ $process_next : $par/next-sibling::related/next-sibling::p//strong
 
 #p a strong:
 
-$ckrel: //p/strong[contains(text(), "Citește")]
+$ckrel: //p/strong[starts-with(text(), "Citește")]
+@debug
+@if_not( $ckrel ) {
+  $ckrel: //p/strong[starts-with(text(), "Citiți")]
+}
+
 $par: $ckrel/ancestor::p
-$process : $par/next-sibling::p/a/strong
+@if_not( $ckrel ) {
+  $ckrel: //p[starts-with(text(), "Citește")]
+  $par: $ckrel
+  @debug
+}
+$process : $par/next-sibling::p//strong
+
 @if($process) {
  <related>: $process/ancestor::p
 }
+@if_not($process) {
+ $process : $par/next-sibling::ul//strong
+ <related>: $process/ancestor::ul
+}
 
-$process_next : $par/next-sibling::related/next-sibling::p/a/strong
+$process_next : $par/next-sibling::related/next-sibling::p//strong
 @if($process_next) {
  <related>: $par/next-sibling::related/next-sibling::p
 }
 
-$process_next : $par/next-sibling::related/next-sibling::related/next-sibling::p/a/strong
+$process_next : $par/next-sibling::related/next-sibling::related/next-sibling::p//strong
 @if($process_next) {
  <related>: $par/next-sibling::related/next-sibling::related/next-sibling::p
 }
 
- $process_next : $par/next-sibling::related/next-sibling::related/next-sibling::related/next-sibling::p/a/strong
+ $process_next : $par/next-sibling::related/next-sibling::related/next-sibling::related/next-sibling::p//strong
 @if($process_next) {
  <related>: $par/next-sibling::related/next-sibling::related/next-sibling::related/next-sibling::p
 }
@@ -129,6 +144,7 @@ $torelc: //p//a/strong[starts-with(text(), "Citiți ")]
 $torelc: //p//a/strong[starts-with(text(), "Citeşte ")]
 @debug
 <related>: $torelc/ancestor::p
+
 #$toappend:
 #Fixes:
 @after_el(./..):   //blockquote/img

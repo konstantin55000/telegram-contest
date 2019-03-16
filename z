@@ -23,40 +23,60 @@ $hrb://hr[@size="2"]
 $dtcont:  $hrf/prev-sibling::span
 @if_not( $dtcont ) {
   $dtcont:  //span[@class="news-date-time"][1]
-   $attext: ($dtcont//following-sibling::text())[1]
+   $siblingtext: ($dtcont//following-sibling::text())[1]
 }
-   $attext: ($dtcont//following-sibling::text())[1]
-   @debug
+  $siblingtext:  ($dtcont//following-sibling::text())[1]
+
+  @debug
 
 
+ #$toauthor :  $body/node()
+ $siblingtext: ($dtcont//following-sibling::text())[1]
 
- $res: $attext[contains(normalize-space(text()), "Автор")]
- $check: $@
-
+ @after(<toremove>) : $body
+ @set_attr(toauthor, $siblingtext) : //toremove
+ $tmp: //toremove
+ @debug
+ @replace("^\\s+$", ""): $tmp/@toauthor[contains(.,"Автор:")]
+ $replaced: $@
+ @set_attr(toauthor, $replaced) : //toremove
+ $tmp: //toremove
+ @debug
+@replace("Автор:",""): $tmp/@toauthor[contains(.,"Автор:")]
+# #author!:
+# @remove: //toremove
+ #!!@replace("Автор:",""): $body/node()[contains(normalize-space(.),"Автор:")]
+# $res: $attext[contains(normalize-space(text()), "Автор")]
+# $check: $@
+  # $text: "    Автор:   Наталья Кузнецова    "
+   # @replace("^\\s+$", ""): $text
+ @replace("^\\s+|\\s$",""):  $tmp/@toauthor
+  $to:  $@
+ author: $to
 
  @datetime(0) : $dtcont/text()
 published_date
- 
+
 $t: $dtcont
 $aut:  ($body/text())[2]
 
 
 
 
- @if( $check ) {
- body:''
-  @replace("Автор:", ""):  $attext
-  $toauthor: $@
-  $toauthor: ($toauthor)[1]
-  #@replace("^(\\s).+", "") : $toauthor
-  @replace("^(\\s).+", ""): $toauthor
-  author: $@
- }
+
+
+#   @replace("Автор:", ""):  $siblingtext
+#   $toauthor: $@
+#   $toauthor: ($toauthor)[1]
+#   #@replace("^(\\s).+", "") : $toauthor
+#   @replace("^(\\s).+", ""): $toauthor
+#   author: $@
+
 
 <p>: $body/div
 @wrap(<figure>): $body//img
 @debug
-@remove: $aut
+#@remove: $aut
 @remove: $dtcont
 @remove: $hrf
 #cover: //div[has-class("above-content-image")]/img
@@ -95,10 +115,7 @@ $a: //a[contains(@href, "@utronews")]
 $tags:   //a[contains(@href, "/tags")]
 @remove : $tags
 @remove : $a
-#  $rel: //ul/li/a/strong/ancestor::ul
-#  @if( $rel/prev-sibling::p ) {
-#     <related>: $rel
-#  }
+
 
   $tchk: //*[contains(text(), "Теги:")]
  @remove: $tchk

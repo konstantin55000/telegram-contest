@@ -1,0 +1,2 @@
+@wrap(<span>): $body/text()
+<p>: $body/br/next-sibling::br

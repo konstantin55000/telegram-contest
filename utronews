@@ -1,1 +1,39 @@
 http://utronews.org/culture/ed_shiran_tayno_zhenilsya_Im_2019/
+http://utronews.org/news/society/kosmonavtam_na_mks_privezut_chesnok_s6g_2019/
+
+# @replace("Автор:","")://div[has-class("news-additional-banners")]/node()[contains(.,"Автор:")]
+@replace("Автор:",""):$body/node()[contains(.,"Автор:")]
+author:$@
+
+Суть: провериь строку на автора.
+если содержит "Автор:" зайти в любой из ифов
+кто, может пожалуйста потестьте у себя.
+go to @if { //get author from text } or
+ go to ?exist: //get author from text ?true: //continue
+
+if string not contains "Автор:  " , do nothing.
+here what i have now.
+unf. Any of this  block is Not executed.
+ $a_text:      "  Автор:   Наталья Кузнецова    "
+$result: $a_text[contains(text(), "Автор")] #not working also
+# $result: $a_text[contains(normalize-space(text()), "Автор")] #not work
+ $maybe_result: $@
+
+@if( $result ) {
+ $result : $result
+ @debug
+   body! : "exist res"
+ }
+ @if( $maybe_result ) {
+   body! : "exist maybe_result"
+ }
+
+ ?exists: $result
+ body: "result"
+
+ ?exists: $maybe_result
+  body: "maybe_result"
+#nothing from this happens; also tested with @debug
+?true:
+
+maybe  someone can test it by yourscript; or help with advice..
