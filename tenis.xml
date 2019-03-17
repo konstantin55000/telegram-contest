@@ -5,6 +5,76 @@ site_name: "Tenisový svět"
 # $(NBSP) FIXER
 @replace("^\\s+$", ""): //text()
 
+$tournament: //div[@class="tournament-heading"]
+?exists: $tournament
+$body: $tournament
+$img: $tournament//img
+image_url: $img/@src
+@remove: $img
+#@append_to($body): $img
+
+$table: //*[has-class("user-detail-bio")]
+$row: $table//div[has-class("col-xs-6")]
+$td: $table//div[has-class("col-xs-6")]/*
+
+
+@wrap(<td>): $td
+
+$td: $table//div[has-class("col-xs-12")]/*
+@remove:  $table//div[has-class("col-xs-12")]/span
+
+
+@wrap(<td>): $td
+$get: $@
+<tr>: $row
+<tr>: $table//div[has-class("col-xs-12")]
+@debug
+@wrap_inner(<table>): $table
+$h2: $table//h2
+#@wrap(<strong>): $h2
+
+?true:
+
+$tournament: //div[@class="player-heading"]
+?exists: $tournament
+$body: $tournament
+$img: $tournament//img
+image_url: $img/@src
+cover: $img
+#@remove: $img
+#@append_to($body): $img
+
+$table: //*[has-class("user-detail-bio")]
+$row: $table//div[has-class("col-xs-6")]
+$td: $table//div[has-class("col-xs-6")]/*
+
+
+@wrap(<td>): $td
+
+$td: $table//div[has-class("col-xs-12")]/*
+
+@remove:  $table//div[has-class("col-xs-12")]/span
+@wrap(<td>): $td
+$get: $@
+<tr>: $row
+<tr>: $table//div[has-class("col-xs-12")]
+@debug
+@wrap_inner(<table>): $table
+$h2: $table//h2
+#@wrap(<strong>): $h2
+
+$pgal: //*[@id="article-gallery"]//div[has-class("col-md-2")]
+$info: //*[@id="article-gallery"]//*[has-class("article-box-info")]
+<h3>: $info//span[1]
+<p>: $info//span[2]
+@append_to($body): $info
+@set_attr(src, $pgal//a/@href): $pgal//img
+@append_to($body): $pgal
+<slideshow> : $pgal
+
+?true:
+
+
 # twitter-tweet
 <iframe>: //twitter-widget[starts-with(@data-tweet-id,"https://twitter.com/")]
 @set_attr(src,./@data-tweet-id): $@
@@ -18,7 +88,7 @@ site_name: "Tenisový svět"
 
 @after_el("./.."): //p/iframe
 @after_el("./.."): //a/img
-<div>: //p/img
+
 @after_el("./.."): //p/related
 
 # STYLING (add it if you want)
@@ -99,6 +169,7 @@ $check:  $dt_field[contains(text(),"VČERA")]
   published_date!: $@
 }
 @remove: //*[has-class("article-heading-info")]
+@remove: //*[has-class("article-author")]
 #=====LET ME DIE=====
 #Original code/idea by Misho @mushi_f
 #With modifications by Andrei Afanasiev

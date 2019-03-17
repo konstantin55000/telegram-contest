@@ -37,12 +37,17 @@ $dtcont:  $hrf/prev-sibling::span
  @set_attr(toauthor, $siblingtext) : //toremove
  $tmp: //toremove
  @debug
- @replace("^\\s+$", ""): $tmp/@toauthor[contains(.,"Автор:")]
- $replaced: $@
- @set_attr(toauthor, $replaced) : //toremove
- $tmp: //toremove
- @debug
-@replace("Автор:",""): $tmp/@toauthor[contains(.,"Автор:")]
+ #@replace("^\\s+$", ""): $tmp/@toauthor[contains(.,"Автор:")]
+ #$replaced: $@
+ #@set_attr(toauthor, $replaced) : //toremove
+ #$tmp: //toremove
+ #@debug
+ @replace("^\\s+|\\s$",""):  $tmp/@toauthor
+
+
+ # @remove:   $siblingtext[contains(.,"Автор:")]
+  # @remove:   $siblingtext[contains(.,"Автор:")]
+
 # #author!:
 # @remove: //toremove
  #!!@replace("Автор:",""): $body/node()[contains(normalize-space(.),"Автор:")]
@@ -50,27 +55,21 @@ $dtcont:  $hrf/prev-sibling::span
 # $check: $@
   # $text: "    Автор:   Наталья Кузнецова    "
    # @replace("^\\s+$", ""): $text
- @replace("^\\s+|\\s$",""):  $tmp/@toauthor
-  $to:  $@
- author: $to
 
+
+ $tauthor: $tmp/@toauthor[contains(normalize-space(.), "Автор")]
+  @replace("Автор:",""):  $tauthor
+   @replace("^\\s+|\\s$",""):  $tauthor
+ author: $tauthor
+ #@remove: $tauthor
+  @remove:   $siblingtext/node()[contains(text(),"Автор:")]
+  @debug($@)
+ #author:  $tmp/@toauthor[contains(normalize-space(.), "Автор")]
  @datetime(0) : $dtcont/text()
 published_date
 
 $t: $dtcont
-$aut:  ($body/text())[2]
-
-
-
-
-
-
-#   @replace("Автор:", ""):  $siblingtext
-#   $toauthor: $@
-#   $toauthor: ($toauthor)[1]
-#   #@replace("^(\\s).+", "") : $toauthor
-#   @replace("^(\\s).+", ""): $toauthor
-#   author: $@
+#$aut:  ($body/text())[2]
 
 
 <p>: $body/div
