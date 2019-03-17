@@ -68,9 +68,13 @@ $info: //*[@id="article-gallery"]//*[has-class("article-box-info")]
 <h3>: $info//span[1]
 <p>: $info//span[2]
 @append_to($body): $info
-@set_attr(src, $pgal//a/@href): $pgal//img
+@map ($pgal//a){
+$link: $@
+@set_attr(src, $link/@href): $link//img
+}
+
 @append_to($body): $pgal
-<slideshow> : $pgal
+#<slideshow> : $pgal
 
 ?true:
 

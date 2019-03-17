@@ -1,0 +1,5 @@
+@prepend(<authors>): /html
+@append_to(//authors): //p[has-class("byline__text")]/a[@rel="author"]
+@combine(", "): //authors/a/next-sibling::a
+
+author: //authors

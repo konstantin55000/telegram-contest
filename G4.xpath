@@ -3,7 +3,6 @@
 site_name: "G4Media.ro"
 $body: //*[@itemtype="http://schema.org/Article"]
 ?exists: $body
-
 title: //h1
  $posfigc: //div[has-class("at-above-post")][contains(@data-url, "bombonica-prodana-si-a-achitat-prejudiciul")]/next-sibling::p[em]
  #@remove: $posfigc
@@ -19,27 +18,44 @@ $cont: //div[has-class("container")]
  $code: //*[has-class("code-block")]
  #<h4>: $code//span
  <p>: $code
-
+@wrap_inner(<strong>): //p[has-class("post-title")]
 $tofig: $cont//figure
 cover: $tofig
 
+@if( //img/@data-large-file ) {
+  @set_attr(src,@data-large-file): //img
+}
+@if( //img/@data-orig-file ) {
+  @set_attr(src,@data-orig-file): //img
+}
+
+$awithimg: //a[img]
+@map( $awithimg ) {
+  $currlink: $@
+  @set_attr("href",$currlink/@href): $currlink/img
+}
+
+
+@debug
 #cover: //div[has-class("above-content-image")]/img
 author_url: //a[@rel="author"]/@href
 #nbsp fixer
-@replace("^\\s+$", ""): //text()
- #$ckk: $body//p/strong[contains(text(),"Citește")]
-#  @if( $ckk ) {
-#    @wrap_inner(<h2>): $ckk
-#    $next:  $ckk/next-sibling::p
-#    $parent: $ckk/..
 
-#    @combine("<br>"): $ckk/../next-sibling::p
-#    <related>: $@
-#    $torel: $body//p/a[strong]
-#    <related>: $torel
-#  }
+$toiframe: //post[@href  and @data-width]
+#@replace("href", "src"): $toiframe
 
+@map( $toiframe ) {
+$curr: $@
+  @set_attr(data-href,$curr/@href): $curr
+  @urldecode: $curr/@data-href
+  @debug
+  @set_attr(data-src, "https://www.facebook.com/plugins/post.php?href=", @data-href): $curr
+@set_attr(src,@data-src,class,"fb-post"): $curr
+}
+<iframe>: //post
 
+#$iframe: //*[contains(@href,"facebook.com")]
+@debug
  #@after_el($body): $posfigc
 # @remove://div[has-class("code-block")]
 @remove: //div[has-class("addthis_tool")]
