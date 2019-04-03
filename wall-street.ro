@@ -6,7 +6,30 @@ https://www.wall-street.ro/articol/Careers/239248/hub-manager-recrutarea-trebuie
 https://www.wall-street.ro/articol/IT-C-Tehnologie/237094/siscale-business-romanesc-de-milioane-de-euro-coordonat-la-new-york.html
 https://www.wall-street.ro/articol/Finante-Banci/237992/steven-van-groningen-taxa-pe-activele-bancare-va-fi-platita-de-consumatori-bancile-doar-o-colecteaza.html
  tst https://www.wall-street.ro/raft-afaceri/afaceri-creatie-productie/afacere-creativa-business-genti-pictate.html
- 
+
+https://www.wall-street.ro/articol/Start-Up/239356/un-nou-restaurant-din-centrul-capitalei-mizeaza-pe-mancarea-organica-pentru-a-ramane-in-piata.html
+embed in end of the page
+
+
+$sds : //*[has-class("mb-5")][1]
+@debug
+#@remove: //*[has-class("mb-5")]
+@remove: $sds/prev-sibling::*/prev-sibling::hr
+@remove: $sds/prev-sibling::hr
+@remove: $sds/next-sibling::*/next-sibling::*/next-sibling::*/next-sibling::*
+@remove: $sds/next-sibling::*/next-sibling::*
+@remove: $sds/next-sibling::*
+@remove: $sds/next-sibling::hr
+
+cookie https://www.wall-street.ro/articol/IT-C-Tehnologie/236987/cum-arata-casa-fondatorului-facebook-a-carui-avere-se-ridica-la-peste-50-de-miliarde-de-dolari.html
+https://www.wall-street.ro/special/ecomteam/239403/roboti-inteligenti-made-in-romania-aggranda-deja-contactata-de-fonduri-de-investitii.html
+
+EMBED JS
+https://www.wall-street.ro/special/ecomteam/239627/draghici-dwf-update-ul-major-google-de-pe-13-martie-a-schimbat-radical-paradigma-seo.html
+
+Pentru a putea urmari acest video te rugam sa accepti plasarea de cookie-uri de marketing.
+https://www.wall-street.ro/special/the-future-of-business/238830/podcastul-de-fiscalitate-facilitatile-fiscale-in-domeniul-constructiilor.html
+
 figcaption https://www.wall-street.ro/special/analize-economice-si-geo-politice/238821/suspendarea-tratatului-inf-oportunitate-pentru-sua-sau-pentru-federatia-rusa.html
 maybe ficcapt https://www.wall-street.ro/articol/Lifestyle/238608/top-10-cele-mai-scumpe-orase-din-lume-in-2019.html
 elian https://www.wall-street.ro/articol/Lifestyle/238608/top-10-cele-mai-scumpe-orase-din-lume-in-2019.html
@@ -120,6 +143,11 @@ https://www.wall-street.ro/gdpr/prelucrarea-datelor-personale.html
 in article:
 https://www.wall-street.ro/articol/Companii/238864/apa-nova-nu-accepta-amenda-de-10-000-de-lei-de-la-directia-de-sanatate-publica-argumentand-ca-apa-distribuita-este-potabila.html
 
+!ws cover video
+https://www.wall-street.ro/articol/Start-Up/235554/a-adus-counter-strike-in-viata-reala-si-face-bani-din-asta.html
+
+video appended
+https://www.wall-street.ro/articol/Auto/239539/guvernul-incearca-sa-resusciteze-prima-masina-ce-noutati-aduce.html
 
 #several related links
 https://www.wall-street.ro/articol/Careers/238150/cum-scrii-un-cv-impresionant-daca-nu-ai-deloc-experienta-profesionala.html

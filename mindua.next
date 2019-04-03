@@ -1,11 +1,10 @@
-~version: "2.1"
+~version: "2.0"
 title: //h1[@class="post__title"]
-site_name: "Mind UA"
+site_name: "Mind"
 $body: //article[has-class("post")]
 channel: "@mindua"
 subtitle: //h2[@class="post__subtitle"]
 $spn: //*[@class="post__partnership__text"]
-$later: //div[@class="post_language"]/a
 
 $testembed: //*[contains(@src, "//e.issuu.com/embed.js")]
 #@debug
@@ -19,9 +18,8 @@ $remove: //a[contains(text(), "Партнерский материал")]
 @remove: $remove
 @wrap_inner(<sup>):$spn
 
-@remove: //iframe[contains(@src, "quizi.io")]
-<mark>: //span[contains(@style, "color:#fff")]
 
+@debug
 $iframevideo: //div[has-class("block_social_wide")]/next-sibling::div[has-class("video_content__code")]
 @debug
 @prepend_to($body): $iframevideo
@@ -130,10 +128,9 @@ $fig: //*[has-class("img_box2_c")]
 <div>: //h2[iframe]
 <figcaption>: $fig//*[has-class("img_source")]
 $spn: //*[@style="color: rgb(102, 102, 102); font-size: 14px;"]
+<figcaption>: $spn
 
-
- <figure>: $spn/ancestor::p
- <figcaption>: $spn
+#<figure>: $spn/ancestor::p
 @debug
 #@combine(""): $fig/next-sibling::figcaption
 #$zxz: $@
@@ -208,6 +205,7 @@ $figcap: //figure/next-sibling::*[@style="text-align: center;"][em]
 $dt: //span[has-class("post__info__date")]
 @datetime(0): $dt
 published_date: $@
+$later: //div[@class="post_language"]/a
 
 $aut://span[@class="post__info__author__name"]//a
 @combine(", "): //span[@class="post__info__author__name"]/next-sibling::span
@@ -218,7 +216,7 @@ $sm: //*[has-class("related_news__inner")]
 $to_rel://h3[@style="text-align: center;"]
 @wrap(<related>): $to_rel//a
 $rels: $@
-
+@append_to($body): $rels
 @append_to($body): $spn
 
  <h3>: //*[has-class("block_related")]//*[has-class("section_title_small")][1]/*
@@ -268,7 +266,7 @@ body: $body
 #@append_to($body): $ptn/ancestor::footer
 
 #@append_to($later): $later/text()
-
+@append_to($body):$later
 # @wrap(<torelated>): $later
 # $torelated: $@
 
@@ -351,14 +349,17 @@ $eve: $@
 #description: //p[1]
 #description: //div[has-class("event_info")]/text()
 }
-#description:  $body//p[2]
-
-$pfirst: $body//p[1]
+$pfirst: //p[1]
 @prepend(" "): $pfirst/strong
-
-description: $body//p[1]
-
-
+description: $pfirst
+# $contains: $pfirst/strong[contains(text(),"Початок навчання")]
+# @debug
+# @if(  $contains) {
+#   description: $pfirst
+# }
+# @if_not(  $contains) {
+  description:  //*[has-class("event_info")]//*
+# }
  $tst: (//div[contains(text(),"Матеріал у партнерстві з OLX")])
  @debug
 ?path: /20191403-pridbati-kvartiru-i-ne-prograti-7-pomilok-pokupciv-zhitla-na-vtorinnomu-rinku/.*
@@ -395,44 +396,17 @@ $tst: (//img[contains(@data-src,"s.mind.ua/img/forall/a/201914/3_header.jpg")])
 
 #path education
 ?path: .*/editorial
-
+?path: .*/ads
 ?path: .*/about
 ?path: .*/shield
-
- @debug
-
-#   @before_el("./..") : //table//td
-  <p>: //table
-
-  #<p>: //tr
-  <inner>: //td
-  @before(<br>): //strong
-#   @before(<br>): //strong
- @after(<br>): //inner/p
-#   <div>: //tbody
 $cont: //div[@class="content__text"]
 <p> : $cont//ul
 @after(<br>): $cont//p/li
 body: //div[@class="content__text"]
 title: //h1
-description:  //p[1]
-
-
 
 ?true
-?path: .*/ads
-body: //div[@class="content__text"]
-title: //h1
-$pfirst: //p[contains(normalize-space(.), "Керівник комерційного відділу")]
-@if( $pfirst ) {
- @combine("<br>"): //p/next-sibling::p
-}
 
-description:  //p[1]
-@debug
-?true:
-#further
-<figure>: //figcaption[.//img]
 $a : //p/em/next-sibling::a
 #@set_attr(href, $a/@href): $a
 #@replace("https//", "https://"): $a/@href
@@ -467,28 +441,6 @@ $tohigh: //div[contains(@style, "border: #d62b61 1px solid")]
 @after(<hr>): $tohigh
 $rela: //related
 @before_el($rela): //*[@class="post__partnership__text"]
-@debug
-
- @append_to($body): $rels
- @wrap(<related>): $later
-@prepend_to($body):$@
-
-
-$chck: //em[contains(text(), "Читайте также:")]
-<related>: $chck/ancestor::p
-$chck: //strong[contains(text(), "Читайте также:")]
-<related>: $chck/ancestor::p
-
-$chck: //em[contains(text(), "Read also:")]
-<related>: $chck/ancestor::p
-$chck: //strong[contains(text(), "Read also:")]
-<related>: $chck/ancestor::p
-
-$chck: //em[contains(text(), "Читайте також:")]
-<related>: $chck/ancestor::p
-
-$chck: //strong[contains(text(), "Читайте також:")]
-<related>: $chck/ancestor::p
 @debug
 $problems: $body
 @while( $problems ) {

@@ -1,0 +1,160 @@
+~version: "2.1"
+?path: /.+
+site_name: "Water & Wastes Digest"
+# $(NBSP) FIXER
+@replace("^\\s+$", ""): //text()
+
+$h2: //td//h2[./span[@style="text-decoration: underline;"]]
+@wrap_inner(<u>): $h2
+$th2: //td[./h2]
+#@before(<hr>): $th2
+@set_attr(style, "text-align:center")
+@debug
+#@wrap(<caption>): $h2
+#@wrap(<thead>): $h2
+#@wrap(<aside>): //td//h2
+#@before_el("./.."): $h2[1]
+<iframe>: //twitter-widget[startswith(@data-tweet-id,"https://twitter.com/")]
+@set_attr(src,./@data-tweet-id): $@
+@replace:
+
+@wrap_inner(<b>): //div[@class="field-type-text_long"]/p
+
+?true:
+
+$body: //*[@role="article"]
+
+@if_not( $body ) {
+  $body: //*[has-class("mdl-grid")][1]
+}
+
+?true:
+
+$awithimg: //div[@id="block-views-block-videos-block-2"]//a
+@debug
+@set_attr("href",./img): $a[./img]/@href
+@debug
+<pic>: //img[ancestor::td]
+
+
+@map( $awithimg ) {
+  $currlink: $@
+  @set_attr("href",$currlink/@href): $currlink/img
+}
+
+@after_el("./.."): //p/iframe
+@after_el("./.."): //a/img
+@after_el("./.."): //p/figure
+@after_el("./.."): //p/related
+@after_el("./.."): //p/img[1]
+
+ <aside>: //*[@style="text-align: center;"]
+
+<figure>: //p/img
+$setsrc: $body//img[@srcset]
+@set_attr(src_set, @srcset):
+@replace("http.+w, ", ""): $setsrc/@src_set
+@replace("(jpe?g|png|gif).+w", "$1"): $setsrc/@src_set
+@set_attr(src, @src_set): $setsrc
+
+# YOUTUBE OBJECT FIXER
+# By @housemusicforhomelessepeople
+@if("//object[contains(@data, \"youtube\")]") {
+  @before(<iframe>): //object[contains(@data, \"youtube\")]
+  @replace("http://www.youtube.com/v/","https://www.youtube.com/embed/"): //object[contains(@data, "youtube")]/@data
+  @set_attr(src, "./next-sibling::object[contains(@data, \"youtube\")]/@data"): //iframe[next-sibling::object[contains(@data, "youtube")]]
+  @remove: //object[contains(@data, "youtube")]
+}
+
+
+@after(<br>): $body//blockquote//p
+
+$views:  //div[has-class("video-player")]
+@debug
+@if($views ) {
+  <iframe>: $views
+  @unsupported: $@
+  #@append_to($body): $views
+}
+
+
+#@before_el("./.."): $info
+#@remove: $info//span[2]
+
+#$links: $pgal//a
+#$h2: //table/h2
+#@before_el("../.."): $h2
+# @set_attr(src, "./ancestor::a/@href"): //a[not(ends-with(@href, "jpg")) and not(ends-with(@href, "JPG")) and not(ends-with(@href, "jpeg")) and not(ends-with(@href, "JPEG")) and not(ends-with(@href, "gif")) and not(ends-with(@href, "GIF")) and not(ends-with(@href, "png")) and not(ends-with(@href, "PNG"))]//img
+#@replace("100_100/",""): $pgal//img/@src
+
+
+ ?true:
+
+
+# $pgal: //*[@id="article-gallery"]
+# <slideshow>: $pgal
+
+@if( //div[@id="block-views-block-issue-block-3"]) {
+  $body:  //div[@id="block-views-block-issue-block-3" ]//div[@class="content"]
+  <p>: $body//div[has-class("views-row")]
+}
+
+title: //meta[@property="og:title"]/@content
+description: //meta[@name="description"]/@content
+
+cover: $body//img
+cover!: $body//figure[1]
+image_url: //meta[@property="og:image"]/@content
+image_url: $body//img/@src
+site_name: //meta[@property="site_name"]/@content
+
+author: //*[has-class("article-author")]
+$dt_field: //*[has-class("views-field-created")]//span[has-class("field-content")]
+@datetime(0, "en_EN", "M dd, yyyy"): $dt_field
+$dt: $@
+published_date: $dt
+
+body: $body
+@append_to($body): //*[has-class("article-box")]
+
+
+<related>: //*[has-class("article-box") and not(@id="article-gallery")]
+$x: $@
+<h3>: $x//span[has-class("article-box-title-small")]
+
+
+#$d: //*/ancestor::blockquote
+@append_to($body): //div[@id="block-views-block-videos-block-1"]
+@append_to($body): //div[@id="block-views-block-videos-block-2"]
+@append_to($body): //div[@id="block-views-block-videos-block-3"]
+@append_to($body): //div[@id="block-views-block-videos-block-4"]
+@append_to($body): //div[@id="block-views-block-videos-block-5"]
+
+$contactinfo: //div[@id="block-views-block-company-profile-block-9"]
+?exists: $contactinfo
+
+@append_to($body): $contactinfo
+@before(<hr>): $contactinfo
+
+@remove: //*[has-class("views-field-title")]
+
+$rel: //div[@id="block-views-block-latest-block-3"]
+@debug
+@append_to($body): $rel
+<related>: $rel
+
+$problems: $body
+@while( $problems ) {
+  $test: $body//*[self::blockquote or self::aside or self::figure or (self::img and not(./ancestor::figure)) or self::iframe or self::slideshow or self::related or self::footer or self::table[not(ancestor::table) and not(descendant::table)]]
+
+  $problems: $test/self::*[ancestor::anchor or ancestor::blockquote or ancestor::aside or ancestor::footer or ancestor::strong or ancestor::b or ancestor::em or ancestor::i or ancestor::ins or ancestor::u or ancestor::del or ancestor::s or ancestor::strike or ancestor::code or ancestor::kbd or ancestor::samp or ancestor::tt or ancestor::mark or ancestor::sup or ancestor::pic or ancestor::sub or ancestor::a or ancestor::reference or ancestor::h1 or ancestor::h2 or ancestor::h3 or ancestor::h4 or ancestor::h5 or ancestor::h6 or ancestor::p or ancestor::pre or ancestor::hr or ancestor::img or ancestor::br]
+
+  @if( $problems ) {
+    $parent: $problems/parent::*
+    @detach: $parent/node()
+    @set_attr("merge", $index): $@
+    <remove>: $parent
+    @after_el("./parent::*"): $problems
+    @combine: $body//self::*[prev-sibling::*/@merge = @merge]
+  }
+}

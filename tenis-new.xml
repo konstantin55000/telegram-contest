@@ -1,5 +1,5 @@
 
-~version: "2.1"
+~version: "2.0"
 ?path: /.+
 site_name: "Tenisový svět"
 # $(NBSP) FIXER
@@ -17,7 +17,7 @@ $th2: //td[./h2]
 #@before_el("./.."): $h2[1]
 <iframe>: //twitter-widget[startswith(@data-tweet-id,"https://twitter.com/")]
 @set_attr(src,./@data-tweet-id): $@
-
+@replace:
 
 
 $f: //blockquote[./blockquote]
@@ -27,12 +27,10 @@ $dsa: //*[has-class("instagram-media")]//p[@style="text-align: center;"]/img
 $d: //blockquote//blockquote
 @debug
 <p> : $f
-#@after_el("./.."): $d
+@after_el("./.."): $d
 #<aside> : $d *[has-class("instagram-media")]
 $mm://p/next-sibling::*[has-class("instagram-media")]
-
-
-#tournament
+@debug
 $tournament: //div[@class="tournament-heading"]
 ?exists: $tournament
 $body: $tournament
@@ -45,7 +43,7 @@ $table: //*[has-class("user-detail-bio")]
 $row: $table//div[has-class("col-xs-6")]
 $td: $table//div[has-class("col-xs-6")]/*
 
-
+@wrap_inner(<u>): //span[@style="text-decoration: underline;"]
 @wrap(<td>): $td
 
 $td: $table//div[has-class("col-xs-12")]/*
@@ -66,7 +64,7 @@ $get: $@
 
 
 ?true:
-#player
+
 $tournament: //div[@class="player-heading"]
 ?exists: $tournament
 $body: $tournament
@@ -296,12 +294,8 @@ $x: $@
 
 
 #$d: //*/ancestor::blockquote
-$sdx: //span[@style="text-decoration: underline;"]
-@if( $sdx/parent::p ) {
-  @debug
-  @wrap_inner(<u>): $sdx
-}
-# @wrap_inner(<u>)
+
+
 $problems: $body
 @while( $problems ) {
   $test: $body//*[self::blockquote or self::aside or self::figure or (self::img and not(./ancestor::figure)) or self::iframe or self::slideshow or self::related or self::footer or self::table[not(ancestor::table) and not(descendant::table)]]

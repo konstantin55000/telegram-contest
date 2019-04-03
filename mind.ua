@@ -1,6 +1,9 @@
 #mind ua is not present
 https://mind.ua/editorial
 :)
+http://www.tenisovysvet.cz/article/detail/8859--denni-menu-15-3-2019-bouzkova-v-mexiku-dosahla-karierniho-maxima-kr-pliskova-dohrala
+
+fk
 
  cite are missing https://mind.ua/ru/publications/20183057-ostorozhno-facebook-pochemu-voznik-skandal-s-ispolzovaniem-personalnyh-dannyh
 
@@ -15,6 +18,22 @@ this need to be fixed
  https://mind.ua/news/20194293-youcontrol-tretinu-dohodu-biznesu-dnipropetrovshchini-ta-odeshchini-generuyut-ofshorni-kompaniyi
  h6 maybe figcapt
 
+https://mind.ua/ru/style/20185306-premery-nedeli-krasavica-na-vsyu-golovu-i-eskobar
+
+https://mind.ua/news/20184734-v-modi-originalnist-viznachivsya-peremozhec-evrobachennya-2018
+I don't understand why you've drop support of this page.
+
+here what say Checklist about infografics:
+If there’s a reliable way to identify [...] them,
+the IV must add an image link to the full version of the image
+Nowhere in #6-2-6 said that we must not support page with infographics.
+And by the way, by default it shows to users two links leads to site with infographic.
+(c) link on "infogram.com" can be removed, but main link
+https://infogram.com/cf50fce9-67d4-438c-9214-96a7c23132e1
+should be keeped.
+It is not exact what checklist ask (we need get relaible image somewhere),
+can't see screenshot solution here)_ so  at least better to show link what lead to infographic.
+So yes, i believe IV page should be generated
 
 !nomedia https://mind.ua/publications/20191403-pridbati-kvartiru-i-ne-prograti-7-pomilok-pokupciv-zhitla-na-vtorinnomu-rinku
 
@@ -77,10 +96,16 @@ https://mind.ua/openmind/20175907-hochu-selfi-ale-fotokameru-shche-ne-vinajshli-
 
 figc
 https://mind.ua/en/publications/20190743-power-trends-what-energy-projects-are-worth-investing-in
+https://mind.ua/openmind/20191959-skilki-naspravdi-koshtue-tazik-olive
+lnks 1 s3ct!0n
+
+https://mind.ua/publications/20184607-eliksir-zhittya-yak-farmacevtichna-firma-darnicya-stvoryuvala-virobnictvo-infuzij
+lnks
 
 my bug
-https://www.g4media.ro/video-documente-deputatul-florin-roman-acuzatii-grave-la-adresa-psd-cu-privile-la-chelutirea-subventiei-de-la-stat-ii-acuz-deschis-de-spalare-de-bani-si-deturnare-de-fonduri.html
-https://www.g4media.ro/episcopia-husilor-anunta-ca-a-luat-act-de-condamnarea-preotilor-care-l-au-santajat-pe-fostul-episcop-foto-acesta-din-urma-a-fost-acuzat-de-relatii-sexuale-cu-un-elev-de-seminar.html
+news-michal-koterski-i-marcela-leszczak-chca-miec-drugie-dziecko
+https://mind.ua/education/934-vnutrishni-komunikaciyi-dlya-vlasnikiv-strategichnij-riven
+
 
 should be precent cite
 https://mind.ua/publications/20180681-tiha-gavan-shcho-dp-world-pridbala-v-portu-yuzhnij
@@ -92,7 +117,8 @@ https://mind.ua/openmind/20177349-korupciya-po-kiyivski-shcho-yavlyali-soboyu-ha
 UzVer template better https://mind.ua/education/934-vnutrishni-komunikaciyi-dlya-vlasnikiv-strategichnij-riven
 
 https://mind.ua/questions/385-integrities
-
+a em strong []
+https://mind.ua/publications/20194926-kandidatska-z-ekonomiki-petro-poroshenko-derzhfinansi-i-banki
 fk. kostia
 https://www.g4media.ro/protocolul-tinut-secret-de-tudorel-toader-ministrul-justitiei-refuza-sa-faca-publice-numele-membrilor-comisiei-sipa.html
 

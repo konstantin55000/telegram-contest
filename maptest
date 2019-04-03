@@ -1,0 +1,12 @@
+@map ($numbers) {
+  $el: $@
+  @after_el($el): $index
+  @wrap(<index>): $@
+  @debug: //index # (==$index)
+  $needed_el: //element[position()=number(//index/text())]
+  #do stuff
+  @remove: //index
+}
+
+счетчик
+https://dnipro-kirovograd.com.ua/mobile-app?fbclid=IwAR0DZL7tWVjzkLeRyRFoUvM9M-10QuZc6yYiTrsHwFyomjAmKOrw7RUUSZw

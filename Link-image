@@ -1,0 +1,11 @@
+#1
+@match("(?i).+(?<!\\.jpg|\\.jpeg|\\.png|\\.gif)$"): //a[descendant::img]/@href
+@set_attr(href, "./..//self::a/@href"): //a[not(@href = //link[@rel="canonical"]/@href) and not(@href = //meta[@property="og:url"]/@content)]//img
+
+
+
+@set_attr(href, "./ancestor::a/@href"): //a//img[@href and not(ends-with(@href, ".jpg")) and not(ends-with(@href, ".png")) and not(ends-with(@href, ".gif")) and not(ends-with(@href, "jpeg"))]
+
+
+#COOL
+@set_attr(href, "./ancestor::a/@href"): //a[not(ends-with(@href, "jpg")) and not(ends-with(@href, "JPG")) and not(ends-with(@href, "jpeg")) and not(ends-with(@href, "JPEG")) and not(ends-with(@href, "gif")) and not(ends-with(@href, "GIF")) and not(ends-with(@href, "png")) and not(ends-with(@href, "PNG")) and not(contains(@href, "/upload/iblock/"))and not(contains(@href, "/upload/resize_cache/"))]//img

@@ -1,10 +1,7 @@
 ~version: "2.1"
 site_name: "Wall-Street.ro"
 ?path: /.+
-
-
-$sds : //*[has-class("mb-5")][1]
-@debug
+$sds : //*[has-class("mb-5")]
 #@remove: //*[has-class("mb-5")]
 @remove: $sds/prev-sibling::*/prev-sibling::hr
 @remove: $sds/prev-sibling::hr
@@ -12,8 +9,7 @@ $sds : //*[has-class("mb-5")][1]
 @remove: $sds/next-sibling::*/next-sibling::*
 @remove: $sds/next-sibling::*
 @remove: $sds/next-sibling::hr
-
-@remove: $sds
+#@remove: $sds
 #@remove : //img[./img/@src[.='']]
 @remove: //img[not(@src) or @src=""]
 @debug
@@ -46,7 +42,7 @@ $sds : //*[has-class("mb-5")][1]
 
 # start
 $body: //*[has-class("article-body")]
-
+@debug
 @if(  //*[has-class("articleText")]) {
   $body://*[has-class("articleText")]
 }
@@ -92,21 +88,20 @@ $xsx: //div[has-class("panel-heading")][span]
 
 }
 
-# $chk : //*[contains(@src, "video.onnetwork.tv")]
-# @if( $chk ) {
-# @remove : $chk
-# $body: //*[has-class("article-body")]
+$chk : //*[contains(@src, "video.onnetwork.tv")]
+@if( $chk ) {
+@remove : $chk
+$body: //*[has-class("article-body")]
 
-# }
-body!!: $body
+}
+$body
 @debug
 
 @remove: //script
- $srcf: //*[has-class("source")]/prev-sibling::div[has-class("embed-responsive")]/iframe
-@remove: $srcf[contains(@src, "docs.google.com")]
- @debug
-#@remove: $srcf
- #@remove: //*[contains(text(),"Pentru a putea urmari acest video")]
+$srcf: //*[has-class("source")]/prev-sibling::div[has-class("embed-responsive")]
+@debug
+@remove: $srcf
+ @remove: //*[contains(text(),"Pentru a putea urmari acest video")]
  @remove: //*[contains(text(),"Accepta toate cookie-urile")]
 
 @wrap_inner(<strong>) : //*[has-class("article-excerpt")]
@@ -227,7 +222,7 @@ $fk: //figure/next-sibling::div
 #@debug
 $srcphoto : //*[has-class("source")]
 #<cite>: $srcphoto
-<footer>: $srcphoto
+<sup>: $srcphoto
 @debug
 @remove: //*[has-class("related-tags")]
 
@@ -240,20 +235,14 @@ $srcphoto : //*[has-class("source")]
 
 
 
-$srcf: //p[starts-with(text(),"FOTO:")]
-<footer> : $srcf
-$srcf: //p[starts-with(text(),"Foto:")]
-<footer> : $srcf
-title: //meta[@property="og:title"]/@content
 
-description:  //meta[@name="description"]/@content
+$descr: //*[has-class("article-excerpt")]//p
 
-$descrc: //*[has-class("article-excerpt")]//p
-
-@if( $descrc ) {
-
-  description!:  //*[has-class("article-excerpt")]//p/text()
+@if_not( $descr ) {
+  $descr: //meta[@name="description"]/@content
 }
+title: //meta[@property="og:title"]/@content
+description: $descr
 
 image_url: //meta[@property="og:image"]/@content
 image_url: $body//img/@src
@@ -279,7 +268,7 @@ $setsrc: $body//img[@srcset]
   @set_attr(src, "./next-sibling::object[contains(@data, \"youtube\")]/@data"): //iframe[next-sibling::object[contains(@data, "youtube")]]
   @remove: //object[contains(@data, "youtube")]
 }
-
+body!: $body
 #=====LET ME DIE=====
 #Original code/idea by Misho @mushi_f
 #With modifications by Andrei Afanasiev
