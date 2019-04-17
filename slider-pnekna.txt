@@ -1,0 +1,291 @@
+
+#gal with blog https://www.prlekija-on.net/lokalno/20576/radgonski-obrtniki-in-podjetniki-zadovoljni-z-narejenim.html
+#DRIL
+
+#https://www.prlekija-on.net/lokalno/20699/negovski-grad-prikovani-grajski-duhovi.html
+
+~version: "2.1"
+?path: /.+
+site_name: "Prlekija on net"
+@remove: //script
+@remove: //meta[@property="article:author"]
+$if: //iframe
+subtitle: //h2/next-sibling::h3
+$aut:  //div[has-class("meta")]//*[has-class("author")]
+@replace(", ", ""): $aut
+@clone: $aut
+@debug
+author!: $aut[1]/text()
+#@debug
+
+#
+#@wrap(<toremove>): $aut[1]
+#$aut: $@
+#@debug
+#@after_el("./.."): $aut
+#$torem: $@
+
+
+#@wrap(<caption>): $h2
+#@wrap(<thead>): $h2
+#@wrap(<aside>): //td//h2
+#@before_el("./.."): $h2[1]
+# <iframe>: //twitter-widget[startswith(@data-tweet-id,"https://twitter.com/")]
+# @set_attr(src,./@data-tweet-id): $@
+# @replace:
+
+$srcf: //p[contains(text(),"FOTO:")]
+<footer> : $srcf
+$srcf: //p[contains(text(),"Foto:")]
+<footer> : $srcf
+@remove: //*[@class="adsbygogle"]
+$asdf :  //blockquote/a
+
+ @remove: //div[@class="margin-bottom-10"]/next-sibling::br
+ 
+$ifr: //iframe[contains(@src,"likebox")]
+@remove: $ifr
+
+$slideshow: //div[has-class("post-carousel")]
+@combine(""): $slideshow//img/next-sibling::div
+<figure>: $slideshow/div
+# <figcaption>: $slideshow//*[@class="layout_1--item"]//div[has-class("meta")]
+@after_el("./.."): $slideshow//img/figcaption
+
+@remove: $slideshow//div[@class="overlay"]
+<slideshow>: $slideshow
+$S: $@
+@debug
+#<pic>: $slideshow//img
+<pic>: //img[ancestor::td]
+
+@combine(""):$slideshow//figcaption/ancestor::figure
+ 
+# @set_attr("href",./img): //a[./img]/@href
+
+@after_el("./.."): //p/iframe
+
+
+@after_el("./.."): //p/related
+
+@remove: //hr
+<aside>: //*[@style="text-align: center;"]
+
+
+
+
+@if("//object[contains(@data, \"youtube\")]") {
+  @before(<iframe>): //object[contains(@data, \"youtube\")]
+  @replace("http://www.youtube.com/v/","https://www.youtube.com/embed/"): //object[contains(@data, "youtube")]/@data
+  @set_attr(src, "./next-sibling::object[contains(@data, \"youtube\")]/@data"): //iframe[next-sibling::object[contains(@data, "youtube")]]
+  @remove: //object[contains(@data, "youtube")]
+}
+
+
+@after(<br>): $body//blockquote//p
+ 
+@wrap(<p>): $body//blockquote//a
+ $soc: //div[has-class("social")]
+ @remove: $soc/next-sibling::h3
+title: //h1
+?exists: //*[has-class("blog-excerpt")]
+body!: //*[has-class("blog-excerpt")]
+@remove: //*[has-class("banner")]
+@remove: //*[has-class("fb-like")]
+@remove: //*[has-class("resp-sharing-button__container")]
+
+$pgal: //*[has-class("popup-gallery")]
+@debug
+
+#@combine(" "): $pgal//a/next-sibling::*
+
+#@debug
+
+$hgal: $info//span[has-class("heading-1")]
+
+$fig: $body//img
+@wrap(<figure>): $fig
+<figcaption>: //div[@class="credit"]/p
+@combine("<br>"): //figure/next-sibling::div[@class="credit"]
+
+$fig: //figure
+@debug
+
+# @set_attr(src, "./ancestor::a/@href"): //a[not(ends-with(@href, "jpg")) and not(ends-with(@href, "JPG")) and not(ends-with(@href, "jpeg")) and not(ends-with(@href, "JPEG")) and not(ends-with(@href, "gif")) and not(ends-with(@href, "GIF")) and not(ends-with(@href, "png")) and not(ends-with(@href, "PNG"))]//img
+
+
+
+
+@map ($pgal//a){
+$link: $@
+
+$ck: $link/img
+@debug
+@replace("thumb_", ""): $link/@href
+@debug
+@set_attr(src, $link/@href): $ck
+
+@debug
+$title: $ck/@alt
+@html_to_dom: $title
+ $cap: $@
+  @debug
+
+@append_to($link): $cap
+<figcaption>:   $cap
+@debug
+$link
+
+#@append_to($link): $link/next-sibling::dom
+$t: $link
+@debug
+}
+<figure>: $pgal//a
+@debug
+@append_to($body): $hgal
+$pgal: //*[has-class("popup-gallery")]
+<slideshow>: $pgal
+$h1: //h3[@class="heading-1"][span[contains(text(),"alerija")]]
+<h5>: $h1
+$h1: $@
+@debug
+#@after_el("./.."): //a/img
+#@append_to(//slideshow): $pgal//figure
+#@append_to($body): $pgal
+title: //meta[@property="og:title"]/@content
+description: //meta[@name="description"]/@content
+cover: $body//div[@class="blog-single-head"]/next-sibling::figure
+cover: $body//div[@class="blog-single-head"]/next-sibling::img
+@if( $slideshow ) {
+  cover!: $slideshow
+}
+#cover: $body//img
+image_url: //meta[@property="og:image"]/@content
+image_url: $body//img/@src
+site_name: //meta[@property="site_name"]/@content
+
+$contains: $author[.="https://www.facebook.com/dejanrazlag"]
+
+@if( $contains ) {
+  $author: ""
+}
+@remove: //*[has-class("article-heading-info")]
+@remove: //*[has-class("article-author")]
+# @remove: //div[@id="article-gallery"]/*[has-class("article-box-info")]
+
+$d: (//span[@class="date"])[1]
+@if_not( $d ) {
+ $h2: (//h2)[1]
+  $d: $h2/next-sibling::div 
+  @debug
+}
+$d: $d
+@debug
+@match("(,).+$", ""):$d
+$d: $@
+@replace(", ", ""):$d
+$d: $@
+$d: (//span[@class="date"])[1]
+# @if_not( $d ) {
+#    $h2: (//h2)[1]
+#   $d: $h2/next-sibling::div
+# }
+@replace("ob ", ""):$d
+$d: $@
+# @debug
+# $d: (//span[@class="date"])[1]
+# @debug
+@datetime(0, "sk-SK", "EEEE, d. LLLL yyyy hh:mm"): $d/text()
+@debug
+published_date!: $@
+@remove: $d
+
+$bold: //div[has-class("well")]
+@wrap_inner(<strong>): $bold
+@debug
+
+#
+# @remove: //div[has-class("page_header")]
+#@append_to($body): $img
+
+# $videoitem:  //div[has-class("layout_3--item")]
+# @debug
+# @if( $videoitem ) {
+
+#   $body: $videoitem/ancestor::div[has-class("container")]
+#   @debug
+# }
+body!: $body
+$if: //iframe
+@debug
+$video: //h3[@class="heading-1"]/next-sibling::div[has-class("embed-responsive")]
+ $h3:  $video/prev-sibling::h3
+ @append_to($body): $h3
+ <h5>: $h3
+@append_to($body): $video
+
+body!: $body
+@append_to($body): //*[has-class("article-box")]
+
+@remove:  //div[has-class("meta")]
+<related>: //*[has-class("article-box") and not(@id="article-gallery")]
+$x: $@
+<h3>: $x//span[has-class("article-box-title-small")]
+
+@append_to($body): $h1
+@append_to($body):  //*[has-class("popup-gallery")]
+#$d: //*/ancestor::blockquote
+
+#$blog: //div[has-class("blog-excerpt")]
+@remove: $body/next-sibling::hr
+
+ 
+ $rel: //div[has-class("margin-bottom-5") and has-class("row")]
+$relh: $rel/prev-sibling::h3
+ 
+@prepend_to($rel): $relh 
+
+
+<related>: $rel
+
+@append_to($body): //related
+#@remove: //hr
+ 
+ 
+#@remove: //toremove
+
+ @replace(",", "") : //span[@class="author"]/text()
+ author!!: //span[@class="author"]/text()
+$blog: //div[has-class("blog-excerpt")]
+ @remove: (//*[has-class("meta")])[1]
+@if( $blog ) {
+  title!: //h2  
+  @remove: (//h2)[1]
+ }
+$f: //form
+@remove: $f/prev-sibling::hr
+$af: $f/prev-sibling::a
+ $ca: $af//preceding-sibling::text()[contains(normalize-space(.), "Kategorija:")]
+ @debug
+ @remove: $ca
+ @remove: $af
+@remove: $f
+$problems: $body
+@while( $problems ) {
+  $test: $body//*[self::blockquote or self::aside or self::figure or (self::img and not(./ancestor::figure)) or self::iframe or self::slideshow or self::related or self::footer or self::table[not(ancestor::table) and not(descendant::table)]]
+
+  $problems: $test/self::*[ancestor::anchor or ancestor::blockquote or ancestor::aside or ancestor::footer or ancestor::strong or ancestor::b or ancestor::em or ancestor::i or ancestor::ins or ancestor::u or ancestor::del or ancestor::s or ancestor::strike or ancestor::code or ancestor::kbd or ancestor::samp or ancestor::tt or ancestor::mark or ancestor::sup or ancestor::pic or ancestor::sub or ancestor::a or ancestor::reference or ancestor::h1 or ancestor::h2 or ancestor::h3 or ancestor::h4 or ancestor::h5 or ancestor::h6 or ancestor::p or ancestor::pre or ancestor::hr or ancestor::img or ancestor::br]
+
+  @if( $problems ) {
+    $parent: $problems/parent::*
+    @detach: $parent/node()
+    @set_attr("merge", $index): $@
+    <remove>: $parent
+    @after_el("./parent::*"): $problems
+    @combine: $body//self::*[prev-sibling::*/@merge = @merge]
+  }
+}
+
+#vozmozhno related links
+
+ 

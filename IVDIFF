@@ -1,0 +1,35 @@
+$vk: $body//div[contains(@id, "vk_post")]
+@if( $vk ) {
+  @debug: $@/following-sibling::script[contains(text(), "vk_post")]
+  @match("\"vk_post.+?\\'.+?\\'")
+  $params: $@/text()
+  
+  @clone: $params
+  $owner_id: $@
+  @replace("^.+?, ", ""): $owner_id
+  @replace(",.+$", ""): $owner_id
+  
+  @clone: $params
+  $post_id: $@
+  @replace("^(.+?,){2} ", ""): $post_id
+  @replace(",.+$", ""): $post_id
+  
+  @clone: $params
+  $hash: $@
+  @match("'.+'", 0): $hash
+  @replace("'", "")
+  
+  @debug: $params
+  @debug: $owner_id
+  @debug: $post_id
+  @debug: $hash
+  
+  #https://vk.com/widget_post.php?owner_id=-100283479&post_id=122689&hash=79LyRk2mgobJgT0WwbkcdYP98Q
+  @append(<iframe>, src, "vk_post"): $vk
+  $iframe: $@
+  @set_attr(src, "https://vk.com/widget_post.php?owner_id=", $owner_id, "%26post_id=", $post_id, "%26hash=", $hash): $iframe
+  @urldecode: $iframe/@src
+  @debug: $iframe/..
+  
+  @replace("(\\s|\u00a0)", ""): $vk/text()
+}

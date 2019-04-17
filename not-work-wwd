@@ -1,0 +1,330 @@
+~version: "2.1"
+?path: /.+
+site_name: "Water & Wastes Digest"
+?path_not: .*/type/.*
+?path_not: .*/tag/.* 
+#!path_not: .*/latest.*
+ 
+
+# $(NBSP) FIXER
+ @replace("^\\s+$", ""): //text()
+ <sup>: //h2[span[@style="font-size:10px;"]]
+ <b>: //div[@class="field-type-string_long"]
+ #<b>: //div[@class="field-type-daterange"]
+$h2: //td//h2[./span[@style="text-decoration: underline;"]]
+@wrap_inner(<u>): $h2
+
+$th2: //td[./h2]
+#@before(<hr>): $th2
+@set_attr(style, "text-align:center")
+ 
+@remove: //img[contains(@src,"SolarBee%20GS12chart-1%20orig_0.jpg")] 
+
+  
+#@wrap(<caption>): $h2
+#@wrap(<thead>): $h2
+#@wrap(<aside>): //td//h2
+#@before_el("./.."): $h2[1]
+<iframe>: //twitter-widget[startswith(@data-tweet-id,"https://twitter.com/")]
+@set_attr(src,./@data-tweet-id): $@
+@replace:
+<sub>: //span[@style="font-size:10px;"]
+<sub>: //span[@style="font-size:11px;"]
+<sub>: //span[@style="font-size:12px;"]
+<sub>: //span[@style="font-size:9px;"]
+@wrap_inner(<strong>):  //div[has-class("field-type-text_long")]//p
+$body: //*[@role="article"]
+
+@if_not( $body ) {
+  $body: //*[has-class("mdl-grid")][1]
+}
+
+ @if( //div[@id="block-views-block-company-profile-block-7"] ) {
+   $body://div[@id="block-views-block-company-profile-block-7"]
+ }
+ 
+$awithimg: //div[@id="block-views-block-videos-block-2"]//a
+@debug
+@set_attr("href",./img): $a[./img]/@href
+@debug
+<pic>: //img[ancestor::td]
+
+@remove: //iframe[contains(@src, "googletagmanager.com")]
+@map( $awithimg ) {
+  $currlink: $@
+  @set_attr("href",$currlink/@href): $currlink/img
+}
+
+@after_el("./.."): //p/iframe
+@after_el("./.."): //a/img
+@after_el("./.."): //p/figure
+@after_el("./.."): //p/related
+@after_el("./.."): //p/img[1]
+
+$ck: //div[has-class("products")]
+@if( $ck ) {
+  cover!: ""
+}
+ <aside>: //*[@style="text-align: center;"]
+
+<figure>: //p/img
+$setsrc: $body//img[@srcset]
+@set_attr(src_set, @srcset):
+@replace("http.+w, ", ""): $setsrc/@src_set
+@replace("(jpe?g|png|gif).+w", "$1"): $setsrc/@src_set
+@set_attr(src, @src_set): $setsrc
+
+ 
+@if("//object[contains(@data, \"youtube\")]") {
+  @before(<iframe>): //object[contains(@data, \"youtube\")]
+  @replace("http://www.youtube.com/v/","https://www.youtube.com/embed/"): //object[contains(@data, "youtube")]/@data
+  @set_attr(src, "./next-sibling::object[contains(@data, \"youtube\")]/@data"): //iframe[next-sibling::object[contains(@data, "youtube")]]
+  @remove: //object[contains(@data, "youtube")]
+}
+
+
+@after(<br>): $body//blockquote//p
+
+$views:  //div[has-class("video-player")]
+@debug
+@if($views ) {
+  <iframe>: $views
+  @unsupported: $@
+ 
+} 
+@if_not( $description ) {
+  description:   //div[has-class("views-field-body")][1]/*/text()
+}
+
+#@before_el("./.."): $info
+#@remove: $info//span[2]
+ 
+#$links: $pgal//a
+#$h2: //table/h2
+#@before_el("../.."): $h2
+# @set_attr(src, "./ancestor::a/@href"): //a[not(ends-with(@href, "jpg")) and not(ends-with(@href, "JPG")) and not(ends-with(@href, "jpeg")) and not(ends-with(@href, "JPEG")) and not(ends-with(@href, "gif")) and not(ends-with(@href, "GIF")) and not(ends-with(@href, "png")) and not(ends-with(@href, "PNG"))]//img
+#@replace("100_100/",""): $pgal//img/@src
+
+ $contentform: //div[has-class("content")]//form
+ @if( $contentform ) {
+   $body: ""
+ }
+ ?true:
+
+@style_to_attrs(width,  width, height, height): //img
+
+# $pgal: //*[@id="article-gallery"]
+# <slideshow>: $pgal
+ 
+@if( //div[@id="block-views-block-issue-block-3"]) {
+  $body:  //div[@id="block-views-block-issue-block-3" ]//div[@class="content"]
+  <p>: $body//div[has-class("views-row")]
+  $link: //div[has-class("digital-link")]
+  $fig: //div[has-class("views-field-field-image")] //div[has-class("node-image")]
+  @debug
+  #<figcaption>: $link
+ # $pag: //ul[has-class("pager__items")]
+#   <span>: $pag//li[has-class("is-active")]/a
+#@remove: //nav[has-class("pager")]
+} 
+ 
+title: //h1 
+title: //meta[@property="og:title"]/@content
+description: //meta[@name="description"]/@content
+
+$cvr: $body//div[has-class("field-type-image")]//figure
+<sub>: //span[@style="font-size:9px;"]
+<div>: //figure[img[@width and @width < 899]]
+$cvr: $body//div[has-class("field-type-image")]//figure
+$cvr: $cvr[img[@height and @height < 399]]
+cover: $cvr
+<figure>: //div[figcaption]
+#image_url: //meta[@property="og:image"]/@content
+image_url: $body//img/@src
+ @if_not( $image_url ) {
+  image_url!: $body//img/@src
+}
+image_url: $body//pic/@src
+
+site_name: //meta[@property="site_name"]/@content
+
+$author: //*[has-class("article-author")]
+@if( //div[has-class("field-type-entity_reference")] ) {
+  $author: //div[has-class("field-type-entity_reference")]/a/text()
+  author_url: //div[has-class("field-type-entity_reference")]/a/@href
+}
+author: $author
+$dt_field: //div[@class="view-content"]//div[has-class("views-field-created")]/span[has-class("field-content")]
+@debug
+@datetime(0, "en_EN", "LLL dd, yyyy"): $dt_field[1]
+$dt: $@
+@debug
+published_date!: $dt
+
+@remove: $author
+
+  
+@if_not(  //*[has-class("article-author")] ) {
+  $auth: //div[has-class("views-field-field-byline")]
+   @replace("By ", " "): $auth
+  @replace("by ", " "): $auth
+ @replace("Interview Compiled ", ""): $auth 
+ @replace("Interview compiled ", ""): $auth 
+ # $auth: $@ 
+  #@replace(" &", ","): $auth
+  author: $auth
+}
+$catalog: //h1//span[@property="schema:name"]
+#//div[@id="block-views-block-storefronts-block-1"]
+ @if($catalog) {  
+ 
+ 
+   $body:""
+ }
+
+body: $body
+ 
+$long: //div[has-class("articles")]//div[has-class("field-type-text_long")]
+@wrap_inner(<b>): $long/p
+@debug
+#$d: //*/ancestor::blockquote
+@append_to($body): //div[@id="block-views-block-videos-block-1"]
+@append_to($body): //div[@id="block-views-block-videos-block-2"]
+@append_to($body): //div[@id="block-views-block-videos-block-3"]
+@append_to($body): //div[@id="block-views-block-videos-block-4"]
+@append_to($body): //div[@id="block-views-block-videos-block-5"]
+ 
+$contactinfo: //div[@id="block-views-block-company-profile-block-9"]
+?exists: $contactinfo 
+#@after(<br>): $contactinfo/p
+@wrap_inner(<b>):  $contactinfo//h2
+<h5>: $contactinfo//h2
+@wrap_inner(<footer>): $contactinfo
+@append_to($body): $contactinfo
+#<b>: $contactinfo//h4
+#@before(<hr>): $contactinfo
+
+@remove: //*[has-class("views-field-title")]
+
+# $rel: //div[@id="block-views-block-latest-block-3"]
+# @debug
+# @append_to($body): $rel
+# <related>: $rel
+
+<img> : //pic[@height and @height> 200]
+?true:
+$check_mag: //div[@id="block-views-block-issue-block-3"]//div[@class="content"]
+@if($check_mag ) {
+ 
+ 
+  $pager: //ul[has-class("pager__items")]
+#pager in one page
+  @debug
+ $last_img: (//div[has-class("content")]//div[has-class("views-row")])[last()]
+
+ 
+ @remove: $check_mag//*[has-class("visually-hidden")]
+@remove: $pager//li[has-class("is-active")]
+@remove: $pager//li[has-class("pager__item--next")]
+@remove: $pager//li[has-class("pager__item--last")]
+@remove: $pager//li[has-class("pager__item--first")]
+@remove: $pager//li[has-class("pager__item--previous")]
+$pager: $pager
+@debug
+ $tx: $pager//li
+ #get all pages
+ @map( $tx ) {
+  $curr: $@
+  @if_not( $curr[has-class("is-active")] ) {
+  
+  @after(<iframex>): $last_img
+   $xs: $@
+  @debug
+   @set_attr(src, $curr/a/@href): $xs
+  
+  } 
+ 
+ }
+ #@inline: //iframex
+ #SDF
+<iframe>: //iframex
+@inline: //iframe
+$inlined: $@
+ 
+  
+ $need: $inlined//div[@id="block-views-block-issue-block-3"]//div[@class="content"]
+ <p>: $need//div[has-class("views-row")]
+  @remove: $need//div[has-class("views-field-field-image")]
+  @remove: $need//nav[has-class("pager")]
+  @remove: $need//div[has-class("digital-link")]
+  $last_img: $last_img
+  @debug
+  @append_to($check_mag): $need
+#   @after_el(/html): $inlined
+#   @remove: /html/next-sibling::*
+# @append_to($last_img):$needGal[2]
+@remove: $need//*[has-class("visually-hidden")]
+@remove: $pager
+}
+
+
+$sx: //div[@id="block-views-block-content-info-block-3"]//*[has-class("views-label")]
+@after(" "): $sx
+@debug
+<b>:$sx
+ @append_to($body): //div[@id="block-views-block-content-info-block-3"]
+ 
+$figpic:  //img[@width and @width < 300 and @height < 251]
+$figc: $figpic/next-sibling::figcaption
+@if_not($figc){
+<PIC>: $figpic
+}
+ $b: //*[@class="path-events"]
+ ?exists: $b
+ $body: ""
+ ?true:
+$problems: $body
+@if( //div[has-class("block-views-block-issue-block-3")] ) {
+  body!!: ""
+}
+#  ?path: .*/latest.+
+#  $body: ""
+#  ?true:
+ 
+?exists: //div[@id="block-views-block-company-profile-block-8"]  
+ $body: ""
+?true:
+!not_exists: //article
+$body: ""
+?true:
+@if( //div[@class="blog_author"] ) {
+  $body: ""
+}
+@while( $problems ) {
+  $test: $body//*[self::blockquote or self::aside or self::figure or (self::img and not(./ancestor::figure)) or self::iframe or self::slideshow or self::related or self::footer or self::table[not(ancestor::table) and not(descendant::table)]]
+
+  $problems: $test/self::*[ancestor::anchor or ancestor::blockquote or ancestor::aside or ancestor::footer or ancestor::strong or ancestor::b or ancestor::em or ancestor::i or ancestor::ins or ancestor::u or ancestor::del or ancestor::s or ancestor::strike or ancestor::code or ancestor::kbd or ancestor::samp or ancestor::tt or ancestor::mark or ancestor::sup or ancestor::pic or ancestor::sub or ancestor::a or ancestor::reference or ancestor::h1 or ancestor::h2 or ancestor::h3 or ancestor::h4 or ancestor::h5 or ancestor::h6 or ancestor::p or ancestor::pre or ancestor::hr or ancestor::img or ancestor::br]
+
+  @if( $problems ) {
+    $parent: $problems/parent::*
+    @detach: $parent/node()
+    @set_attr("merge", $index): $@
+    <remove>: $parent
+    @after_el("./parent::*"): $problems
+    @combine: $body//self::*[prev-sibling::*/@merge = @merge]
+  }
+}
+
+ 
+$cont: //div[has-class("content") and contains(text(),"This")]
+@debug
+@if( $cont ) {
+  published_date!: ""
+  author!: ""
+  
+}
+# published_date!!: $cont[contains(text(),"This block is broken or missing")]  
+ 
+
+
+ 

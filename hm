@@ -1,0 +1,578 @@
+~version: "2.1"
+title: //h1[@class="post__title"]
+site_name: "Mind UA"
+$body: //article[has-class("post")]
+channel: "@mindua"
+subtitle: //h2[@class="post__subtitle"]
+$spn: //*[@class="post__partnership__text"]
+$later: //div[@class="post_language"]/a
+$al: //a[contains(@href,"https://infogram.com")]
+@remove: //div[@id="SinoptikInformer"]
+@if( //div[has-class("author_info__description")] ) {
+  description!: // //div[has-class("author_info__description")]/text()
+}
+#<iframe>: $al
+@unsupported: $al
+@remove: //*[has-class("post__partnership__img")]
+#@prepend_to($body): $later
+$testembed: //*[contains(@src, "//e.issuu.com/embed.js")]
+#@debug
+
+@if(//div[has-class("event_info")] ) {
+  @clone: //div[has-class("event_info")]
+  $s: $@
+#    @combine("<br>"): $s//*[has-class("event_info__description")]/next-sibling::*[has-class("event_info__date")]
+ @replace_tag(""): $s//*[has-class("event_info__description")]//strong
+   $d: $@
+   @debug
+@remove: //toremove
+@combine("")://figure/figcaption/next-sibling::figcaption[cite]
+   description!!:$s//*[has-class("event_info__date")]/text()
+   @remove: $s
+}
+
+@if($testembed){
+ <iframe>: $testembed
+}
+<figcaption>: //em[contains(@style,"color: rgb(34, 34, 34);")]
+@remove: //a[has-class("post__partnership__link")]
+$remove: //a[contains(text(), "Реклама")]
+@remove: $remove
+$remove: //a[contains(text(), "Партнерский материал")]
+@remove: $remove
+@wrap_inner(<sup>):$spn
+
+@remove: //iframe[contains(@src, "quizi.io")]
+#<mark>: //span[contains(@style, "color:#fff")]
+
+$iframevideo: //div[has-class("block_social_wide")]/next-sibling::div[has-class("video_content__code")]
+@debug
+@prepend_to($body): $iframevideo
+$aside: //*[@class="post__frame"]
+@before(<hr>): $aside
+@after(<hr>): $aside
+@remove://img[contains(@src,".svg")]
+$dv: //p/next-sibling::div[@class="img_source"]
+$dv2: //p/next-sibling::div[@class="img_source"]/next-sibling::div[@class="img_source"]
+#<cite>: $dv2/span
+#@wrap_inner(<cite>): $dv
+#<figcaption>: $dv
+#<figcaption>: $dv2
+#@combine(""): //figcaption[@class="img_source"]/next-sibling::figcaption
+#<figure>: //p[/next-sibling::figcaption]
+@debug
+$ptn: //a[contains(@href,"mind.ua/partnership")]
+#@debug
+#@after(<footer>): $body
+@wrap_inner(<mark>):$ptn
+#@append_to(//footer): $ptn
+@wrap(<footer>): $ptn
+$ft: $@
+<aside>: //p[contains(@style, "center")]
+$h1check: //h1[string-length(text())=0]
+@debug
+$sdsdf:  //*[has-class("read-also__wrapper")]
+@debug
+@if( $h1check ) {
+  title!: //meta[@property="og:title"]/@content
+}
+$a: //*[has-class("section_title_small")]/a[contains(@href, "/author/")]
+@debug
+@if( $a ) {
+  @remove: $a/ancestor::div[@class="section_title_small"]/next-sibling::div
+  @remove: $a
+}
+?true:
+#@wrap_inner(<b>):$ptn
+
+$spn: //span[@style="color:#ffffff;"]
+<mark>: $spn
+#figcaptions
+
+#<cite>: //*[has-class("img_box2_fl")]/span
+@wrap(<figcaption>): $@
+<cite>: //*[has-class("img_box2_fl")]/*[has-class("img_source")]
+#@debug
+@wrap(<figcaption>): $@
+<figure>: //*[has-class("img_box2_fl")]
+
+$infogr: //div[contains(@style, "padding:8px 0;font-family:Arial!important;")]
+@before(<hr>): $infogr
+@after(<hr>): $infogr
+@remove: $infogr//a[2]
+@wrap_inner(<aside>): $infogr
+#@debug
+#<cite>: //*[has-class("img_box2_fr")]/span
+#@wrap(<figcaption>): $@
+<cite>: //*[has-class("img_box2_fr")]/*[has-class("img_source")]
+#@debug
+@wrap(<figcaption>): $@
+<figure>: //*[has-class("img_box2_fr")]
+#<figure>: //figcaption//img
+$fig: //div[has-class("post__photo")]
+$get: //img
+@set_attr(src,@data-src): //img
+$find: //img/next-sibling::br/next-sibling::span
+
+$to_cap: //div[has-class("post__frame")]
+
+#$rel: //*/em/strong/a
+#<related>: $rel/ancestor::em
+$a: //p/em[2]/strong/a
+$href: $a/@href
+
+
+<figcaption>: $find
+<figcaption>: $fig//div[has-class("post__photo__about")]
+<cite>: $fig//div[has-class("post__photo__source")]
+<figure>: $fig
+$phs: $@
+cover: $phs[1]
+$fig: //*[has-class("img_box2_c")]
+$get: //*[has-class("img_box2_c")]//br/following-sibling::text()[1]
+@wrap(<z>): $get
+<cite>: //*[has-class("img_box2_c")]/div[has-class("img_source")]
+$ax: $@
+@debug
+@wrap(<z>): $ax
+<z>: $fig//p[span]
+<figcaption>: //z
+$cite: //figcaption/next-sibling::*
+#@debug
+#<cite>: $cite
+@wrap(<figcaption>): $cite
+@combine(""): //figcaption/next-sibling::figcaption
+<figure>: $fig
+$test: //figure
+@debug
+@wrap(<figcaption>): //figure//cite
+@wrap(<figcaption>): //figure//span
+@wrap_inner(<cite>): //figure//*[has-class("img_source")]
+#@wrap(<figcaption>): //figure//*[has-class("img_source")]
+#@debug
+
+$get: //img/next-sibling::br/next-sibling::span
+<figcaption>: $get
+$to_fg: //div[font]
+@debug
+$hm: $to_fg//font
+<figcaption>:$hm
+<figure>: $to_fg
+##@debug
+$fig: //*[has-class("img_box2_c")]
+<div>: //h2[iframe]
+<figcaption>: $fig//*[has-class("img_source")]
+$spn: //*[@style="color: rgb(102, 102, 102); font-size: 14px;"]
+
+
+ <figure>: $spn/ancestor::p
+ <figcaption>: $spn
+@debug
+#@combine(""): $fig/next-sibling::figcaption
+#$zxz: $@
+
+#@debug
+$ckd: //div/em/next-sibling::br
+$fk:  $ckd/ancestor::*[@style="text-align: right;"][1]
+<blockquote>: $fk
+$ckd: //div[@style="text-align: right;"]/p/em
+
+<aside>: $ckd
+
+$s: //*[has-class("img_box2_c")]
+@debug
+@after(<auth>) : $body
+$at: //auth
+@set_attr(data-auth, //span[@class="post__info__author__name"]/a): $at
+$check: //span[@class="post__info__author__name"]/a[2]
+#@debug
+@if( $check ) {
+#@debug
+  $awith_text: //span[@class="post__info__author__name"][2][contains(text(),",")]
+#@debug
+@remove: $awith_text/text()
+@set_attr(data-auth, //span[@class="post__info__author__name"]/a[1], ", ", //span[@class="post__info__author__name"]/a[2]): $at
+
+}
+
+$check: //span[@class="post__info__author__name"][2]
+#@debug
+@if( $check ) {
+
+  $awith_text: //span[@class="post__info__author__name"][2][contains(text(),",")]
+#@debug
+@remove: $awith_text/text()
+@set_attr(data-auth, //span[@class="post__info__author__name"][1]/a, ", ", //span[@class="post__info__author__name"][2]/a): $at
+
+}
+$check://span[@class="post__info__author__name"][3]
+#3 auth
+@if( $check ) {
+  $awith_text: //span[@class="post__info__author__name"][3][contains(text(),",")]
+#@debug
+@remove: $awith_text/text()
+@set_attr(data-auth, //span[@class="post__info__author__name"][1]/a, ", ", //span[@class="post__info__author__name"][2]/a, ",", //span[@class="post__info__author__name"][3]/a): $at
+
+}
+
+#@remove: //*[@class="post__partnership__text"]
+@remove: //*[@class="post__partnership_img"]
+
+$fig: //figure
+
+$figcap: //figure/next-sibling::*[has-class("img_source")]
+@wrap_inner(<figcaption>): $figcap
+@combine(<br>): //figure/next-sibling::*[has-class("img_source")]
+
+$fig: //figure
+
+$figcap: //figure/next-sibling::*[@style="text-align: center;"][strong]
+@wrap_inner(<figcaption>): $figcap
+@combine(<br>): $figcap
+
+$fig: //figure
+
+$figcap: //figure/next-sibling::*[@style="text-align: center;"][em]
+@wrap_inner(<figcaption>): $figcap
+@combine(<br>): $figcap
+
+ @remove: //*[contains(@href,"https://mind.ua/partnership")]
+  @remove: //*[contains(@href,"https://mind.ua/ad")]
+$dt: //span[has-class("post__info__date")]
+@datetime(0): $dt
+published_date: $@
+
+$aut://span[@class="post__info__author__name"]//a
+@combine(", "): //span[@class="post__info__author__name"]/next-sibling::span
+#@debug
+@remove: //*[@id="comment_header_layer"]
+$sm: //*[has-class("related_news__inner")]
+
+$to_rel://h3[@style="text-align: center;"]
+@wrap_inner(<b>): $to_rel//strong
+#@wrap(<related>): $to_rel//a
+#$rels: $@
+
+@append_to($body): $spn
+
+ <h3>: //*[has-class("block_related")]//*[has-class("section_title_small")][1]/*
+ #@debug
+@prepend_to($sm): //*[has-class("block_related")]//*[has-class("section_title_small")][1]
+#@debug
+$chkaldy: //related
+
+@if_not( $sdsdf ) {
+@wrap(<related>): $sm
+$rel: $@
+}
+
+
+
+author: $at/@data-auth
+#author_url: $aut/a/@href
+
+
+#removing
+#@debug
+@remove: //div[@class="post__section_info"]
+@remove: //div[@class="post__info"]
+$rls: //div[@class="read-also"]//*[has-class("read-also__wrapper")]
+<h3>: //*[has-class("read-also__title")]
+<related>: $rls
+@append_to($body): $rls
+$adv: //div[@class="post__adv"]
+$adv2: //div[@class="post__frame"]
+
+#<blockqoute>: $adv2
+# <div>: //p[./img]
+# <div>: //p[./iframe]
+# <div>: //a[./img]
+@remove: $adv
+#@remove: $rls
+$tv: //div[@class="post__tags"]
+@remove: $tv
+#post__info
+@remove: //h1[@class="post__title"]
+
+
+body: $body
+
+
+
+#@wrap(<footer>): $ptn
+
+#@append_to($body): $ptn/ancestor::footer
+
+#@append_to($later): $later/text()
+
+# @wrap(<torelated>): $later
+# $torelated: $@
+
+
+# $rels : //p/strong/em[contains(text(),"Читайте также:")]
+# <related>: $rels/ancestor::p
+
+# <related>: $rel
+# $relx: $@
+# @append_to($body): $relx
+#@debug
+#@append_to($later): //toh3
+@append_to($body): $rels
+$fkd: //*[@class="post__partnership__link"]
+@debug
+@before(<toremove>) :$body//figcaption
+@append_to(//toremove): $fkd
+
+@debug
+
+@remove: //noscript
+
+@append_to($body): $rel
+#@debug
+#@set_attr(text,"123"): $rel
+$test: //div[has-class("img_source")]
+<figcaption>: $test
+$pr: $test/..
+#@debug
+
+#########
+#event page
+ $events: //*[has-class("event")]
+@if($events) {
+ # @remove: $events//div[@id="box-content"]
+@after_el(./..):   $events/div/img
+$img: $@
+cover: $img
+#@debug
+
+@remove: //script
+
+$addr:  //div[@id="box-content"]
+#//*[has-class("event_info__adress")]
+#@remove://td[iframe]
+
+#@wrap(<summary>): $addr
+ @wrap(<details>): $addr
+$details: $@
+@prepend(<summary>): $details
+ #@debug
+
+ $map: $@
+ #@debug
+# @clone : //*[has-class("event_info__adress")]
+# $sum: $@
+#@debug
+ @append_to($details//summary): //*[has-class("event_info__adress")]
+ #@debug
+#@set_attr(src, $events//div[@id="box-content"]/@src): //summary//img
+#@after($events): $addr
+@prepend_to($body): //details
+#@debug
+@prepend_to($body): $eve
+#@replace("[$]events", "") : //details
+
+@wrap_inner(<strong>) : //*[has-class("event_info__description")]
+
+$t:  //*[has-class("event_info__description")]
+@debug
+<td>: $events//div[@class="event_info__item"]//div
+@combine(" "): $events//*[@class="event_info__place"]/next-sibling::td
+
+@set_attr(colspan, "2"): $events//td[@class="event_info__place__url"]
+#@debug
+<tr>: $events//div[@class="event_info__item"]
+<tbody>: $events//div[@class="event_info"]
+@set_attr(border,"0"): $events
+<table>:$events
+$eve: $@
+@wrap_inner(<strong>): $eve/tr/td[2]
+@prepend_to($body): $eve
+
+#description: //p[1]
+#description: //div[has-class("event_info")]/text()
+}
+#description:  $body//p[2]
+
+$pfirst: $body//p[1]
+@prepend(" "): $pfirst/strong
+
+description: $body//p[1]
+
+
+ $tst: (//div[contains(text(),"Матеріал у партнерстві з OLX")])
+ @debug
+?path: /20191403-pridbati-kvartiru-i-ne-prograti-7-pomilok-pokupciv-zhitla-na-vtorinnomu-rinku/.*
+@remove: //noindex[1]
+$hm_img : //img[contains(@data-src,"https://s.mind.ua/img/forall/a/201914/3_header.jpg")]
+@wrap(<figure>): $hm_img
+cover:
+$tst: (//img[contains(@data-src,"s.mind.ua/img/forall/a/201914/3_header.jpg")])
+@debug
+@remove: $tst
+
+#@remove: //cover[1]
+#TEST questions
+# ?path: .*/questions/.*
+# $qbody: //div[@id="accordion"]
+# @wrap(<inner>): $qbody
+# #body: //div[@id="accordion"]
+# @before_el(./..): //*[@class="ac_answer"]//p
+# title: //h1[@class="section_title"]
+
+# $sums: //h3[@class="ac_question"]
+# <span>: $sums//a
+# $answs: //*[@class="ac_answer"]
+
+# $desc: //*[@class="qa_description"]
+
+# body: $qbody
+# subtitle: $desc
+
+#  @remove: //auth
+
+
+@remove: //toremove
+
+#path education
+?path: .*/editorial
+
+?path: .*/about
+?path: .*/shield
+
+ @debug
+
+#   @before_el("./..") : //table//td
+  <p>: //table
+
+  #<p>: //tr
+  <inner>: //td
+  @before(<br>): //strong
+#   @before(<br>): //strong
+ @after(<br>): //inner/p
+#   <div>: //tbody
+$cont: //div[@class="content__text"]
+<p> : $cont//ul
+@after(<br>): $cont//p/li
+body: //div[@class="content__text"]
+title: //h1
+description:  //p[1]
+
+
+
+?true
+?path: .*/ads
+body: //div[@class="content__text"]
+title: //h1
+$pfirst: //p[contains(normalize-space(.), "Керівник комерційного відділу")]
+@if( $pfirst ) {
+ @combine("<br>"): //p/next-sibling::p
+}
+
+description:  //p[1]
+@debug
+?true:
+#further
+<figure>: //figcaption[.//img]
+$a : //p/em/next-sibling::a
+#@set_attr(href, $a/@href): $a
+#@replace("https//", "https://"): $a/@href
+@replace("https/", "https:/"): //a/@href
+@replace("http://Кандидатська з економіки: Петро Порошенко, держфінанси і банки", "https://mind.ua/publications/20194926-kandidatska-z-ekonomiki-petro-poroshenko-derzhfinansi-i-banki"): //p//a/@href
+$ds: //p//a/@href
+@debug
+ @replace("http://https:", ""): //a/@href
+# @replace("http://", "//"): $a/@href
+$s: $a/@href
+@debug
+#<a>: $a
+$par: $a/ancestor::p/em/strong
+@append_to($par): $a
+@debug
+# @clone: $a
+# @wrap_inner(<a>): $a
+# @set_attr(href, $a/@href): $a/a
+@debug
+@replace("https//", "//"): //p//strong//a/@href
+$s: $@
+
+# $imgsource: //p/next-sibling::*[has-class("img_source")]/next-sibling::*[has-class("img_source")]
+# #@wrap_inner(<cite>): $imgsource
+# $parent: $imgsource/prev-sibling::*[has-class("img_source")]/prev-sibling::p
+
+# @combine(""): $imgsource
+
+$tohigh: //div[contains(@style, "border: #d62b61 1px solid")]
+
+@before(<hr>): $tohigh
+@after(<hr>): $tohigh
+$rela: //related
+@before_el($rela): (//*[@class="post__partnership__text"])[1]
+@prepend_to($body): (//*[@class="post__partnership__text"])[2]
+
+@debug
+<figure>: //*[has-class("img_box2_c")]
+@debug
+$s: //figure[./toremove]
+@debug
+ @append_to($body): $rels
+# @wrap(<related>): $later
+#@prepend_to($body):$later
+@remove: $later
+ 
+# $chck: //em[contains(text(), "Читайте также:")]
+# <related>: $chck/ancestor::p
+# $chck: //strong[contains(text(), "Читайте также:")]
+# <related>: $chck/ancestor::p
+
+# $chck: //em[contains(text(), "Read also:")]
+# <related>: $chck/ancestor::p
+# $chck: //strong[contains(text(), "Read also:")]
+# <related>: $chck/ancestor::p
+
+# $chck: //em[contains(text(), "Читайте також:")]
+# <related>: $chck/ancestor::p
+# $rels : //p/em/strong[contains(text(),"Читайте также:")]
+# <related>: //p[./strong/em[contains(text(),"Читайте также:")]]
+# $chck: //strong[contains(text(), "Читайте також:")]
+# <related>: $chck/ancestor::p
+@debug
+# ?path: .*/publications/20191403.*
+# cover!: //img[1]
+# ?true:
+
+$p://p/next-sibling::*[has-class("img_source")]
+@wrap_inner(<cite>): $p
+@wrap_inner(<figcaption>): $p
+ $next:  //p/next-sibling::*[has-class("img_source")]/next-sibling::*[has-class("img_source")]
+ @wrap_inner(<figcaption>): $next
+ <figure>: //p[./img[contains(@src,"1542603533.jpg")]]
+ $fg: $@
+@debug
+#@combine(""): $next
+#@combine(""): $p
+@combine:  $fg/next-sibling::*[has-class("img_source")]
+@wrap_inner(<figcaption>):  $fg/next-sibling::*[has-class("img_source")]
+
+ <figure>: //p[./img[contains(@src,"1551176776.jpg")]]
+ $fg: $@
+ @combine:  $fg/next-sibling::*[has-class("img_source")]
+#  @combine:  $fg/next-sibling::*[has-class("img_source")]
+@debug
+cover: //div[has-class("post__photo_wide")]/img
+cover: //div[has-class("post__photo_wide")]/figure
+$problems: $body
+
+@while( $problems ) {
+  $test: $body//*[self::blockquote or self::aside or self::figure or (self::img and not(./ancestor::figure)) or self::iframe or self::slideshow or self::related or self::footer or self::table[not(ancestor::table) and not(descendant::table)]]
+
+  $problems: $test/self::*[ancestor::anchor or ancestor::blockquote or ancestor::aside or ancestor::footer or ancestor::strong or ancestor::b or ancestor::em or ancestor::i or ancestor::ins or ancestor::u or ancestor::del or ancestor::s or ancestor::strike or ancestor::code or ancestor::kbd or ancestor::samp or ancestor::tt or ancestor::mark or ancestor::sup or ancestor::pic or ancestor::sub or ancestor::a or ancestor::reference or ancestor::h1 or ancestor::h2 or ancestor::h3 or ancestor::h4 or ancestor::h5 or ancestor::h6 or ancestor::p or ancestor::pre or ancestor::hr or ancestor::img or ancestor::br]
+
+  @if( $problems ) {
+    $parent: $problems/parent::*
+    @detach: $parent/node()
+    @set_attr("merge", $index): $@
+    <remove>: $parent
+    @after_el("./parent::*"): $problems
+    @combine: $body//self::*[prev-sibling::*/@merge = @merge]
+  }
+}
